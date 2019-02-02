@@ -1,3 +1,5 @@
+ofxAudioAnalyzer
+ofxAudioDecoder
 ofxGui
 ofxMaxim
 ofxOsc

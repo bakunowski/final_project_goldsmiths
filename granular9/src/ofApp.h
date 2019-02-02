@@ -7,6 +7,7 @@
 #include "ofxOsc.h"
 #include <sys/time.h>
 #include "ofxGui.h"
+#include "ofxAudioAnalyzer.h"
 
 #define HOST "localhost"
 #define RECEIVEPORT 12000
@@ -23,6 +24,7 @@ public:
     void setup();
     void update();
     void draw();
+    
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y);
@@ -32,28 +34,19 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-    void drawWaveform(float waveformWidth, float waveformHeight, float top, float left);
     
-    void audioOut(float * output, int bufferSize, int nChannels);
+    void drawWaveform(float waveformWidth, float waveformHeight, float top, float left);
+    ofxAudioAnalyzer audioAnalyzer;
+    
+    void audioOut(ofSoundBuffer &outBuffer);
     void audioIn(float * input, int bufferSize, int nChannels);
     
+    ofSoundStream soundStream;
+    ofSoundBuffer lastBuffer;
+    
     int		bufferSize;
-    
-    /* stick you maximilian declarations below
-     
-     For information on how maximilian works, take a look at the example code at
-     
-     http://www.maximilian.strangeloop.co.uk
-     
-     under 'Tutorials'.
-     
-     
-     */
-    
-    
     int		initialBufferSize; /* buffer size */
     int		sampleRate;
-    
     
     /* stick your maximilian stuff below */
     
@@ -63,6 +56,7 @@ public:
     maxiMix mymix;
     maxiTimePitchStretch<grainPlayerWin, maxiSample> *ts, *ts2, *ts3, *ts4, *ts5;
     double rate, grainLength, pitch, overlaps, position, loop_start, loop_end, volume, random_offset;
+    int out_channels;
     bool playmode, loop_mode;
     
     ofxMaxiFFT fft;
@@ -96,6 +90,9 @@ public:
     int curXpos, curYpos;
     int prevXpos, prevYpos;
     
+    //ofxAudioAnalyzer
+    vector<float> spectrum;
+    vector<float> mfcc;
 };
 
 

@@ -33,7 +33,6 @@ void ofApp::setup(){
     sender.setup(HOST, SENDPORT);
     receiver.setup(RECEIVEPORT);
     
-    
     //samples from http://freesound.org
     samp.load(ofToDataPath("2630__Jovica__133_bpm_ATTACK_LOOP_04_electrified_analog_kit_variation_16_mono.wav"));
     samp2.load(ofToDataPath("24620__anamorphosis__GMB_Kantilan_1.wav"));
@@ -41,11 +40,6 @@ void ofApp::setup(){
     samp4.load(ofToDataPath("68373__juskiddink__Cello_open_string_bowed.wav"));
     samp5.load(ofToDataPath("71515__Microscopia__Wilhelm_Bruder_Sohne_Organ.wav"));
     //samp5.load(ofToDataPath("sine1sec.wav"));
-    
-    ofEnableAlphaBlending();
-    ofSetupScreen();
-    ofBackground(0, 0, 0);
-    ofSetFrameRate(60);
     
     sampleRate 	= 44100; /* Sampling Rate */
     bufferSize	= 512; /* Buffer Size. you have to fill this buffer with sound using the for loop in the audioOut method */
@@ -64,28 +58,36 @@ void ofApp::setup(){
     grainLength = 0.05;
     current=0;
     pitch = 1.;
+    out_channels = 2;
     
     fft.setup(1024, 512, 256);
     oct.setup(44100, 1024, 10);
     
     int current = 0;
-    ofxMaxiSettings::setup(sampleRate, 2, initialBufferSize);
+    ofxMaxiSettings::setup(sampleRate, out_channels, initialBufferSize);
+
+    //ofEnableSmoothing();
     
-    ofSetVerticalSync(true);
-    ofEnableAlphaBlending();
-    ofEnableSmoothing();
-    
-    /* Anything that you would normally find/put in maximilian's setup() method needs to go here. For example, Sample loading.
-     
-     */
+    //Anything that you would normally find/put in maximilian's setup() method needs to go here. For example, Sample loading.
     
     isTraining=true;
     
     ofBackground(0,0,0);
+    ofSetFrameRate(60);
     
     //ofSoundStreamListDevices();
-    ofSoundStreamSetup(2,1,this, sampleRate, bufferSize, 4); /* this has to happen at the end of setup - it switches on the DAC */
+    //CHNAGE TO VARIABLE OUT_CHANNELS
+    //ofSoundStreamSetup(2, 1 ,this ,sampleRate, bufferSize, 4); /* this has to happen at the end of setup - it switches on the DAC */
     
+    ofSoundStreamSettings settings;
+    settings.numOutputChannels = out_channels;
+    settings.sampleRate = sampleRate;
+    settings.bufferSize = bufferSize;
+    settings.numBuffers = 4;
+    settings.setOutListener(this);
+    soundStream.setup(settings);
+    
+    audioAnalyzer.setup(sampleRate, bufferSize, out_channels);
 }
 
 //--------------------------------------------------------------
@@ -98,7 +100,7 @@ void ofApp::update(){
         while(receiver.hasWaitingMessages()){
             // get the next message
             ofxOscMessage m;
-            receiver.getNextMessage(&m);
+            receiver.getNextMessage(m);
             
             // check for mouse moved message
             if(m.getAddress() == "/wek/outputs"){
@@ -112,6 +114,10 @@ void ofApp::update(){
         }
         
     }
+    
+    //AudioAnalyzer
+    
+    mfcc = audioAnalyzer.getValues(MFCC, 0, 0);
     
     
 }
@@ -150,13 +156,50 @@ void ofApp::draw(){
     loop_start = loop_start_gui;
     loop_end = loop_end_gui;
     random_offset = random_offset_gui;
+    
+    //AudioAnalyzer
+    ofPushMatrix();
+    ofTranslate(700, 0);
+    int mw = 250;
+    
+    int graphH = 75;
+    int yoffset = graphH + 50;
+    int ypos = -100;
+    int xpos = 700;
+    
+    ofSetColor(255);
+    ofDrawBitmapString("MFCC", xpos, ypos);
+    ofPushMatrix();;
+    ofTranslate(xpos, ypos);
+    ofSetColor(ofColor::cyan);
+    float bin_w = (float) mw / spectrum.size();
+    for (int i = 0; i < spectrum.size(); i++){
+        float scaledValue = ofMap(spectrum[i], DB_MIN, DB_MAX, 0.0, 1.0, true);//clamped value
+        float bin_h = -1 * (scaledValue * graphH);
+        ofDrawRectangle(i*bin_w, graphH, bin_w, bin_h);
+    }
+    ofPopMatrix();
+    
+    ypos += yoffset;
+    ofSetColor(255);
+    ofDrawBitmapString("MFCC: ", xpos, ypos);
+    ofPushMatrix();
+    ofTranslate(xpos, ypos);
+    ofSetColor(ofColor::cyan);
+    bin_w = (float) mw / mfcc.size();
+    for (int i = 0; i < mfcc.size(); i++){
+        float scaledValue = ofMap(mfcc[i], 0, MFCC_MAX_ESTIMATED_VALUE, 0.0, 1.0, true);//clamped value
+        float bin_h = -1 * (scaledValue * graphH);
+        ofDrawRectangle(i*bin_w, graphH, bin_w, bin_h);
+    }
+    ofPopMatrix();
 }
 
 //--------------------------------------------------------------
-void ofApp::audioOut(float * output, int bufferSize, int nChannels) {
+void ofApp::audioOut(ofSoundBuffer &outBuffer) {
     
     
-    for (int i = 0; i < bufferSize; i++){
+    for (size_t i = 0; i < outBuffer.getNumFrames(); i++){
         
         /* Stick your maximilian 'play()' code in here ! Declare your objects in testApp.h.
          
@@ -183,13 +226,16 @@ void ofApp::audioOut(float * output, int bufferSize, int nChannels) {
         
         //play result
         mymix.stereo(wave, outputs, 0.5);
-        output[i*nChannels    ] = outputs[0] * volume; /* You may end up with lots of outputs. add them here */
-        output[i*nChannels + 1] = outputs[1] * volume;
+        //output[i*nChannels    ] = outputs[0] * volume; /* You may end up with lots of outputs. add them here */
+        //output[i*nChannels + 1] = outputs[1] * volume;
+        outBuffer.getSample(i, 0) = outputs[0] * volume;
+        outBuffer.getSample(i, 1) = outputs[1] * volume;
         
         /* You may end up with lots of outputs. add them here */
-        
-        
-    }
+        }
+    
+    //lastBuffer = outBuffer;
+    audioAnalyzer.analyze(outBuffer);
     
 }
 
@@ -252,8 +298,8 @@ void ofApp::drawWaveform(float waveformWidth, float waveformHeight, float top, f
         curXpos = ofMap(i,0,LENGTH,left,waveformWidth+20);
         curYpos = ofMap(stretches[current]->sample->temp[i],-32768,32768,top,waveformHeight+top);
         ofSetColor(100,120,180);
-        ofEllipse(curXpos, curYpos, 2, 2);
-        ofLine(curXpos, curYpos, prevXpos, prevYpos);
+        ofDrawEllipse(curXpos, curYpos, 2, 2);
+        ofDrawLine(curXpos, curYpos, prevXpos, prevYpos);
         if(i < LENGTH-bufferSize){
             prevXpos = curXpos;
             prevYpos = curYpos;
@@ -264,7 +310,7 @@ void ofApp::drawWaveform(float waveformWidth, float waveformHeight, float top, f
     }
     // draw a playhead over the waveform
     ofSetColor(ofColor::white);
-    ofLine(left + stretches[current]->getNormalisedPosition() * waveformWidth, top, left + stretches[current]->getNormalisedPosition() * waveformWidth, top + waveformHeight);
+    ofDrawLine(left + stretches[current]->getNormalisedPosition() * waveformWidth, top, left + stretches[current]->getNormalisedPosition() * waveformWidth, top + waveformHeight);
     ofDrawBitmapString("PlayHead", left + stretches[current]->getNormalisedPosition() * waveformWidth-69, top+30);
 }
 
