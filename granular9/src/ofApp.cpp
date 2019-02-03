@@ -18,7 +18,7 @@ void ofApp::setup(){
     gui.setup();
     gui.add(volume_gui.setup("volume", 0.1, 0, 1));
     gui.add(speed_gui.setup("speed", 1, -1, 1));
-    gui.add(grain_size_gui.setup("grain_size", 0.1, 0.001, 0.5));
+    gui.add(grain_size_gui.setup("grain_size", 0.1, 0.001, 0.4));
     gui.add(pitch_gui.setup("pitch", 1, 0., 2.));
     gui.add(overlaps_gui.setup("overlaps?", 5, 0, 10.));
     gui.add(position_gui.setup("position", 0, 0, 1));
@@ -34,26 +34,25 @@ void ofApp::setup(){
     receiver.setup(RECEIVEPORT);
     
     //samples from http://freesound.org
-    samp.load(ofToDataPath("2630__Jovica__133_bpm_ATTACK_LOOP_04_electrified_analog_kit_variation_16_mono.wav"));
-    samp2.load(ofToDataPath("24620__anamorphosis__GMB_Kantilan_1.wav"));
-    samp3.load(ofToDataPath("26393__brfindla__Calango1berimbau.wav"));
+    samp.load(ofToDataPath("346755__sergiosmarinis__keys-on-table.wav"));
+    samp2.load(ofToDataPath("249592__staticpony1__dirty-electro-bass.wav"));
+  //  samp3.load(ofToDataPath("26393__brfindla__Calango1berimbau.wav"));
     samp4.load(ofToDataPath("68373__juskiddink__Cello_open_string_bowed.wav"));
-    samp5.load(ofToDataPath("71515__Microscopia__Wilhelm_Bruder_Sohne_Organ.wav"));
-    //samp5.load(ofToDataPath("sine1sec.wav"));
+    //samp5.load(ofToDataPath("249592__staticpony1__dirty-electro-bass.wav"));
     
     sampleRate 	= 44100; /* Sampling Rate */
     bufferSize	= 512; /* Buffer Size. you have to fill this buffer with sound using the for loop in the audioOut method */
     
     ts = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp);
     ts2 = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp2);
-    ts3 = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp3);
+    //ts3 = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp3);
     ts4 = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp4);
-    ts5 = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp5);
+    //ts5 = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp5);
     stretches.push_back(ts);
     stretches.push_back(ts2);
-    stretches.push_back(ts3);
+    //stretches.push_back(ts3);
     stretches.push_back(ts4);
-    stretches.push_back(ts5);
+    //stretches.push_back(ts5);
     rate = 1;
     grainLength = 0.05;
     current=0;
@@ -64,15 +63,15 @@ void ofApp::setup(){
     oct.setup(44100, 1024, 10);
     
     int current = 0;
-    ofxMaxiSettings::setup(sampleRate, out_channels, initialBufferSize);
+    ofxMaxiSettings::setup(sampleRate, out_channels, bufferSize);
 
-    //ofEnableSmoothing();
+    ofEnableSmoothing();
     
     //Anything that you would normally find/put in maximilian's setup() method needs to go here. For example, Sample loading.
     
     isTraining=true;
     
-    ofBackground(0,0,0);
+    ofBackground(211,211,211);
     ofSetFrameRate(60);
     
     //ofSoundStreamListDevices();
@@ -130,19 +129,34 @@ void ofApp::draw(){
      Clever people don't do this. This bit of code shows that by default, each signal is going to flip
      between -1 and 1. You need to account for this somehow. Get the absolute value for example.
      */
-
+    
     //ADD SOURCE
-    ofSetColor(255);
-    ofFill();
+    drawWaveform();
+    /*
+    // draw the left channel:
+    ofPushStyle();
+    ofPushMatrix();
+    ofTranslate(32, 150, 0);
     
-    const float waveformWidth  = ofGetWidth() - 40;
-    const float waveformHeight = 300;
+    ofSetColor(225);
+    ofDrawBitmapString("Left Channel", 4, 18);
     
-    float top = ofGetHeight() - waveformHeight - 200;
-    float left = 20;
+    ofSetLineWidth(1);
+    ofDrawRectangle(0, 0, 900, 200);
     
-    drawWaveform(waveformWidth, waveformHeight, top, left);
-
+    ofSetColor(245, 58, 135);
+    ofSetLineWidth(3);
+    
+    ofBeginShape();
+    for (unsigned int i = 0; i < stretches[current]->sample->getLength() ; i++){
+        float x =  ofMap(i, 0, stretches[current]->sample->getLength() , 0, 900, true);
+        ofVertex(x, 100 -(stretches[current]->sample->temp[i]*180.0f));
+    }
+    ofEndShape(false);
+    
+    ofPopMatrix();
+    ofPopStyle();
+*/
     //gui
     gui.draw();
     volume = volume_gui;
@@ -165,13 +179,13 @@ void ofApp::draw(){
     int graphH = 75;
     int yoffset = graphH + 50;
     int ypos = -100;
-    int xpos = 700;
+    int xpos = ofGetWidth()-300;
     
     ofSetColor(255);
     ofDrawBitmapString("MFCC", xpos, ypos);
     ofPushMatrix();;
     ofTranslate(xpos, ypos);
-    ofSetColor(ofColor::cyan);
+    ofSetColor(141,82,82);
     float bin_w = (float) mw / spectrum.size();
     for (int i = 0; i < spectrum.size(); i++){
         float scaledValue = ofMap(spectrum[i], DB_MIN, DB_MAX, 0.0, 1.0, true);//clamped value
@@ -185,7 +199,7 @@ void ofApp::draw(){
     ofDrawBitmapString("MFCC: ", xpos, ypos);
     ofPushMatrix();
     ofTranslate(xpos, ypos);
-    ofSetColor(ofColor::cyan);
+    ofSetColor(141,82,82);
     bin_w = (float) mw / mfcc.size();
     for (int i = 0; i < mfcc.size(); i++){
         float scaledValue = ofMap(mfcc[i], 0, MFCC_MAX_ESTIMATED_VALUE, 0.0, 1.0, true);//clamped value
@@ -193,6 +207,12 @@ void ofApp::draw(){
         ofDrawRectangle(i*bin_w, graphH, bin_w, bin_h);
     }
     ofPopMatrix();
+    
+    //cout << mfcc.size() << endl;
+    
+    //cout << stretches[current]->sample->temp[0] << endl;
+    
+    //cout << stretches[current]->sample->length << endl;
 }
 
 //--------------------------------------------------------------
@@ -291,16 +311,27 @@ void ofApp::mousePressed(int x, int y, int button){
 
 
 //--------------------------------------------------------------
-void ofApp::drawWaveform(float waveformWidth, float waveformHeight, float top, float left){
-    //ADD SOURCE!
+void ofApp::drawWaveform(){
+    //ADD SOURCE
+    ofSetColor(255);
+    ofFill();
+    
+    const float waveformWidth  = ofGetWidth() - 40;
+    const float waveformHeight = 150;
+    
+    float top = ofGetHeight() - waveformHeight - 50;
+    float left = 20;
+    
+    float point = (stretches[current]->sample->length)/2000;
+    
     // draw the audio waveform
-    for(int i= 0; i < LENGTH; i+=bufferSize){
-        curXpos = ofMap(i,0,LENGTH,left,waveformWidth+20);
-        curYpos = ofMap(stretches[current]->sample->temp[i],-32768,32768,top,waveformHeight+top);
-        ofSetColor(100,120,180);
+    for(int i= 0; i < stretches[current]->sample->length; i+=point){
+        curXpos = ofMap(i, 0, stretches[current]->sample->length, left, waveformWidth+20);
+        curYpos = ofMap(stretches[current]->sample->temp[i], -32768, 32768, top, waveformHeight + top);
+        ofSetColor(0,0,0);
         ofDrawEllipse(curXpos, curYpos, 2, 2);
         ofDrawLine(curXpos, curYpos, prevXpos, prevYpos);
-        if(i < LENGTH-bufferSize){
+      if(i < (stretches[current]->sample->length)-point){
             prevXpos = curXpos;
             prevYpos = curYpos;
         } else {
@@ -308,10 +339,16 @@ void ofApp::drawWaveform(float waveformWidth, float waveformHeight, float top, f
             prevYpos = waveformHeight+top;
         }
     }
+    
     // draw a playhead over the waveform
     ofSetColor(ofColor::white);
     ofDrawLine(left + stretches[current]->getNormalisedPosition() * waveformWidth, top, left + stretches[current]->getNormalisedPosition() * waveformWidth, top + waveformHeight);
     ofDrawBitmapString("PlayHead", left + stretches[current]->getNormalisedPosition() * waveformWidth-69, top+30);
+    
+    // draw a frame around the whole thing
+    ofSetColor(ofColor::white);
+    ofNoFill();
+    ofDrawRectangle(left, top, waveformWidth, waveformHeight);
 }
 
 //--------------------------------------------------------------

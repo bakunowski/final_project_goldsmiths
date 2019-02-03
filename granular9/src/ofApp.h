@@ -35,7 +35,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    void drawWaveform(float waveformWidth, float waveformHeight, float top, float left);
+    void drawWaveform();
     ofxAudioAnalyzer audioAnalyzer;
     
     void audioOut(ofSoundBuffer &outBuffer);
