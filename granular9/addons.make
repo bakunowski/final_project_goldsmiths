@@ -1,5 +1,6 @@
 ofxAudioAnalyzer
 ofxAudioDecoder
 ofxGui
+ofxJSON
 ofxMaxim
 ofxOsc

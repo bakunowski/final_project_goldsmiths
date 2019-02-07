@@ -1090,6 +1090,206 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
+			<key>CCDC6F9CCF925CC402160B85</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>661C0C5E49EAE0D4C6583594</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>src</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>77371D09B946E81E33DA3D93</key>
+			<dict>
+				<key>fileRef</key>
+				<string>661C0C5E49EAE0D4C6583594</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>661C0C5E49EAE0D4C6583594</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>jsoncpp.cpp</string>
+				<key>path</key>
+				<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/src/jsoncpp.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>B62571D13D439B4CB3E1A05B</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>json.h</string>
+				<key>path</key>
+				<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include/json/json.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>58AD3BD71B781D9BC25763C8</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>1D11D3E5EA2FBF6D65A92531</string>
+					<string>B62571D13D439B4CB3E1A05B</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>json</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>D486FC87F063317BB47E9FAC</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>58AD3BD71B781D9BC25763C8</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>include</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>977A836DD2C489CCC5E330FF</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>D486FC87F063317BB47E9FAC</string>
+					<string>CCDC6F9CCF925CC402160B85</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>jsoncpp</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>F40E80CB2D443CBA9581DD03</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>977A836DD2C489CCC5E330FF</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>libs</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>1D11D3E5EA2FBF6D65A92531</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>json-forwards.h</string>
+				<key>path</key>
+				<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include/json/json-forwards.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>08040A6A267B94145B42FFB0</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ofxJSONElement.h</string>
+				<key>path</key>
+				<string>../../../../../openFrameworks/addons/ofxJSON/src/ofxJSONElement.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>B3EDBB18BB28AAE4B2BAC2EB</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ofxJSON.h</string>
+				<key>path</key>
+				<string>../../../../../openFrameworks/addons/ofxJSON/src/ofxJSON.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>292AF6148769654D0DF26018</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>929211870078C18CB379A42D</string>
+					<string>B3EDBB18BB28AAE4B2BAC2EB</string>
+					<string>08040A6A267B94145B42FFB0</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>src</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>2865DAEF86B1907A704CA70B</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>292AF6148769654D0DF26018</string>
+					<string>F40E80CB2D443CBA9581DD03</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>ofxJSON</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>E71B4362F3C0295F58A3A3E4</key>
+			<dict>
+				<key>fileRef</key>
+				<string>929211870078C18CB379A42D</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>929211870078C18CB379A42D</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ofxJSONElement.cpp</string>
+				<key>path</key>
+				<string>../../../../../openFrameworks/addons/ofxJSON/src/ofxJSONElement.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
 			<key>68207C649D061C80EF7C7BE3</key>
 			<dict>
 				<key>explicitFileType</key>
@@ -3921,6 +4121,12 @@ fi
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/libs/src</string>
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/src</string>
 						<string>../../../../../openFrameworks/addons/ofxGui/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include/json</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/src</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/libs</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/src</string>
 						<string>../../../../../openFrameworks/addons/ofxOsc/libs</string>
@@ -3998,6 +4204,12 @@ fi
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/libs/src</string>
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/src</string>
 						<string>../../../../../openFrameworks/addons/ofxGui/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include/json</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/src</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/libs</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/src</string>
 						<string>../../../../../openFrameworks/addons/ofxOsc/libs</string>
@@ -4049,6 +4261,7 @@ fi
 					<string>69EA4EEFE27955C695DB2D99</string>
 					<string>E57BA9F5B131DD75E7F6B1AC</string>
 					<string>480A780D8D0308AE4A368801</string>
+					<string>2865DAEF86B1907A704CA70B</string>
 					<string>6234D3BCE87D1C3BA2230F19</string>
 					<string>E6053AB7FEC63D5F83825B88</string>
 				</array>
@@ -6843,6 +7056,12 @@ fi
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/libs/src</string>
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/src</string>
 						<string>../../../../../openFrameworks/addons/ofxGui/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include/json</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/src</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/libs</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/src</string>
 						<string>../../../../../openFrameworks/addons/ofxOsc/libs</string>
@@ -6940,6 +7159,12 @@ fi
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/libs/src</string>
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/src</string>
 						<string>../../../../../openFrameworks/addons/ofxGui/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include/json</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/src</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/libs</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/src</string>
 						<string>../../../../../openFrameworks/addons/ofxOsc/libs</string>
@@ -6993,6 +7218,8 @@ fi
 					<string>2888E36560937DE1A3FF3F00</string>
 					<string>C8BDF55AB0A8BCB0B5BE4215</string>
 					<string>925F781B5D4493177F993E68</string>
+					<string>E71B4362F3C0295F58A3A3E4</string>
+					<string>77371D09B946E81E33DA3D93</string>
 					<string>0FDDF1B70ABF46746503CDB6</string>
 					<string>37B2423CA5E77735B584507A</string>
 					<string>28108C00CB851991A96852A7</string>
@@ -7140,6 +7367,12 @@ fi
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/libs/src</string>
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/src</string>
 						<string>../../../../../openFrameworks/addons/ofxGui/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include/json</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/src</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/libs</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/src</string>
 						<string>../../../../../openFrameworks/addons/ofxOsc/libs</string>
@@ -7231,6 +7464,12 @@ fi
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/libs/src</string>
 						<string>../../../../../openFrameworks/addons/ofxAudioDecoder/src</string>
 						<string>../../../../../openFrameworks/addons/ofxGui/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/include/json</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/libs/jsoncpp/src</string>
+						<string>../../../../../openFrameworks/addons/ofxJSON/src</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/libs</string>
 						<string>../../../../../openFrameworks/addons/ofxMaxim/src</string>
 						<string>../../../../../openFrameworks/addons/ofxOsc/libs</string>

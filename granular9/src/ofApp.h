@@ -8,6 +8,7 @@
 #include <sys/time.h>
 #include "ofxGui.h"
 #include "ofxAudioAnalyzer.h"
+#include "ofxJSON.h"
 
 #define HOST "localhost"
 #define RECEIVEPORT 12000
@@ -55,7 +56,7 @@ public:
     vector<maxiTimePitchStretch<grainPlayerWin, maxiSample>*> stretches;
     maxiMix mymix;
     maxiTimePitchStretch<grainPlayerWin, maxiSample> *ts, *ts2, *ts3, *ts4, *ts5;
-    double rate, grainLength, pitch, overlaps, position, loop_start, loop_end, volume, random_offset;
+    double rate, grainLength, pitch, overlaps, position, volume, random_offset;
     int out_channels;
     bool playmode, loop_mode;
     
@@ -65,8 +66,8 @@ public:
     double pos;
     
     //osc
-    ofxOscSender sender;
-    ofxOscReceiver receiver;
+    //ofxOscSender sender;
+    //ofxOscReceiver receiver;
     
     ofxMaxiFilter myFilter, myFilter2;
     
@@ -81,9 +82,6 @@ public:
     ofxFloatSlider overlaps_gui;
     ofxFloatSlider position_gui;
     ofxToggle playmode_gui;
-    ofxToggle loop_mode_gui;
-    ofxFloatSlider loop_start_gui;
-    ofxFloatSlider loop_end_gui;
     ofxIntSlider random_offset_gui;
     
     //Drawing
@@ -93,6 +91,10 @@ public:
     //ofxAudioAnalyzer
     vector<float> spectrum;
     vector<float> mfcc;
+    
+    //JSON
+    ofxJSONElement result;
+    int k;
 };
 
 

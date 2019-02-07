@@ -23,25 +23,19 @@ void ofApp::setup(){
     gui.add(overlaps_gui.setup("overlaps?", 5, 0, 10.));
     gui.add(position_gui.setup("position", 0, 0, 1));
     gui.add(playmode_gui.setup("playmode", true));
-    gui.add(random_offset_gui.setup("random", 10, 1, 1000));
-    gui.add(loop_mode_gui.setup("loopmode", true));
-    gui.add(loop_start_gui.setup("loop start", 0, 0, 1));
-    gui.add(loop_end_gui.setup("loop end", 1, 0, 1));
-    
+    gui.add(random_offset_gui.setup("random", 10, 1, 10000));
+
     /* This is stuff you always need.*/
-    
-    sender.setup(HOST, SENDPORT);
-    receiver.setup(RECEIVEPORT);
     
     //samples from http://freesound.org
     samp.load(ofToDataPath("346755__sergiosmarinis__keys-on-table.wav"));
     samp2.load(ofToDataPath("249592__staticpony1__dirty-electro-bass.wav"));
-  //  samp3.load(ofToDataPath("26393__brfindla__Calango1berimbau.wav"));
+    //samp3.load(ofToDataPath("26393__brfindla__Calango1berimbau.wav"));
     samp4.load(ofToDataPath("68373__juskiddink__Cello_open_string_bowed.wav"));
     //samp5.load(ofToDataPath("249592__staticpony1__dirty-electro-bass.wav"));
     
-    sampleRate 	= 44100; /* Sampling Rate */
-    bufferSize	= 512; /* Buffer Size. you have to fill this buffer with sound using the for loop in the audioOut method */
+    sampleRate 	= 44100;    //Sampling Rate
+    bufferSize	= 512;      //Buffer Size. you have to fill this buffer with sound using the for loop in the audioOut method
     
     ts = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp);
     ts2 = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp2);
@@ -69,14 +63,8 @@ void ofApp::setup(){
     
     //Anything that you would normally find/put in maximilian's setup() method needs to go here. For example, Sample loading.
     
-    isTraining=true;
-    
     ofBackground(211,211,211);
     ofSetFrameRate(60);
-    
-    //ofSoundStreamListDevices();
-    //CHNAGE TO VARIABLE OUT_CHANNELS
-    //ofSoundStreamSetup(2, 1 ,this ,sampleRate, bufferSize, 4); /* this has to happen at the end of setup - it switches on the DAC */
     
     ofSoundStreamSettings settings;
     settings.numOutputChannels = out_channels;
@@ -87,38 +75,13 @@ void ofApp::setup(){
     soundStream.setup(settings);
     
     audioAnalyzer.setup(sampleRate, bufferSize, out_channels);
+    
+    k = 0;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
-    //WEKINATOR
-    if (!isTraining) {
-        
-        
-        while(receiver.hasWaitingMessages()){
-            // get the next message
-            ofxOscMessage m;
-            receiver.getNextMessage(m);
-            
-            // check for mouse moved message
-            if(m.getAddress() == "/wek/outputs"){
-                
-                cout << m.getArgAsFloat(0);
-                rate = ((double ) m.getArgAsFloat(0) * 4.0) - 2.0;
-                grainLength = (m.getArgAsFloat(1) * 0.1) + 0.001;
-                pos = ((double) m.getArgAsFloat(0) * 2.0);
-                
-            }
-        }
-        
-    }
-    
-    //AudioAnalyzer
-    
-    mfcc = audioAnalyzer.getValues(MFCC, 0, 0);
-    
-    
+
 }
 
 //--------------------------------------------------------------
@@ -132,31 +95,7 @@ void ofApp::draw(){
     
     //ADD SOURCE
     drawWaveform();
-    /*
-    // draw the left channel:
-    ofPushStyle();
-    ofPushMatrix();
-    ofTranslate(32, 150, 0);
-    
-    ofSetColor(225);
-    ofDrawBitmapString("Left Channel", 4, 18);
-    
-    ofSetLineWidth(1);
-    ofDrawRectangle(0, 0, 900, 200);
-    
-    ofSetColor(245, 58, 135);
-    ofSetLineWidth(3);
-    
-    ofBeginShape();
-    for (unsigned int i = 0; i < stretches[current]->sample->getLength() ; i++){
-        float x =  ofMap(i, 0, stretches[current]->sample->getLength() , 0, 900, true);
-        ofVertex(x, 100 -(stretches[current]->sample->temp[i]*180.0f));
-    }
-    ofEndShape(false);
-    
-    ofPopMatrix();
-    ofPopStyle();
-*/
+
     //gui
     gui.draw();
     volume = volume_gui;
@@ -166,12 +105,9 @@ void ofApp::draw(){
     overlaps = overlaps_gui;
     position = position_gui;
     playmode = playmode_gui;
-    loop_mode = loop_mode_gui;
-    loop_start = loop_start_gui;
-    loop_end = loop_end_gui;
     random_offset = random_offset_gui;
     
-    //AudioAnalyzer
+    //AudioAnalyzer ADD SOURCE
     ofPushMatrix();
     ofTranslate(700, 0);
     int mw = 250;
@@ -181,38 +117,19 @@ void ofApp::draw(){
     int ypos = -100;
     int xpos = ofGetWidth()-300;
     
-    ofSetColor(255);
-    ofDrawBitmapString("MFCC", xpos, ypos);
-    ofPushMatrix();;
-    ofTranslate(xpos, ypos);
-    ofSetColor(141,82,82);
-    float bin_w = (float) mw / spectrum.size();
-    for (int i = 0; i < spectrum.size(); i++){
-        float scaledValue = ofMap(spectrum[i], DB_MIN, DB_MAX, 0.0, 1.0, true);//clamped value
-        float bin_h = -1 * (scaledValue * graphH);
-        ofDrawRectangle(i*bin_w, graphH, bin_w, bin_h);
-    }
-    ofPopMatrix();
-    
     ypos += yoffset;
     ofSetColor(255);
     ofDrawBitmapString("MFCC: ", xpos, ypos);
     ofPushMatrix();
     ofTranslate(xpos, ypos);
     ofSetColor(141,82,82);
-    bin_w = (float) mw / mfcc.size();
+    float bin_w = (float) mw / mfcc.size();
     for (int i = 0; i < mfcc.size(); i++){
         float scaledValue = ofMap(mfcc[i], 0, MFCC_MAX_ESTIMATED_VALUE, 0.0, 1.0, true);//clamped value
         float bin_h = -1 * (scaledValue * graphH);
         ofDrawRectangle(i*bin_w, graphH, bin_w, bin_h);
     }
     ofPopMatrix();
-    
-    //cout << mfcc.size() << endl;
-    
-    //cout << stretches[current]->sample->temp[0] << endl;
-    
-    //cout << stretches[current]->sample->length << endl;
 }
 
 //--------------------------------------------------------------
@@ -232,13 +149,11 @@ void ofApp::audioOut(ofSoundBuffer &outBuffer) {
          */
         if(playmode == false){
         stretches[current]->setPosition(position);
-        stretches[current]->randomOffset = ofRandomf() * random_offset_gui;
+        //stretches[current]->randomOffset = ofRandomf() * random_offset_gui;
         }
-        if(loop_mode == false){
-            stretches[current]->setLoopStart(loop_start_gui);
-            stretches[current]->setLoopEnd(loop_end_gui);
-        }
+
         wave = stretches[current]->play(pitch, rate, grainLength, overlaps, 0);
+        stretches[current]->randomOffset = random_offset_gui;
         
         if (fft.process(wave)) {
             oct.calculate(fft.magnitudes);
@@ -246,16 +161,15 @@ void ofApp::audioOut(ofSoundBuffer &outBuffer) {
         
         //play result
         mymix.stereo(wave, outputs, 0.5);
-        //output[i*nChannels    ] = outputs[0] * volume; /* You may end up with lots of outputs. add them here */
-        //output[i*nChannels + 1] = outputs[1] * volume;
         outBuffer.getSample(i, 0) = outputs[0] * volume;
         outBuffer.getSample(i, 1) = outputs[1] * volume;
         
         /* You may end up with lots of outputs. add them here */
         }
     
-    //lastBuffer = outBuffer;
+    //AudioAnalyzer
     audioAnalyzer.analyze(outBuffer);
+    mfcc = audioAnalyzer.getValues(MFCC, 0, 0);
     
 }
 
@@ -274,9 +188,23 @@ void ofApp::audioIn(float * input, int bufferSize, int nChannels){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     
-    isTraining=!isTraining;
+    //JSON
+    //Json::Value event;
+    k++;
+        for(int i = 0; i < mfcc.size(); i++){
+            result["data"][k]["mfcc"][i] = mfcc[i];
+            result["data"][k]["parameters"]["pitch"] = pitch;
+            result["data"][k]["parameters"]["rate"] = rate;
+            result["data"][k]["parameters"]["grainLength"] = grainLength;
+            result["data"][k]["parameters"]["overlaps"] = overlaps;
+            result["data"][k]["parameters"]["position"] = position;
+        }
     
-    cout << isTraining;
+    
+    result.save("example_output.json", true);
+
+    //cout << result << endl;
+    cout << k << endl;
     
 }
 
@@ -287,16 +215,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y){
-    /*
-        ofxOscMessage m;
-        m.setAddress("/wekinator/control/outputs");
-        m.addFloatArg((float)x/ofGetWidth());
-        m.addFloatArg((float)y/ofGetHeight());
-        m.addFloatArg((float)current/stretches.size()-1);
-        sender.sendMessage(m);
-        cout << "messageSent" << "\n";
-    }
-    */
+
 }
 
 //--------------------------------------------------------------
@@ -322,7 +241,7 @@ void ofApp::drawWaveform(){
     float top = ofGetHeight() - waveformHeight - 50;
     float left = 20;
     
-    float point = (stretches[current]->sample->length)/2000;
+    float point = (stretches[current]->sample->length)/4000;
     
     // draw the audio waveform
     for(int i= 0; i < stretches[current]->sample->length; i+=point){
@@ -342,7 +261,14 @@ void ofApp::drawWaveform(){
     
     // draw a playhead over the waveform
     ofSetColor(ofColor::white);
-    ofDrawLine(left + stretches[current]->getNormalisedPosition() * waveformWidth, top, left + stretches[current]->getNormalisedPosition() * waveformWidth, top + waveformHeight);
+    
+    ofDrawLine(
+     stretches[current]->getNormalisedPosition() * waveformWidth,
+     top,
+     stretches[current]->getNormalisedPosition() * waveformWidth,
+     top + waveformHeight);
+    
+    
     ofDrawBitmapString("PlayHead", left + stretches[current]->getNormalisedPosition() * waveformWidth-69, top+30);
     
     // draw a frame around the whole thing
