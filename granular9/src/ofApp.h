@@ -65,10 +65,6 @@ public:
     int current;
     double pos;
     
-    //osc
-    //ofxOscSender sender;
-    //ofxOscReceiver receiver;
-    
     ofxMaxiFilter myFilter, myFilter2;
     
     bool isTraining;

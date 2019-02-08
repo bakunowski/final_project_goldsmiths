@@ -149,6 +149,7 @@ void ofApp::audioOut(ofSoundBuffer &outBuffer) {
          */
         if(playmode == false){
         stretches[current]->setPosition(position);
+            speed_gui = 0;
         //stretches[current]->randomOffset = ofRandomf() * random_offset_gui;
         }
 
@@ -194,14 +195,15 @@ void ofApp::keyPressed(int key){
         for(int i = 0; i < mfcc.size(); i++){
             result["data"][k]["mfcc"][i] = mfcc[i];
             result["data"][k]["parameters"]["pitch"] = pitch;
-            result["data"][k]["parameters"]["rate"] = rate;
+            result["data"][k]["parameters"]["speed"] = rate;
             result["data"][k]["parameters"]["grainLength"] = grainLength;
             result["data"][k]["parameters"]["overlaps"] = overlaps;
             result["data"][k]["parameters"]["position"] = position;
+            result["data"][k]["parameters"]["playmode"] = playmode;
         }
     
     
-    result.save("example_output.json", true);
+    result.save("data.json", true);
 
     //cout << result << endl;
     cout << k << endl;
