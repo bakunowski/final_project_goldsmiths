@@ -13,6 +13,8 @@
 #define HOST "localhost"
 #define RECEIVEPORT 12000
 #define SENDPORT 6448
+// max number of strings to display
+#define NUM_MSG_STRINGS 20
 
 #define LENGTH 294000
 
@@ -91,6 +93,14 @@ public:
     //JSON
     ofxJSONElement result;
     int k;
+    
+    //osc
+    ofxOscSender sender;
+    ofxOscReceiver receiver;
+    int currentMsgString;
+    string msgStrings[NUM_MSG_STRINGS];
+    float timers[NUM_MSG_STRINGS];
+    vector<float> params;
 };
 
 

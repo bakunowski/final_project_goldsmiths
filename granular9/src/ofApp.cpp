@@ -24,6 +24,10 @@ void ofApp::setup(){
     gui.add(position_gui.setup("position", 0, 0, 1));
     gui.add(playmode_gui.setup("playmode", true));
     gui.add(random_offset_gui.setup("random", 10, 1, 10000));
+    
+    //osc
+    sender.setup(HOST, SENDPORT);
+    receiver.setup(RECEIVEPORT);
 
     /* This is stuff you always need.*/
     
@@ -81,7 +85,57 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    
+    // hide old messages
+    for(int i = 0; i < NUM_MSG_STRINGS; i++){
+        if(timers[i] < ofGetElapsedTimef()){
+            msgStrings[i] = "";
+        }
+    }
+    
+    // check for waiting messages
+    while(receiver.hasWaitingMessages()){
+        
+        // get the next message
+        ofxOscMessage m;
+        receiver.getNextMessage(m);
+        
+        // check for mouse moved message
+        if(m.getAddress() == "/values"){
+            for(int i = 0; i <= 4; i++){
+                params.push_back(m.getArgAsFloat(i));
+            }
+            cout << params << endl;
+        }
+        else{
+            
+            // unrecognized message: display on the bottom of the screen
+            string msgString;
+            msgString = m.getAddress();
+            msgString += ":";
+            for(size_t i = 0; i < m.getNumArgs(); i++){
+                
+                // get the argument type
+                msgString += " ";
+                msgString += m.getArgTypeName(i);
+                msgString += ":";
+                
+                // display the argument - make sure we get the right type
+                if(m.getArgType(i) == OFXOSC_TYPE_INT32){
+                    msgString += ofToString(m.getArgAsInt32(i));
+                }
+                else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT){
+                    msgString += ofToString(m.getArgAsFloat(i));
+                }
+                else if(m.getArgType(i) == OFXOSC_TYPE_STRING){
+                    msgString += m.getArgAsString(i);
+                }
+                else{
+                    msgString += "unhandled argument type " + m.getArgTypeName(i);
+                }
+            }
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -189,25 +243,52 @@ void ofApp::audioIn(float * input, int bufferSize, int nChannels){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     
+    if (key == 32){
     //JSON
     //Json::Value event;
-    k++;
-        for(int i = 0; i < mfcc.size(); i++){
-            result["data"][k]["mfcc"][i] = mfcc[i];
-            result["data"][k]["parameters"]["pitch"] = pitch;
-            result["data"][k]["parameters"]["speed"] = rate;
-            result["data"][k]["parameters"]["grainLength"] = grainLength;
-            result["data"][k]["parameters"]["overlaps"] = overlaps;
-            result["data"][k]["parameters"]["position"] = position;
-            result["data"][k]["parameters"]["playmode"] = playmode;
-        }
+        k++;
+            for(int i = 0; i < mfcc.size(); i++){
+                result["data"][k]["mfcc"][i] = mfcc[i];
+                result["data"][k]["parameters"]["pitch"] = pitch;
+                result["data"][k]["parameters"]["speed"] = rate;
+                result["data"][k]["parameters"]["grainLength"] = grainLength;
+                result["data"][k]["parameters"]["overlaps"] = overlaps;
+                result["data"][k]["parameters"]["position"] = position;
+                //result["data"][k]["parameters"]["playmode"] = playmode;
+            }
     
     
-    result.save("data.json", true);
+        result.save("dataset.json", true);
+        //cout << k << endl;
+    }
 
-    //cout << result << endl;
-    cout << k << endl;
+    if (key == OF_KEY_RETURN){
+        for(int i = 0; i < mfcc.size(); i++){
+            cout << mfcc[i] << endl;
+        }
+    }
     
+    // send a test message
+    if(key == 's' || key == 'S'){
+        ofxOscMessage m;
+        m.setAddress("/test");
+        for(int i = 0; i < mfcc.size(); i++){
+            m.addFloatArg(mfcc[i]);
+        }
+        sender.sendMessage(m, false);
+    }
+    
+    // change parameters according to python prediction
+    if(key == 'c' || key == 'C'){
+        grain_size_gui = params[0];
+        overlaps_gui = params[1];
+        pitch_gui = params[2];
+        position_gui = params[3];
+        speed_gui = params[4];
+        params.clear();
+        cout << params << endl;
+        
+    }
 }
 
 //--------------------------------------------------------------
