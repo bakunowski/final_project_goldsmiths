@@ -1,9 +1,9 @@
 /* This is an example of how to integrate maximilain into openFrameworks,
  including using audio received for input and audio requested for output.
- 
- 
+
+
  You can copy and paste this and use it as a starting example.
- 
+
  */
 
 #include "ofApp.h"
@@ -13,7 +13,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    
+
     //gui
     gui.setup();
     gui.add(volume_gui.setup("volume", 0.1, 0, 1));
@@ -24,23 +24,23 @@ void ofApp::setup(){
     gui.add(position_gui.setup("position", 0, 0, 1));
     gui.add(playmode_gui.setup("playmode", true));
     gui.add(random_offset_gui.setup("random", 10, 1, 10000));
-    
+
     //osc
     sender.setup(HOST, SENDPORT);
     receiver.setup(RECEIVEPORT);
 
     /* This is stuff you always need.*/
-    
+
     //samples from http://freesound.org
     samp.load(ofToDataPath("346755__sergiosmarinis__keys-on-table.wav"));
     samp2.load(ofToDataPath("249592__staticpony1__dirty-electro-bass.wav"));
     //samp3.load(ofToDataPath("26393__brfindla__Calango1berimbau.wav"));
     samp4.load(ofToDataPath("68373__juskiddink__Cello_open_string_bowed.wav"));
     //samp5.load(ofToDataPath("249592__staticpony1__dirty-electro-bass.wav"));
-    
+
     sampleRate 	= 44100;    //Sampling Rate
     bufferSize	= 512;      //Buffer Size. you have to fill this buffer with sound using the for loop in the audioOut method
-    
+
     ts = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp);
     ts2 = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp2);
     //ts3 = new maxiTimePitchStretch<grainPlayerWin, maxiSample>(&samp3);
@@ -56,7 +56,7 @@ void ofApp::setup(){
     current=0;
     pitch = 1.;
     out_channels = 2;
-    
+
     fft.setup(1024, 512, 256);
     oct.setup(44100, 1024, 10);
     
