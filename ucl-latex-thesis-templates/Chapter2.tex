@@ -3,17 +3,56 @@
 
 \section{Problem background}
 %VERY CONCISE 
+- what is the problem
+
+- some study that describes it directly, and is a general thing done on the main
+problem here - programming synths based on sound matching
+
+\subsection{Audio descriptors}
+MFCC - description - most popular in speech synthesis
+
+what other can i mention that are useful, and widely used, but not as popular?
+mention the ones that i think will be useful in this project - paired with a granulator.
+
+\subsection{Granulation}
+difficult problem as the sound heavily depends on the audio sampled
+
+to accommodate for that - some universal audio descriptor have to be used that
+describe rhythm, density, pitch etc - so that the input sound can be 'molded'
+into what will resemble the original input sound to the system. 
+
+concatenative synthesis - how it could be beneficial to make that - at least
+mention it and some studies about it. mention CataRT maybe...
+
+\subsection{Machine Learning}
+a neural network could me used to build a granular synthesis parameter space
+from a sound, but teaching it to do that, and predicting it's behaviour is a
+difficult task as well as a very experimental approach, that is quite difficult
+to controll and predict.
+
+instead, focusing on replicating certain aspects of the input sound seems like a
+more straightforward and predictable approach to this problem.
+
+slicing the machine learning algorithm to predict different aspects of the sound
+separately will result in a more predictable outcome as well as one that's
+easier to control.
+
+
+
+
+\iffalse
 Programming synthesizers is a fun, but challenging task. The range of sounds possible to
 achieve on such a device, and consequently the amount of adjustable parameters can be overwhelming.
 From choosing an audio file to sample, to an amplitude envelope for each grain, the ability to make
 decisions about programming a granulator has to come from either a place of certainty about what
 each parameter is responsible for, or a place of experimental thought, and a somewhat random
-parameter value assignments
+parameter value assignments.
 
 Users fairly new in the realm of synthesizer programming may encounter issues creating sounds they
 desire. Even successful musicians might be doing things following a not clearly defined “intuition”.
 There are of course people who are experts in this field, but artists often look for inspiration
-when it comes to timbre of their sounds%\cite{noauthor_oneohtrix_2016} \cite{herbert_manifesto_2011}.
+when it comes to timbre of their sounds.
+%\cite{noauthor_oneohtrix_2016} \cite{herbert_manifesto_2011}
 It would seem that, the use of presets as a starting point is not unusual.
 
 %My future thesis will aim to offer an alternative way to approach the creation of new sounds.
@@ -45,12 +84,25 @@ input
 could arise as an effect of bad performance, but is does not seem to be the
 desired outcome in most cases.
 
-\subsection{Audio descriptors}
-\subsection{Granulation}
-\subsection{Machine Learning}
 
-\iffalse
 It seems like a description of this section is also in the introduction
 description. Which means that it could probably be fitted in there, instead of
 making a whole another section for it in the paper.
+
+The next paragraphs in the introduction should cite previous research in this
+area. It should cite those who had the idea or ideas first, and should also cite
+those who have done the most recent and relevant work. You should then go on to
+explain why more work was necessary (your work, of course.)
+
+Sufficient background information to allow the reader to understand the context
+and significance of the question you are trying to address.
+
+Proper acknowledgement of the previous work on which you are building.
+Sufficient references such that a reader could, by going to the library, achieve
+a sophisticated understanding of the context and significance of the question.
+
+The introduction should be focused on the thesis question(s). All cited work
+should be directly relevant to the goals of the thesis. This is not a place to
+summarize everything you have ever read on a subject.
+
 \fi
