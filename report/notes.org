@@ -1,0 +1,134 @@
+* Introduction  
+** This section should be about 500 words.
+** You can't write a good introduction until you know what the body of the paper says. Consider writing the introductory section(s) after you have completed the rest of the paper, rather than before.
+** Be sure to include a hook at the beginning of the introduction. This is a statement of something sufficiently interesting to motivate your reader to read the rest of the paper, it is an important/interesting scientific problem that your paper either solves or addresses. You should draw the reader in and make them want to read the rest of the paper.
+** The next paragraphs in the introduction should cite previous research in this area. It should cite those who had the idea or ideas first, and should also cite those who have done the most recent and relevant work. You should then go on to explain why more work was necessary (your work, of course.)
+** What else belongs in the introductory section(s) of your paper? 
+*** A statement of the goal of the paper: why the study was undertaken, or why the paper was written. Do not repeat the abstract. 
+*** Sufficient background information to allow the reader to understand the context and significance of the question you are trying to address. 
+*** Proper acknowledgement of the previous work on which you are building.
+*** Sufficient references such that a reader could, by going to the library, achieve
+    a sophisticated understanding of the context and significance of the question.
+*** The introduction should be focused on the thesis question(s).  All cited work should be directly relevant to the goals of the thesis.  This is not a place to summarize everything you have ever read on a subject.
+*** Explain the scope of your work, what will and will not be included. 
+*** A verbal "road map" or verbal "table of contents" guiding the reader to what lies ahead. 
+*** Is it obvious where introductory material ("old stuff") ends and your contribution ("new stuff") begins? 
+** Remember that this is not a review paper. We are looking for original work and interpretation/analysis by you. Break up the introduction section into logical segments by using subheads. 
+* Literature review
+** It seems like a description of this section is also in the introduction
+description. Which means that it could probably be fitted in there, instead of
+making a whole another section for it in the paper.
+
+** The next paragraphs in the introduction should cite previous research in this
+area. It should cite those who had the idea or ideas first, and should also cite
+those who have done the most recent and relevant work. You should then go on to
+explain why more work was necessary (your work, of course.)
+
+** Sufficient background information to allow the reader to understand the context
+and significance of the question you are trying to address.
+
+** Proper acknowledgement of the previous work on which you are building.
+Sufficient references such that a reader could, by going to the library, achieve
+a sophisticated understanding of the context and significance of the question.
+
+** The introduction should be focused on the thesis question(s). All cited work
+should be directly relevant to the goals of the thesis. This is not a place to
+summarize everything you have ever read on a subject.
+* Methods 
+** What belongs in the "methods" section of a scientific paper?
+*** Information to allow the reader to assess the believability of your results.
+*** Information needed by another researcher to replicate your experiment.
+*** Description of your materials, procedure, theory.
+*** Calculations, technique, procedure, equipment, and calibration plots. 
+*** Limitations, assumptions, and range of validity.
+*** Desciption of your analystical methods, including reference to any specialized statistical software. 
+
+** The methods section should answering the following questions and caveats: 
+
+    Could one accurately replicate the study (for example, all of the optional and adjustable parameters on any sensors or instruments that were used to acquire the data)?
+    Could another researcher accurately find and reoccupy the sampling stations or track lines?
+    Is there enough information provided about any instruments used so that a functionally equivalent instrument could be used to repeat the experiment?
+    If the data are in the public domain, could another researcher lay his or her hands on the identical data set?
+    Could one replicate any laboratory analyses that were used? 
+    Could one replicate any statistical analyses?
+    Could another researcher approximately replicate the key algorithms of any computer software?
+
+** Citations in this section should be limited to data sources and references of where to find more complete descriptions of procedures.
+** Do not include descriptions of results. 
+* Results and Analysis 
+** The results are actual statements of observations, including statistics, tables and graphs.
+** Indicate information on range of variation.
+** Mention negative results as well as positive. Do not interpret results - save that for the discussion. 
+** Lay out the case as for a jury. Present sufficient details so that others can draw their own inferences and construct their own explanations. 
+** Use S.I. units (m, s, kg, W, etc.) throughout the thesis. 
+** Break up your results into logical segments by using subheadings
+** Key results should be stated in clear sentences at the beginning of paragraphs.  It is far better to say "X had significant positive relationship with Y (linear regression p<0.01, r^2=0.79)" then to start with a less informative like "There is a significant relationship between X and Y".  Describe the nature of the findings; do not just tell the reader whether or not they are significant. 
+
+** Note: Results vs. Discussion Sections
+*** Quarantine your observations from your interpretations. The writer must make it crystal clear to the reader which statements are observation and which are interpretation. In most circumstances, this is best accomplished by physically separating statements about new observations from statements about the meaning or significance of those observations. Alternatively, this goal can be accomplished by careful use of phrases such as "I infer ..." vast bodies of geological literature became obsolete with the advent of plate tectonics; the papers that survived are those in which observations were presented in stand-alone fashion, unmuddied by whatever ideas the author might have had about the processes that caused the observed phenomena.
+ 
+*** How do you do this? 
+
+**** Physical separation into different sections or paragraphs.
+**** Don't overlay interpretation on top of data in figures. 
+**** Careful use of phrases such as "We infer that ".
+**** Don't worry if "results" seem short.
+
+*** Why? 
+
+**** Easier for your reader to absorb, frequent shifts of mental mode not required. 
+**** Ensures that your work will endure in spite of shifting paradigms.
+* Discussion 
+** Start with a few sentences that summarize the most important results. The discussion section should be a brief essay in itself, answering the following questions and caveats: 
+*** What are the major patterns in the observations? (Refer to spatial and temporal variations.)
+*** What are the relationships, trends and generalizations among the results?
+*** What are the exceptions to these patterns or generalizations?
+*** What are the likely causes (mechanisms) underlying these patterns resulting predictions?
+*** Is there agreement or disagreement with previous work?
+*** Interpret results in terms of background laid out in the introduction - what is the relationship of the present results to the original question?
+*** What is the implication of the present results for other unanswered questions in earth sciences, ecology, environmental policy, etc....?
+*** Multiple hypotheses: There are usually several possible explanations for results. Be careful to consider all of these rather than simply pushing your favorite one. If you can eliminate all but one, that is great, but often that is not possible with the data in hand. In that case you should give even treatment to the remaining possibilities, and try to indicate ways in which future work may lead to their discrimination.
+*** Avoid bandwagons: A special case of the above. Avoid jumping a currently fashionable point of view unless your results really do strongly support them. 
+*** What are the things we now know or understand that we didn't know or understand before the present work?
+*** Include the evidence or line of reasoning supporting each interpretation.
+*** What is the significance of the present results: why should we care? 
+** This section should be rich in references to similar work and background needed to interpret results. However, interpretation/discussion section(s) are often too long and verbose. Is there material that does not contribute to one of the elements listed above? If so, this may be material that you will want to consider deleting or moving. Break up the section into logical segments by using subheads. 
+* Conclusion 
+** What is the strongest and most important statement that you can make from your observations? 
+** If you met the reader at a meeting six months from now, what do you want them to remember about your paper? 
+** Refer back to problem posed, and describe the conclusions that you reached from carrying out this investigation, summarize new observations, new interpretations, and new insights that have resulted from the present work.
+** Include the broader implications of your results. 
+** Do not repeat word for word the abstract, introduction or discussion.
+* Frieda document 
+** Final Project Submission: Creative Project and Accompanying Text of 12,000 -15,000 words (80% of final mark) marked out of 100
+
+** Implementation 40/100
+*** TODO Correctness
+*** TODO Elegance of design
+*** TODO Usability
+*** TODO Level of difficulty
+*** TODO Originality
+*** TODO Significance of the work in relation to the state-of-the-art
+*** TODO All parts of the system are working
+*** TODO User interface
+*** TODO Effective error handling
+
+** Testing and Evaluation 20/100
+*** TODO Systematic testing including design of appropriate test cases
+*** TODO Justification of testing methods
+*** TODO User evaluation involving representative stakeholders
+*** TODO Insightful discussion of results
+*** TODO Evaluation of work in relation to original proposal and plan
+
+** Quality of report 40/100
+*** TODO Clear structure
+*** TODO Good introduction and fair discussion of literature 
+*** TODO Clear statement of problem and effective problem analysis
+*** TODO Justification of design decisions
+*** TODO Good argumentation and justification of claims
+*** TODO Clear documentation and user guide
+*** TODO Conclusion and discussion of future work
+*** TODO Sufficient and appropriate references, and good citing method
+*** TODO Good layout and formatting, especially of tables, figures, formulae and code examples
+*** TODO Inclusion of appropriate sound recordings and other documentation media
+*** TODO Correct and readable English in an appropriate style for academic work

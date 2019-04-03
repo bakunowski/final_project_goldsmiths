@@ -9,17 +9,21 @@ the task of granular synthesizer programming based on sound matching.
 Consequently building a tool that would assist musicians in creating interesting
 sounds, provided an audio input to the system.
 
-Over the course of the past couple months the project extended into more
-research-oriented directions, with a focus of finding the best possible audio
-descriptors for specific characteristics of sounds. In order to determine the
-most significant in judging similarity on the cognitive level.
+Over the course of the past couple months, the project extended into a more
+technical-oriented direction, implementing a granular synthesis algorithm in the
+'JUCE' C++ framework. As well as into a research-oriented space, with a focus of
+finding the best possible audio descriptors for specific characteristics of
+sounds. In order to determine the most significant in judging similarity on the
+cognitive level.
 
 The methods here concerned with describing audio differ from other approaches in
-literature (e.g Matthew) primarily in that sound is treated in a modular manner,
+literature
+(SOURCES)%Matthew
+primarily in that sound is treated in a modular manner,
 where a description is made based on one characteristic for X number instances,
 and separate processes are run for each. Instead of trying to describe audio as
 a whole, the aim is to describe it as a combination of things (density, pitch,
-rhythm, amplitude)
+rhythm, amplitude).
 
 Concretely my objectives are:
 
@@ -41,10 +45,12 @@ assessment of these types of problems and ultimately conclude that some stuff in
 the best way of doing it.
 
 \subsection{Deliverables}
-to these ends hehhe this is what i made:
 
-Some stuff about things.
-% \cite{example-citation}
-Some more things. 
-Inline citation:
-%\bibentry{example-citation}
+To these ends I have implemented 3 separate pieces of software:  
+
+\begin{itemize}
+\item Granular synthesizer implemented in the ``JUCE'' framework in C++
+\item A module responsible for analysing audio input, and sending that data
+\item A mixture of machine learing algorithms implemented in Python, that
+        actually change synthesizer's parameters based on the input sound
+\end{itemize}
