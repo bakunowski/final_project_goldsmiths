@@ -101,6 +101,10 @@
 			isa = PBXBuildFile;
 			fileRef = FFB1D0DD970ECA9F2587CDD8;
 		};
+		9AD64DFF6C0ECF85064CF75B = {
+			isa = PBXBuildFile;
+			fileRef = 1115C1BB328D9238EB626D61;
+		};
 		A0C28CA12FC9EEB43A6E8ACB = {
 			isa = PBXBuildFile;
 			fileRef = 36029A4D086B1DF4FBC7192B;
@@ -147,6 +151,13 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = JuceHeader.h;
 			path = ../../JuceLibraryCode/JuceHeader.h;
+			sourceTree = "SOURCE_ROOT";
+		};
+		1115C1BB328D9238EB626D61 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.objcpp;
+			name = "include_juce_dsp.mm";
+			path = "../../JuceLibraryCode/include_juce_dsp.mm";
 			sourceTree = "SOURCE_ROOT";
 		};
 		14774467217D6807872AAA07 = {
@@ -436,6 +447,13 @@
 			path = "~/JUCE/modules/juce_audio_basics";
 			sourceTree = "<absolute>";
 		};
+		F068D7ACD5EDC0F3D3CC87C9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_dsp";
+			path = "~/JUCE/modules/juce_dsp";
+			sourceTree = "<absolute>";
+		};
 		FAE061BCDBD0DF75939504A3 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
@@ -481,6 +499,7 @@
 				CEB5AC1E1F92B8D83C671272,
 				7EA794AE7C01C9268C3EE13B,
 				362EA8C7B4435C8A840340B1,
+				F068D7ACD5EDC0F3D3CC87C9,
 				07F760B821BB2AAE68FB85C3,
 				B7D2A192071E56BF333F470F,
 				6028821FF900A6A972AD3B5C,
@@ -502,6 +521,7 @@
 				A145EB672EC8DDA5744EC034,
 				19B6CE261138BB79785544A1,
 				FFB1D0DD970ECA9F2587CDD8,
+				1115C1BB328D9238EB626D61,
 				36029A4D086B1DF4FBC7192B,
 				A872271AA696965D5645AB41,
 				A1A3D1291E717EC78BC8E7EC,
@@ -590,12 +610,18 @@
 				HEADER_SEARCH_PATHS = (
 					"../../JuceLibraryCode",
 					"$(HOME)/JUCE/modules",
+					"$(SRCROOT)/../../EssentiaLightweightStaticLibrary/include",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Info-App.plist;
 				INFOPLIST_PREPROCESS = NO;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../EssentiaLightweightStaticLibrary/lib\"",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = "-lessentia";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.GranularSynth;
 				PRODUCT_NAME = "GranularSynth";
 				USE_HEADERMAP = NO;
@@ -640,6 +666,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = "-lessentia";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.GranularSynth;
 				PRODUCT_NAME = "GranularSynth";
 				USE_HEADERMAP = NO;
@@ -781,6 +808,7 @@
 				85EAD3A1E5645834F66499B2,
 				7463574745B58902BDEB615F,
 				6D86EF9848998CD0381225AA,
+				9AD64DFF6C0ECF85064CF75B,
 				A0C28CA12FC9EEB43A6E8ACB,
 				C66B7D8292B355B2F0F5797A,
 				CA583641BDF32AC5D48B9F89,

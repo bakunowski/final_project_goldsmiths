@@ -2,21 +2,43 @@
 #include "Grain.h"
 
 //==============================================================================
-MainComponent::MainComponent()  :   activeGrain(),
+MainComponent::MainComponent()  :   grainStream(),
                                     thumbnailCache(5),
                                     thumbnail(512, formatManager, thumbnailCache)
 {
+    setMacMainMenu(this);
     setupButtonsAndDials();
+   /*
+    // essentia
+    preApplyEssentia.buffer.setSize(1, lengthOfEssentiaBuffer);
+    essentia::init();
+    essentia::standard::AlgorithmFactory& factory = essentia::standard::AlgorithmFactory::instance();
+    fft = factory.create("FFT", "size", 8192);
     
+    essentiaInput.reserve(lengthOfEssentiaBuffer);
+    essentiaInput.resize(lengthOfEssentiaBuffer, 0.0f);
+    
+    fft->input("frame").set(essentiaInput);
+    fft->output("fft").set(essentiaFFT);
+  */
     // Make sure you set the size of the component after
     // you add any child components.
-    setSize (740, 380);
+    setSize (1200, 380);
+
+    PropertiesFile::Options options;
+    options.applicationName     = ProjectInfo::projectName;
+    options.filenameSuffix      = "settings";
+    options.osxLibrarySubFolder = "Preferences";
+    appProperties = new ApplicationProperties();
+    appProperties->setStorageParameters (options);
+    auto userSettings = appProperties->getUserSettings();
+    savedAudioState = std::unique_ptr<XmlElement>(userSettings->getXmlValue (XMLKEYAUDIOSETTINGS));
     
     // register the audio file reader
     formatManager.registerBasicFormats();
     
     // waveform visualisation
-    activeGrain.addChangeListener(this);
+    grainStream.addChangeListener(this);
     thumbnail.addChangeListener(this);
 
     // Some platforms require permissions to open input channels so request that here
@@ -24,19 +46,21 @@ MainComponent::MainComponent()  :   activeGrain(),
         && ! RuntimePermissions::isGranted (RuntimePermissions::recordAudio))
     {
         RuntimePermissions::request (RuntimePermissions::recordAudio,
-                                     [&] (bool granted) { if (granted)  setAudioChannels (0, 2); });
+                                     [&] (bool granted) { if (granted)  setAudioChannels (0, 2, savedAudioState.get()); });
     }
     else
     {
         // Specify the number of input and output channels that we want to open
-        setAudioChannels (0, 2);
+        setAudioChannels (0, 2, savedAudioState.get());
     }
 }
 
 MainComponent::~MainComponent()
 {
     // This shuts down the audio device and clears the audio source.
+    setMacMainMenu(nullptr);
     shutdownAudio();
+    //essentia::shutdown;
 }
 
 //==============================================================================
@@ -49,17 +73,22 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     // but be careful - it will be called on the audio thread, not the GUI thread.
 
     // For more details, see the help for AudioProcessor::prepareToPlay()
-    sampleRate = 0;
-    samplesPerBlockExpected = 0;
+    std::cout<<"Sample Rate: "<<sampleRate<<std::endl;
+    std::cout<<"Buffer Size: "<<samplesPerBlockExpected<<std::endl;
+    oversampling = new dsp::Oversampling<float>(1, overSampleFactor, dsp::Oversampling<float>::FilterType::filterHalfBandFIREquiripple, false);
+    auto channels = static_cast<uint32>(1); // supports only mono input
+    dsp::ProcessSpec spec {sampleRate, static_cast<uint32>(samplesPerBlockExpected), channels};
+    highpass.prepare(spec);
+//    updateHighpassCoefficient(19, sampleRate);
+    oversampling->initProcessing(static_cast<size_t>(samplesPerBlockExpected));
+    oversampling->reset();
+//    sampleRate = 0;
+//    samplesPerBlockExpected = 0;
 }
 
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
-    // Your audio-processing code goes here!
-
-    // For more details, see the help for AudioProcessor::getNextAudioBlock()
-    // get the next audio block if the grain is being used
-    if (activeGrain.gsIsPlaying)
+    if (grainStream.grainStreamIsActive)
     {
         for (auto channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel)
         {
@@ -69,10 +98,47 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             // fill the required number of samples with
             for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
             {
-                buffer[sample] = activeGrain(channel);
+                buffer[sample] = grainStream(channel);
             }
         }
     }
+   /*
+    dsp::AudioBlock<float> block(*bufferToFill.buffer);
+    dsp::ProcessContextReplacing<float> context(block);
+    dsp::AudioBlock<float> overSampledBlock;
+    overSampledBlock = oversampling->processSamplesUp(context.getInputBlock());
+    
+    // if the essentia buffer is smaller than the length we're aiming for then add samples
+    // so this should execute 6 times as 512 x 6 = 81...
+    if (preApplyEssentia.index + overSampledBlock.getNumSamples() < lengthOfEssentiaBuffer)
+    {
+        preApplyEssentia.buffer.copyFrom(0, preApplyEssentia.index, overSampledBlock.getChannelPointer(0), (int)overSampledBlock.getNumSamples());
+        preApplyEssentia.index += overSampledBlock.getNumSamples();
+    }
+    // if it's filled up
+    else
+    {
+        const int remains = lengthOfEssentiaBuffer - preApplyEssentia.index;
+        preApplyEssentia.buffer.copyFrom(0, preApplyEssentia.index, overSampledBlock.getChannelPointer(0), remains);
+        const float* preBuffer = preApplyEssentia.buffer.getReadPointer(0);
+        for (int i = 0; i < lengthOfEssentiaBuffer; ++i)
+        {
+            essentiaInput.emplace_back(preBuffer[i]);
+        }
+        
+        calculateFFT();
+        essentiaInput.clear();
+
+        preApplyEssentia.index = 0;
+        const int n = (int)overSampledBlock.getNumSamples() - remains;
+        if (n > 0)
+        {
+            dsp::AudioBlock<float> subBlock = overSampledBlock.getSubBlock(remains);
+            preApplyEssentia.buffer.copyFrom(0, preApplyEssentia.index, subBlock.getChannelPointer(0) , n);
+            preApplyEssentia.index += n;
+        }
+    }
+    */
 }
 
 void MainComponent::releaseResources()
@@ -86,32 +152,32 @@ void MainComponent::releaseResources()
 void MainComponent::sliderValueChanged(Slider * slider)
 {
     //centroid sample
-    if (slider == &centroidSampleDial)
-        activeGrain.setCentroidSample(static_cast<int>(centroidSampleDial.getValue()));
+    // if (slider == &filePositionDial)
+    //   grainStream.setFilePosition(static_cast<int>(filePositionDial.getValue()));
     
     // grain duration
-    else if (slider == &grainDurationDial)
-        activeGrain.setDuration(static_cast<int>(grainDurationDial.getValue()));
+    if (slider == &grainDurationDial)
+        grainStream.setDuration(static_cast<int>(grainDurationDial.getValue()));
     
     // starting offset
     else if (slider == &startingOffsetDial)
-        activeGrain.gsStartingOffset = static_cast<int>(startingOffsetDial.getValue());
+        grainStream.filePositionOffset = static_cast<int>(startingOffsetDial.getValue());
     
     // grain stream size
     else if (slider == &streamSizeDial)
-        activeGrain.setStreamSize(static_cast<int>(streamSizeDial.getValue()));
+        grainStream.setStreamSize(static_cast<int>(streamSizeDial.getValue()));
     
     // pitch offset
     else if (slider == &pitchOffsetDial)
-        activeGrain.gsPitchOffset = static_cast<int>(pitchOffsetDial.getValue());
+        grainStream.pitchOffsetForOneGrain = static_cast<int>(pitchOffsetDial.getValue());
     
     // grain stream gain
-    else if (slider == &grainStreamGainDial)
-        activeGrain.gsGlobalGain = Decibels::decibelsToGain<double>(grainStreamGainDial.getValue());
+    else if (slider == &globalGain)
+        grainStream.globalGain = Decibels::decibelsToGain<double>(globalGain.getValue());
     
     // grain gain offset - random grain amplitude
     else if (slider == &grainGainOffsetDial)
-        activeGrain.gsGainOffsetDb = static_cast<int>(grainGainOffsetDial.getValue());
+        grainStream.gainOffsetForOneGrain = static_cast<int>(grainGainOffsetDial.getValue());
 }
 
 void MainComponent::resized()
@@ -124,13 +190,13 @@ void MainComponent::resized()
     int dial_width = 80;
     int dial_height = 80;
     
-    centroidSampleDial.setBounds(xValue, getHeight()/3+10, dial_width, dial_height);
-    grainDurationDial.setBounds ((xValue += 100), getHeight()/3+10,  dial_width, dial_height);
-    startingOffsetDial.setBounds ((xValue += 100), getHeight()/3+10, dial_width, dial_height);
-    streamSizeDial.setBounds ((xValue += 100), getHeight()/3+10,  dial_width, dial_height);
-    pitchOffsetDial.setBounds((xValue += 100), getHeight()/3+10, dial_width, dial_height);
-    grainStreamGainDial.setBounds((xValue += 100), getHeight()/3+10, dial_width, dial_height);
-    grainGainOffsetDial.setBounds((xValue += 100), getHeight()/3+10, dial_width, dial_height);
+    filePositionDial.setBounds(xValue, getHeight()/3, dial_width, dial_height);
+    grainDurationDial.setBounds ((xValue += 100), getHeight()/3,  dial_width, dial_height);
+    startingOffsetDial.setBounds ((xValue += 100), getHeight()/3, dial_width, dial_height);
+    streamSizeDial.setBounds ((xValue += 100), getHeight()/3,  dial_width, dial_height);
+    pitchOffsetDial.setBounds((xValue += 100), getHeight()/3, dial_width, dial_height);
+    globalGain.setBounds((xValue += 100), getHeight()/3, dial_width, dial_height);
+    grainGainOffsetDial.setBounds((xValue += 100), getHeight()/3, dial_width, dial_height);
     
     openFileButton.setBounds (10, (yValue += 30), getWidth()/5, 20);
     playButton.setBounds (10, (yValue += 30), getWidth()/5, 20);
@@ -139,7 +205,7 @@ void MainComponent::resized()
 
 void MainComponent::paint (Graphics& g)
 {
-    g.fillAll (Colours::lightgrey);
+    g.fillAll (Colours::darkgrey);
     
     Rectangle<int> thumbnailBounds (0, 0, getWidth(), getHeight()/3);
     
@@ -164,7 +230,7 @@ void MainComponent::changeState(TransportState newState)
                 
             case TransportState::starting:
                 playButton.setEnabled (false);
-                activeGrain.gsIsPlaying = true;
+                grainStream.grainStreamIsActive = true;
                 changeState(TransportState::playing);
                 break;
                 
@@ -173,7 +239,7 @@ void MainComponent::changeState(TransportState newState)
                 break;
                 
             case TransportState::stopping:
-                activeGrain.silence();
+                grainStream.silenceAllGrains();
                 changeState(TransportState::stopped);
                 break;
         }
@@ -200,22 +266,20 @@ void MainComponent::openFile()
             playButton.setEnabled(true);
             
             // set the active grain's source audio file to new source
-            activeGrain.setAudioSource(*reader);
+            grainStream.setAudioSource(*reader);
             // set new thumbanil
             thumbnail.setSource(new FileInputSource (file));
             
             // update the starting sample dial
-            centroidSampleDial.setRange(1, activeGrain.getSize());
-            centroidSampleDial.setTextValueSuffix("FilePos");
-            centroidSampleDial.setNumDecimalPlacesToDisplay(0);
+            filePositionDial.setRange(1, grainStream.getFileSize());
+            filePositionDial.setNumDecimalPlacesToDisplay(0);
             
             // reset values of all sliders
-            centroidSampleDial.setValue(1);
+            filePositionDial.setValue(1);
             grainDurationDial.setValue(1);
             startingOffsetDial.setValue(0);
             streamSizeDial.setValue(1);
             pitchOffsetDial.setValue(0);
-            grainStreamGainDial.setValue(0);
             grainGainOffsetDial.setValue(0);
             
             // turn the audio thread back on
@@ -244,13 +308,13 @@ void MainComponent::stopFile()
 
 void MainComponent::changeListenerCallback (ChangeBroadcaster* source)
 {
-    if (source == &activeGrain)  transportSourceChanged();
+    if (source == &grainStream)  transportSourceChanged();
     if (source == &thumbnail)        thumbnailChanged();
 }
 
 void MainComponent::transportSourceChanged()
 {
-    if (activeGrain.gsIsPlaying)
+    if (grainStream.grainStreamIsActive)
         changeState (playing);
     else
         changeState (stopped);
@@ -263,7 +327,7 @@ void MainComponent::thumbnailChanged()
 
 void MainComponent::paintIfNoFileLoaded (Graphics& g, const Rectangle<int>& thumbnailBounds)
 {
-    g.setColour (Colours::darkgrey);
+    g.setColour (Colours::black);
     g.fillRect (thumbnailBounds);
     g.setColour (Colours::white);
     g.drawFittedText ("No File Loaded", thumbnailBounds, Justification::centred, 1.0f);
@@ -271,23 +335,23 @@ void MainComponent::paintIfNoFileLoaded (Graphics& g, const Rectangle<int>& thum
 
 void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbnailBounds)
 {
-    g.setColour (Colours::darkgrey);
+    g.setColour (Colours::black);
     g.fillRect (thumbnailBounds);
     
     // pos in samples
-    double pos = static_cast<double>(centroidSampleDial.getValue());
+    double pos = static_cast<double>(filePositionDial.getValue());
     double pos1 = pos/44100.0;
     auto audioLength (thumbnail.getTotalLength());
     
-    //draw channel 0 in blue
+    //draw channel 0 in red
     g.setColour (Colours::darkred);
     thumbnail.drawChannel(g, thumbnailBounds, 0.0, audioLength, 0, 1.0f);
     
-    //draw channel 1 in red
-    g.setColour(Colours::royalblue);
+    //draw channel 1 in blue
+    g.setColour(Colours::darkgrey);
     thumbnail.drawChannel(g, thumbnailBounds, 0.0, audioLength, 1, 1.0f);
     
-    g.setColour (Colours::green);
+    g.setColour (Colours::lightyellow);
     auto drawPosition ((pos1/audioLength) * thumbnailBounds.getWidth() + thumbnailBounds.getX());
     g.drawLine(drawPosition, thumbnailBounds.getY(), drawPosition, thumbnailBounds.getBottom(), 2.0f);
 }
@@ -296,19 +360,80 @@ void MainComponent::timerCallback()
 {
     repaint();
 }
+
+StringArray MainComponent::getMenuBarNames()
+{
+    const char* const names[] = {"Settings", nullptr};
+    return StringArray (names);
+}
+
+PopupMenu MainComponent::getMenuForIndex(int topLevelMenuIndex, const String&)
+{
+    PopupMenu menu;
+    if (topLevelMenuIndex == 0) menu.addItem(1, "Audio Settings");
+    return menu;
+}
+
+void MainComponent::menuItemSelected(int menuItemID, int topLevelMenuIndex)
+{
+    if (menuItemID == 1)
+    {
+        showAudioSettings();
+    }
+}
+
+void MainComponent::buttonClicked(Button *button)
+{
+}
+
+void MainComponent::showAudioSettings()
+{
+   AudioDeviceSelectorComponent audioSettingsComp (deviceManager,
+                                                   0, 0,    // audio input
+                                                   1, 1,    // audio output
+                                                   false,   // midi in
+                                                   false,   // midi out
+                                                   false,   // stereo pair
+                                                   false);  // advanced
+    audioSettingsComp.setSize(500, 450);
+    
+    DialogWindow::LaunchOptions o;
+    o.content.setNonOwned (&audioSettingsComp);
+    o.dialogTitle                   = "Audio settings";
+    o.componentToCentreAround       = this;
+    o.dialogBackgroundColour        = Colours::black;
+    o.escapeKeyTriggersCloseButton  = true;
+    o.useNativeTitleBar             = true;
+    o.resizable                     = true;
+    o.runModal();
+    
+    ScopedPointer<XmlElement> audioState (deviceManager.createStateXml());
+    appProperties->getUserSettings()->setValue(XMLKEYAUDIOSETTINGS, audioState);
+    appProperties->getUserSettings()->saveIfNeeded();
+}
+
+void MainComponent::calculateFFT()
+{
+    fft->compute();
+}
+
 //===========================================================================================
 //                     setup buttons and dials down here for cleaner code
 void MainComponent::setupButtonsAndDials()
 {
-    // centroid sample dial setup
-    centroidSampleDial.setSliderStyle(Slider::RotaryVerticalDrag);
-    centroidSampleDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
-    centroidSampleDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
-    centroidSampleDial.setRange(1, 2);
-    centroidSampleDial.setTextValueSuffix("FilePos");
-    centroidSampleDial.addListener(this);
-    centroidSampleDial.setNumDecimalPlacesToDisplay(0);
-    addAndMakeVisible(centroidSampleDial);
+    // filePositionDial setup
+    addAndMakeVisible(filePositionDial);
+    filePositionDial.setRange(1, 2);
+    filePositionDial.onValueChange = [this] {(grainStream.setFilePosition(static_cast<int>(filePositionDial.getValue()))); };
+    filePositionDial.setSliderStyle(Slider::RotaryVerticalDrag);
+    filePositionDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
+    filePositionDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+    filePositionDial.setNumDecimalPlacesToDisplay(0);
+    
+    addAndMakeVisible(filePositionLabel);
+    filePositionLabel.setColour(Label::backgroundColourId, Colours::black);
+    filePositionLabel.setText("FilePos", dontSendNotification);
+    filePositionLabel.attachToComponent(&filePositionDial, false);
     
     // grain duration dial setup
     grainDurationDial.setSliderStyle(Slider::RotaryVerticalDrag);
@@ -352,14 +477,14 @@ void MainComponent::setupButtonsAndDials()
     addAndMakeVisible (pitchOffsetDial);
     
     // grain stream gain dial
-    grainStreamGainDial.setSliderStyle(Slider::RotaryVerticalDrag);
-    startingOffsetDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
-    grainStreamGainDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
-    grainStreamGainDial.setRange (-60, 0);
-    grainStreamGainDial.setTextValueSuffix (" dB");
-    grainStreamGainDial.setNumDecimalPlacesToDisplay(0);
-    grainStreamGainDial.addListener(this);
-    addAndMakeVisible (grainStreamGainDial);
+    globalGain.setSliderStyle(Slider::RotaryVerticalDrag);
+    globalGain.setColour(Slider::rotarySliderFillColourId, Colours::orange);
+    globalGain.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+    globalGain.setRange (-60, 0);
+    globalGain.setTextValueSuffix (" dB");
+    globalGain.setNumDecimalPlacesToDisplay(0);
+    globalGain.addListener(this);
+    addAndMakeVisible (globalGain);
     
     // grain gain offset dial
     grainGainOffsetDial.setSliderStyle(Slider::RotaryVerticalDrag);
@@ -369,7 +494,7 @@ void MainComponent::setupButtonsAndDials()
     grainGainOffsetDial.setTextValueSuffix (" dB");
     grainGainOffsetDial.setNumDecimalPlacesToDisplay(0);
     grainGainOffsetDial.addListener(this);
-    addAndMakeVisible (grainGainOffsetDial);
+//    addAndMakeVisible (grainGainOffsetDial);
     
     // open file button
     openFileButton.setButtonText("Open File...");
