@@ -115,6 +115,12 @@ void GrainStream::setStreamSize(int size)
         removeGrainsFromStream(this->grainStreamSize - size);
 }
 
+double GrainStream::getCurrentGrainPosition(int channel)
+{
+    for (oneGrain& grain : grains)
+        return grain.grainDataCurrentSample[channel];
+}
+
 void GrainStream::randomizeGrain(oneGrain& grain)
 {
     Random rand = Random();
@@ -138,7 +144,7 @@ void GrainStream::randomizeGrain(oneGrain& grain)
     // Set the Current Sample to the Starting Sample
     grain.grainDataCurrentSample[LEFT_CHANNEL] = static_cast<double>(grain.grainDataStartPosition);
     grain.grainDataCurrentSample[RIGHT_CHANNEL] = static_cast<double>(grain.grainDataStartPosition);
-    
+//    cout << grain.grainDataCurrentSample[LEFT_CHANNEL] << endl;
     // Clamp the End Sample to be Within the WaveTable Range
     grain.grainDataEndPosition = grain.grainDataStartPosition + this->sampleDelta;
     if (grain.grainDataEndPosition >= this->fileSize)
@@ -185,4 +191,9 @@ void GrainStream::silenceAllGrains()
         grain.grainDataIsFinished = true;
     
     grainStreamIsActive = false;
+}
+
+void GrainStream::getCurrentPosition(oneGrain& grain)
+{
+        cout << grain.grainDataCurrentSample[0] << endl;
 }

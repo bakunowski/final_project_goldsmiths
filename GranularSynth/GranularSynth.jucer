@@ -3,6 +3,10 @@
 <JUCERPROJECT id="Fz5GXJ" name="GranularSynth" projectType="guiapp" jucerVersion="5.4.3">
   <MAINGROUP id="txm1AR" name="GranularSynth">
     <GROUP id="{E42BD5A4-A8B1-9A2F-7341-25912A64AD65}" name="Source">
+      <FILE id="X5Bwrz" name="Audio_Analysis.cpp" compile="1" resource="0"
+            file="Source/Audio_Analysis.cpp"/>
+      <FILE id="iafWnr" name="Audio_Analysis.h" compile="0" resource="0"
+            file="Source/Audio_Analysis.h"/>
       <FILE id="IbYUEi" name="Grain.cpp" compile="1" resource="0" file="Source/Grain.cpp"/>
       <FILE id="HhyT84" name="Grain.h" compile="0" resource="0" file="Source/Grain.h"/>
       <FILE id="DeCb5G" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>

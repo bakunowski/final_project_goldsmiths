@@ -16,6 +16,8 @@ if (APPLE)
 project ("GranularSynth" C CXX)
 
 add_executable (APP
+    "../../Source/Audio_Analysis.cpp"
+    "../../Source/Audio_Analysis.h"
     "../../Source/Grain.cpp"
     "../../Source/Grain.h"
     "../../Source/MainComponent.h"
@@ -1406,6 +1408,7 @@ add_executable (APP
     "../../JuceLibraryCode/JuceHeader.h"
 )
 
+set_source_files_properties ("../../Source/Audio_Analysis.h" PROPERTIES HEADER_FILE_ONLY TRUE)
 set_source_files_properties ("../../Source/Grain.h" PROPERTIES HEADER_FILE_ONLY TRUE)
 set_source_files_properties ("../../Source/MainComponent.h" PROPERTIES HEADER_FILE_ONLY TRUE)
 set_source_files_properties ("../../../../../../../../JUCE/modules/juce_audio_basics/audio_play_head/juce_AudioPlayHead.h" PROPERTIES HEADER_FILE_ONLY TRUE)
@@ -2824,13 +2827,13 @@ set_target_properties (APP PROPERTIES
     XCODE_ATTRIBUTE_COPY_PHASE_STRIP NO
     XCODE_ATTRIBUTE_GCC_DYNAMIC_NO_PIC NO
     XCODE_ATTRIBUTE_GCC_VERSION com.apple.compilers.llvm.clang.1_0
-    XCODE_ATTRIBUTE_INFOPLIST_FILE "/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Builds/CLion/Debug-Info-App.plist"
+    XCODE_ATTRIBUTE_INFOPLIST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Debug-Info-App.plist"
     XCODE_ATTRIBUTE_INFOPLIST_PREPROCESS NO
     XCODE_ATTRIBUTE_INSTALL_PATH "$(HOME)/Applications"
     XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER com.yourcompany.GranularSynth
     XCODE_ATTRIBUTE_PRODUCT_NAME "GranularSynth"
     XCODE_ATTRIBUTE_USE_HEADERMAP NO
-    MACOSX_BUNDLE_INFO_PLIST "/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Builds/CLion/Debug-Info-App.plist"
+    MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Debug-Info-App.plist"
     XCODE_ATTRIBUTE_PRODUCT_NAME "GranularSynth"
     MACOSX_BUNDLE TRUE
 )
@@ -2903,13 +2906,13 @@ set_target_properties (APP PROPERTIES
     XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS NO
     XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN YES
     XCODE_ATTRIBUTE_GCC_VERSION com.apple.compilers.llvm.clang.1_0
-    XCODE_ATTRIBUTE_INFOPLIST_FILE "/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Builds/CLion/Release-Info-App.plist"
+    XCODE_ATTRIBUTE_INFOPLIST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Release-Info-App.plist"
     XCODE_ATTRIBUTE_INFOPLIST_PREPROCESS NO
     XCODE_ATTRIBUTE_INSTALL_PATH "$(HOME)/Applications"
     XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER com.yourcompany.GranularSynth
     XCODE_ATTRIBUTE_PRODUCT_NAME "GranularSynth"
     XCODE_ATTRIBUTE_USE_HEADERMAP NO
-    MACOSX_BUNDLE_INFO_PLIST "/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Builds/CLion/Release-Info-App.plist"
+    MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Release-Info-App.plist"
     XCODE_ATTRIBUTE_PRODUCT_NAME "GranularSynth"
     MACOSX_BUNDLE TRUE
 )

@@ -1,0 +1,2 @@
+* Audio descriptors
+** onsetRate example chain: fft -> onsetDetection -> onsets -> onsetRate

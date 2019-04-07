@@ -40,6 +40,10 @@ public:
     
     double globalGain = 1.0;
     
+    double getCurrentGrainPosition(int channel);
+    
+
+    
 private:
 
     // AudioSampleBuffer of the grain's audio source WAV file
@@ -79,4 +83,6 @@ private:
     void addGrainsToStream(int count = 1);
     
     void removeGrainsFromStream(int count = 1);
+    
+    void getCurrentPosition(oneGrain& grain);
 };

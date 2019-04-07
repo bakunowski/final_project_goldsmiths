@@ -89,6 +89,7 @@ ifeq ($(CONFIG),Build\ Configuration)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/Audio_Analysis_2657fe4e.o \
   $(JUCE_OBJDIR)/Grain_4c99d65c.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
@@ -119,6 +120,11 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
+
+$(JUCE_OBJDIR)/Audio_Analysis_2657fe4e.o: ../../Source/Audio_Analysis.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling Audio_Analysis.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Grain_4c99d65c.o: ../../Source/Grain.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)

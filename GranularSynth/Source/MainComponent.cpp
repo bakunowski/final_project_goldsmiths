@@ -2,25 +2,73 @@
 #include "Grain.h"
 
 //==============================================================================
-MainComponent::MainComponent()  :   grainStream(),
-                                    thumbnailCache(5),
-                                    thumbnail(512, formatManager, thumbnailCache)
+MainComponent::MainComponent()  :     grainStream(),
+                                      thumbnailCache(5),
+                                      thumbnail(512, formatManager, thumbnailCache)
 {
     setMacMainMenu(this);
     setupButtonsAndDials();
-   /*
+   
     // essentia
     preApplyEssentia.buffer.setSize(1, lengthOfEssentiaBuffer);
     essentia::init();
     essentia::standard::AlgorithmFactory& factory = essentia::standard::AlgorithmFactory::instance();
-    fft = factory.create("FFT", "size", 8192);
     
-    essentiaInput.reserve(lengthOfEssentiaBuffer);
-    essentiaInput.resize(lengthOfEssentiaBuffer, 0.0f);
+    dcremoval = factory.create("DCRemoval");
+    windowing = factory.create("Windowing", "type", "hann", "zeroPadding", 0);
+    fft = factory.create("FFT", "size", 1024);
+    cartesian2polar = factory.create("CartesianToPolar");
+    spectrum = factory.create("Spectrum", "size", 8192);
+    mfcc = factory.create("MFCC");
+    onsetDetection = factory.create("OnsetDetection");
+    onsets = factory.create("Onsets");
+    //onsetRate = factory.create("OnsetRate");
+
+    temporaryBuffer.reserve(lengthOfEssentiaBuffer);
+    temporaryBuffer.resize(lengthOfEssentiaBuffer, 0.0f);
     
-    fft->input("frame").set(essentiaInput);
-    fft->output("fft").set(essentiaFFT);
-  */
+    spectrumResults.reserve(lengthOfEssentiaBuffer);
+    spectrumResults.resize(lengthOfEssentiaBuffer, 0.0f);
+    
+    weights.reserve(2);
+    weights.resize(2, 0.0f);
+    cout << weights.size() << endl;
+
+    dcremoval->input("signal").set(temporaryBuffer);
+    dcremoval->output("signal").set(dcRemovalBuffer);
+    
+    windowing->input("frame").set(dcRemovalBuffer);
+    windowing->output("frame").set(windowingBuffer);
+    
+    fft->input("frame").set(windowingBuffer);
+    fft->output("fft").set(fftBuffer);
+    
+    cartesian2polar->input("complex").set(fftBuffer);
+    cartesian2polar->output("magnitude").set(cartesian2polarMagnitudes);
+    cartesian2polar->output("phase").set(cartesian2polarPhases);
+    
+    spectrum->input("frame").set(temporaryBuffer);
+    spectrum->output("spectrum").set(spectrumResults);
+    
+    mfcc->input("spectrum").set(spectrumResults);
+    mfcc->output("bands").set(mfccBands);
+    mfcc->output("mfcc").set(mfccCoeffs);
+    
+    onsetDetection->input("spectrum").set(cartesian2polarMagnitudes);
+    onsetDetection->input("phase").set(cartesian2polarPhases);
+    
+    // push this into an array, the size of which will serve as 2nd arg in matrix init
+    onsetDetection->output("onsetDetection").set(onsetDetectionResult);
+
+    // matrix 2 dimensional
+    onsets->input("detections").set(matrix);
+    onsets->input("weights").set(weights);
+    onsets->output("onsets").set(onsetRateVector);
+
+//    onsetRate->input("signal").set(onsetRateVector);
+//    onsetRate->output("onsetRate").set(result);
+//    onsetRate->output("onsets").set(result2);
+
     // Make sure you set the size of the component after
     // you add any child components.
     setSize (1200, 380);
@@ -60,30 +108,14 @@ MainComponent::~MainComponent()
     // This shuts down the audio device and clears the audio source.
     setMacMainMenu(nullptr);
     shutdownAudio();
-    //essentia::shutdown;
+    essentia::shutdown();
 }
 
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    // This function will be called when the audio device is started, or when
-    // its settings (i.e. sample rate, block size, etc) are changed.
-
-    // You can use this function to initialise any resources you might need,
-    // but be careful - it will be called on the audio thread, not the GUI thread.
-
-    // For more details, see the help for AudioProcessor::prepareToPlay()
     std::cout<<"Sample Rate: "<<sampleRate<<std::endl;
     std::cout<<"Buffer Size: "<<samplesPerBlockExpected<<std::endl;
-    oversampling = new dsp::Oversampling<float>(1, overSampleFactor, dsp::Oversampling<float>::FilterType::filterHalfBandFIREquiripple, false);
-    auto channels = static_cast<uint32>(1); // supports only mono input
-    dsp::ProcessSpec spec {sampleRate, static_cast<uint32>(samplesPerBlockExpected), channels};
-    highpass.prepare(spec);
-//    updateHighpassCoefficient(19, sampleRate);
-    oversampling->initProcessing(static_cast<size_t>(samplesPerBlockExpected));
-    oversampling->reset();
-//    sampleRate = 0;
-//    samplesPerBlockExpected = 0;
 }
 
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
@@ -94,7 +126,7 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
         {
             // get a pointer to the start sample in the buffer for this audio output channel
             auto* buffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
-            
+ 
             // fill the required number of samples with
             for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
             {
@@ -102,82 +134,21 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             }
         }
     }
-   /*
-    dsp::AudioBlock<float> block(*bufferToFill.buffer);
-    dsp::ProcessContextReplacing<float> context(block);
-    dsp::AudioBlock<float> overSampledBlock;
-    overSampledBlock = oversampling->processSamplesUp(context.getInputBlock());
-    
-    // if the essentia buffer is smaller than the length we're aiming for then add samples
-    // so this should execute 6 times as 512 x 6 = 81...
-    if (preApplyEssentia.index + overSampledBlock.getNumSamples() < lengthOfEssentiaBuffer)
+   
+    if (bufferToFill.buffer->getNumChannels() > 0)
     {
-        preApplyEssentia.buffer.copyFrom(0, preApplyEssentia.index, overSampledBlock.getChannelPointer(0), (int)overSampledBlock.getNumSamples());
-        preApplyEssentia.index += overSampledBlock.getNumSamples();
-    }
-    // if it's filled up
-    else
-    {
-        const int remains = lengthOfEssentiaBuffer - preApplyEssentia.index;
-        preApplyEssentia.buffer.copyFrom(0, preApplyEssentia.index, overSampledBlock.getChannelPointer(0), remains);
-        const float* preBuffer = preApplyEssentia.buffer.getReadPointer(0);
-        for (int i = 0; i < lengthOfEssentiaBuffer; ++i)
-        {
-            essentiaInput.emplace_back(preBuffer[i]);
-        }
         
-        calculateFFT();
-        essentiaInput.clear();
-
-        preApplyEssentia.index = 0;
-        const int n = (int)overSampledBlock.getNumSamples() - remains;
-        if (n > 0)
+        const auto* channelData = bufferToFill.buffer->getReadPointer(0, bufferToFill.startSample);
+        for (auto i = 0; i < bufferToFill.numSamples; ++i)
         {
-            dsp::AudioBlock<float> subBlock = overSampledBlock.getSubBlock(remains);
-            preApplyEssentia.buffer.copyFrom(0, preApplyEssentia.index, subBlock.getChannelPointer(0) , n);
-            preApplyEssentia.index += n;
+            // calling the audio desriptors function in this
+            pushNextSampleIntoEssentiaArray(channelData[i]);
         }
-    }
-    */
+   }
 }
 
 void MainComponent::releaseResources()
 {
-    // This will be called when the audio device stops, or when it is being
-    // restarted due to a setting change.
-
-    // For more details, see the help for AudioProcessor::releaseResources()
-}
-
-void MainComponent::sliderValueChanged(Slider * slider)
-{
-    //centroid sample
-    // if (slider == &filePositionDial)
-    //   grainStream.setFilePosition(static_cast<int>(filePositionDial.getValue()));
-    
-    // grain duration
-    if (slider == &grainDurationDial)
-        grainStream.setDuration(static_cast<int>(grainDurationDial.getValue()));
-    
-    // starting offset
-    else if (slider == &startingOffsetDial)
-        grainStream.filePositionOffset = static_cast<int>(startingOffsetDial.getValue());
-    
-    // grain stream size
-    else if (slider == &streamSizeDial)
-        grainStream.setStreamSize(static_cast<int>(streamSizeDial.getValue()));
-    
-    // pitch offset
-    else if (slider == &pitchOffsetDial)
-        grainStream.pitchOffsetForOneGrain = static_cast<int>(pitchOffsetDial.getValue());
-    
-    // grain stream gain
-    else if (slider == &globalGain)
-        grainStream.globalGain = Decibels::decibelsToGain<double>(globalGain.getValue());
-    
-    // grain gain offset - random grain amplitude
-    else if (slider == &grainGainOffsetDial)
-        grainStream.gainOffsetForOneGrain = static_cast<int>(grainGainOffsetDial.getValue());
 }
 
 void MainComponent::resized()
@@ -195,7 +166,7 @@ void MainComponent::resized()
     startingOffsetDial.setBounds ((xValue += 100), getHeight()/3, dial_width, dial_height);
     streamSizeDial.setBounds ((xValue += 100), getHeight()/3,  dial_width, dial_height);
     pitchOffsetDial.setBounds((xValue += 100), getHeight()/3, dial_width, dial_height);
-    globalGain.setBounds((xValue += 100), getHeight()/3, dial_width, dial_height);
+    globalGainDial.setBounds((xValue += 100), getHeight()/3, dial_width, dial_height);
     grainGainOffsetDial.setBounds((xValue += 100), getHeight()/3, dial_width, dial_height);
     
     openFileButton.setBounds (10, (yValue += 30), getWidth()/5, 20);
@@ -348,12 +319,21 @@ void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbn
     thumbnail.drawChannel(g, thumbnailBounds, 0.0, audioLength, 0, 1.0f);
     
     //draw channel 1 in blue
-    g.setColour(Colours::darkgrey);
+    g.setColour(Colours::olivedrab);
     thumbnail.drawChannel(g, thumbnailBounds, 0.0, audioLength, 1, 1.0f);
     
-    g.setColour (Colours::lightyellow);
+    g.setColour (Colours::yellow);
     auto drawPosition ((pos1/audioLength) * thumbnailBounds.getWidth() + thumbnailBounds.getX());
     g.drawLine(drawPosition, thumbnailBounds.getY(), drawPosition, thumbnailBounds.getBottom(), 2.0f);
+    
+    for (int i = 0; i <= streamSizeDial.getValue(); ++i)
+    {
+        double grainsPos = grainStream.getCurrentGrainPosition(i)/44100.0;
+        g.setColour(Colours::white);
+        auto drawGrainPosition ((grainsPos/audioLength) * thumbnailBounds.getWidth() + thumbnailBounds.getX());
+        g.drawLine(drawGrainPosition, thumbnailBounds.getY()+10, drawGrainPosition, thumbnailBounds.getBottom()-10, 1.0f);
+    }
+    //cout << grainsPos << endl;
 }
 
 void MainComponent::timerCallback()
@@ -361,6 +341,8 @@ void MainComponent::timerCallback()
     repaint();
 }
 
+//====================================================================================================
+//                                          menubar stuff
 StringArray MainComponent::getMenuBarNames()
 {
     const char* const names[] = {"Settings", nullptr};
@@ -412,10 +394,7 @@ void MainComponent::showAudioSettings()
     appProperties->getUserSettings()->saveIfNeeded();
 }
 
-void MainComponent::calculateFFT()
-{
-    fft->compute();
-}
+
 
 //===========================================================================================
 //                     setup buttons and dials down here for cleaner code
@@ -437,33 +416,35 @@ void MainComponent::setupButtonsAndDials()
     
     // grain duration dial setup
     grainDurationDial.setSliderStyle(Slider::RotaryVerticalDrag);
-    //   mGrainDurationSlider.setRotaryParameters (MathConstants<float>::pi * 1.2f, MathConstants<float>::pi * 2.8f, false);
     grainDurationDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
     grainDurationDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
     grainDurationDial.setRange (1, 1000);
+    grainDurationDial.onValueChange = [this] {(grainStream.setDuration(static_cast<int>(grainDurationDial.getValue()))); };
     grainDurationDial.setTextValueSuffix (" ms");
     grainDurationDial.setNumDecimalPlacesToDisplay(0);
-    grainDurationDial.addListener(this);
+    //grainDurationDial.addListener(this);
     addAndMakeVisible (grainDurationDial);
-    
+                                               
     // strem size dial setup
     streamSizeDial.setSliderStyle(Slider::RotaryVerticalDrag);
     streamSizeDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
     streamSizeDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
     streamSizeDial.setRange (1, 10);
+    streamSizeDial.onValueChange = [this] {(grainStream.setStreamSize(static_cast<int>(streamSizeDial.getValue()))); };
     streamSizeDial.setTextValueSuffix (" grains");
     streamSizeDial.setNumDecimalPlacesToDisplay(0);
-    streamSizeDial.addListener(this);
+    //streamSizeDial.addListener(this);
     addAndMakeVisible (streamSizeDial);
     
     // starting offset dial setup
     startingOffsetDial.setSliderStyle(Slider::RotaryVerticalDrag);
     startingOffsetDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
     startingOffsetDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
-    startingOffsetDial.setRange (0, 10000);
+    startingOffsetDial.setRange (0, 50000);
+    startingOffsetDial.onValueChange = [this] {(grainStream.filePositionOffset = static_cast<int>(startingOffsetDial.getValue()));};
     startingOffsetDial.setTextValueSuffix (" samples offset");
     startingOffsetDial.setNumDecimalPlacesToDisplay(0);
-    startingOffsetDial.addListener(this);
+    //startingOffsetDial.addListener(this);
     addAndMakeVisible (startingOffsetDial);
     
     // pitch offset dial
@@ -471,29 +452,32 @@ void MainComponent::setupButtonsAndDials()
     pitchOffsetDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
     pitchOffsetDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
     pitchOffsetDial.setRange (0, 24);
+    pitchOffsetDial.onValueChange = [this] {(grainStream.pitchOffsetForOneGrain = static_cast<int>(pitchOffsetDial.getValue()));};
     pitchOffsetDial.setTextValueSuffix (" semitones offset");
     pitchOffsetDial.setNumDecimalPlacesToDisplay(0);
-    pitchOffsetDial.addListener(this);
+    //pitchOffsetDial.addListener(this);
     addAndMakeVisible (pitchOffsetDial);
     
     // grain stream gain dial
-    globalGain.setSliderStyle(Slider::RotaryVerticalDrag);
-    globalGain.setColour(Slider::rotarySliderFillColourId, Colours::orange);
-    globalGain.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
-    globalGain.setRange (-60, 0);
-    globalGain.setTextValueSuffix (" dB");
-    globalGain.setNumDecimalPlacesToDisplay(0);
-    globalGain.addListener(this);
-    addAndMakeVisible (globalGain);
+    globalGainDial.setSliderStyle(Slider::RotaryVerticalDrag);
+    globalGainDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
+    globalGainDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+    globalGainDial.setRange (-60, 0);
+    globalGainDial.onValueChange = [this] {grainStream.globalGain = Decibels::decibelsToGain<double>(globalGainDial.getValue());};
+    globalGainDial.setTextValueSuffix (" dB");
+    globalGainDial.setNumDecimalPlacesToDisplay(0);
+    //globalGainDial.addListener(this);
+    addAndMakeVisible (globalGainDial);
     
     // grain gain offset dial
     grainGainOffsetDial.setSliderStyle(Slider::RotaryVerticalDrag);
     grainGainOffsetDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
     grainGainOffsetDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
     grainGainOffsetDial.setRange (-60, 0);
+    grainGainOffsetDial.onValueChange = [this] {(grainStream.gainOffsetForOneGrain = static_cast<int>(grainGainOffsetDial.getValue()));};
     grainGainOffsetDial.setTextValueSuffix (" dB");
     grainGainOffsetDial.setNumDecimalPlacesToDisplay(0);
-    grainGainOffsetDial.addListener(this);
+    //grainGainOffsetDial.addListener(this);
 //    addAndMakeVisible (grainGainOffsetDial);
     
     // open file button
@@ -514,4 +498,92 @@ void MainComponent::setupButtonsAndDials()
     stopButton.setColour(TextButton::buttonColourId, Colours::lightpink);
     stopButton.setEnabled(false);
     addAndMakeVisible(&stopButton);
+}
+//======================================================================================================
+//                                              essentia
+void MainComponent::pushNextSampleIntoEssentiaArray(float sample) noexcept
+{
+    if (state == playing){
+    // if we have enough data set a flag to indicate that next line should now be rendered?
+    if (preApplyEssentia.index == lengthOfEssentiaBuffer)
+    {
+        if (! preApplyEssentia.nextBlockReady)
+        {
+            // zeromem
+            // memcpy
+            estimateMelody();
+            temporaryBuffer.clear();
+            preApplyEssentia.nextBlockReady = true;
+        }
+        preApplyEssentia.index = 0;
+        preApplyEssentia.nextBlockReady = false;
+    }
+    // update index if not enough data and make that index equal to the sample
+    preApplyEssentia.index += 1;
+    temporaryBuffer.emplace_back(sample);
+}
+}
+
+void MainComponent::estimateMelody()
+{
+    dcremoval->compute();
+    windowing->compute();
+    fft->compute();
+    cartesian2polar->compute();
+    
+    spectrum->compute();
+    mfcc->compute();
+    
+    
+   // for (int i = 0; i <= mfccCoeffs.size(); ++i)
+   // {
+   //     cout << mfccCoeffs[i] << endl;
+   // }
+    
+    
+    onsetDetection->compute();
+    hfc.push_back(onsetDetectionResult);
+    blablabla.push_back(onsetDetectionResult);
+
+//    cout << "weights" << weights.size() << endl;
+//    cout << "detection function" << hfc.size() << endl;
+    
+    if (hfc.size() == 2)
+    {
+        matrix = TNT::Array2D<essentia::Real>(2, hfc.size());
+
+        for (int i=0; i<int(hfc.size()); ++i)
+        {
+            matrix[0][i] = hfc[i];
+            matrix[1][i] = blablabla[i];
+        }
+        
+        hfc.clear();
+        weights[0] = 1.0;
+        weights[1] = 1.0;
+        
+        onsets->compute();
+        
+        for (int i = 0; i <= onsetRateVector.size(); ++i)
+        {
+            cout << onsetRateVector[i] << endl;
+        }
+        
+//        onsetRatee = onsetRateVector.size() / (temporaryBuffer.size()/44100.0);
+//        cout << onsetRatee << endl;
+//        hfc.clear();
+    }
+    
+
+
+/*
+    cout << "onsetRate: " << result << endl;
+ 
+    for (int i = 0; i <= result2.size(); ++i)
+    {
+        cout << "onsetTimes: " << result2[i] << endl;
+    }
+*/
+    
+//    cout << onsetDetectionResult << endl;
 }

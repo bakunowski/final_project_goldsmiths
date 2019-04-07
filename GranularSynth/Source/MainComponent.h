@@ -11,7 +11,6 @@
 
 //==============================================================================
 class MainComponent                                   : public AudioAppComponent,
-                                                        public Slider::Listener,
                                                         public ChangeListener,
                                                         public Timer,
                                                         public MenuBarModel,
@@ -30,7 +29,6 @@ public:
     //==============================================================================
     void paint (Graphics& g) override;
     void resized() override;
-    void sliderValueChanged(Slider* slider) override;
     StringArray getMenuBarNames() override;
     PopupMenu getMenuForIndex (int topLevelMenuIndex, const String&) override;
     void buttonClicked (Button* button) override;
@@ -38,9 +36,37 @@ public:
     void showAudioSettings();
     
     //==============================================================================
-    std::vector<essentia::Real> essentiaInput;
-    std::vector<essentia::Real> essentiaFFT;
-    essentia::standard::Algorithm*  fft;
+    vector<essentia::Real> temporaryBuffer;
+    vector<essentia::Real> dcRemovalBuffer;
+    vector<essentia::Real> windowingBuffer;
+    vector<complex<essentia::Real>> fftBuffer;
+    vector<essentia::Real> cartesian2polarMagnitudes;
+    vector<essentia::Real> cartesian2polarPhases;
+    essentia::Real onsetDetectionResult;
+    essentia::Real result;
+    vector<essentia::Real> result2;
+    // rename the name "matrix" soon !!!!!!!
+//    vector<vector<essentia::Real>> matrix;
+    TNT::Array2D<essentia::Real> matrix;
+    vector<essentia::Real> hfc;
+    vector<essentia::Real> weights;
+    double onsetRatee;
+    vector<essentia::Real> blablabla;
+    vector<essentia::Real> onsetRateVector;
+    
+    vector<essentia::Real> spectrumResults;
+    vector<essentia::Real> mfccBands;
+    vector<essentia::Real> mfccCoeffs;
+
+    essentia::standard::Algorithm* dcremoval;
+    essentia::standard::Algorithm* windowing;
+    essentia::standard::Algorithm* fft;
+    essentia::standard::Algorithm* cartesian2polar;
+    essentia::standard::Algorithm* spectrum;
+    essentia::standard::Algorithm* mfcc;
+    essentia::standard::Algorithm* onsetDetection;
+    essentia::standard::Algorithm* onsets;
+    essentia::standard::Algorithm* onsetRate;
 
 
 private:
@@ -57,7 +83,7 @@ private:
     Slider  startingOffsetDial;
     Slider  streamSizeDial;
     Slider  pitchOffsetDial;
-    Slider  globalGain;
+    Slider  globalGainDial;
     Slider  grainGainOffsetDial;
     
     enum TransportState
@@ -80,7 +106,7 @@ private:
     AudioThumbnail thumbnail;
     
 
-    //==============================================================================
+//==============================================================================
     //                                functions
     
     void setupButtonsAndDials();
@@ -97,21 +123,19 @@ private:
     //                              essentia stuff
     
     static constexpr int lengthOfEssentiaBuffer = 8192; // 6 times the buffer size
-    
+
     // buffer to hold the last 8192 samples for analysis
     struct bufferAndIndex {
         AudioSampleBuffer buffer;
         int index = 0;
+        bool nextBlockReady = false;
     };
     
     bufferAndIndex preApplyEssentia;
-    
-    ScopedPointer<dsp::Oversampling<float>> oversampling;
-    static const int overSampleFactor = 1;
-    using iir = dsp::ProcessorDuplicator<dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>>;
-    dsp::ProcessorChain<iir, iir> highpass;
-    
-    void calculateFFT();
+
+    void estimateMelody();
+
+    void pushNextSampleIntoEssentiaArray(float sample) noexcept;
     
     //==============================================================================
     //                    functions only used in waveform drawing
