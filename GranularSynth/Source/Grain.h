@@ -1,3 +1,6 @@
+#ifndef GRAIN
+#define GRAIN
+
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 
@@ -86,3 +89,5 @@ private:
     
     void getCurrentPosition(oneGrain& grain);
 };
+
+#endif

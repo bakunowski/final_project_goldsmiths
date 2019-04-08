@@ -1,76 +1,15 @@
 #include "MainComponent.h"
-#include "Grain.h"
 
 //==============================================================================
 MainComponent::MainComponent()  :     grainStream(),
+                                      essentia(),
                                       thumbnailCache(5),
                                       thumbnail(512, formatManager, thumbnailCache)
+
 {
     setMacMainMenu(this);
     setupButtonsAndDials();
-   
-    // essentia
-    preApplyEssentia.buffer.setSize(1, lengthOfEssentiaBuffer);
-    essentia::init();
-    essentia::standard::AlgorithmFactory& factory = essentia::standard::AlgorithmFactory::instance();
-    
-    dcremoval = factory.create("DCRemoval");
-    windowing = factory.create("Windowing", "type", "hann", "zeroPadding", 0);
-    fft = factory.create("FFT", "size", 1024);
-    cartesian2polar = factory.create("CartesianToPolar");
-    spectrum = factory.create("Spectrum", "size", 8192);
-    mfcc = factory.create("MFCC");
-    onsetDetection = factory.create("OnsetDetection");
-    onsets = factory.create("Onsets");
-    //onsetRate = factory.create("OnsetRate");
 
-    temporaryBuffer.reserve(lengthOfEssentiaBuffer);
-    temporaryBuffer.resize(lengthOfEssentiaBuffer, 0.0f);
-    
-    spectrumResults.reserve(lengthOfEssentiaBuffer);
-    spectrumResults.resize(lengthOfEssentiaBuffer, 0.0f);
-    
-    weights.reserve(2);
-    weights.resize(2, 0.0f);
-    cout << weights.size() << endl;
-
-    dcremoval->input("signal").set(temporaryBuffer);
-    dcremoval->output("signal").set(dcRemovalBuffer);
-    
-    windowing->input("frame").set(dcRemovalBuffer);
-    windowing->output("frame").set(windowingBuffer);
-    
-    fft->input("frame").set(windowingBuffer);
-    fft->output("fft").set(fftBuffer);
-    
-    cartesian2polar->input("complex").set(fftBuffer);
-    cartesian2polar->output("magnitude").set(cartesian2polarMagnitudes);
-    cartesian2polar->output("phase").set(cartesian2polarPhases);
-    
-    spectrum->input("frame").set(temporaryBuffer);
-    spectrum->output("spectrum").set(spectrumResults);
-    
-    mfcc->input("spectrum").set(spectrumResults);
-    mfcc->output("bands").set(mfccBands);
-    mfcc->output("mfcc").set(mfccCoeffs);
-    
-    onsetDetection->input("spectrum").set(cartesian2polarMagnitudes);
-    onsetDetection->input("phase").set(cartesian2polarPhases);
-    
-    // push this into an array, the size of which will serve as 2nd arg in matrix init
-    onsetDetection->output("onsetDetection").set(onsetDetectionResult);
-
-    // matrix 2 dimensional
-    onsets->input("detections").set(matrix);
-    onsets->input("weights").set(weights);
-    onsets->output("onsets").set(onsetRateVector);
-
-//    onsetRate->input("signal").set(onsetRateVector);
-//    onsetRate->output("onsetRate").set(result);
-//    onsetRate->output("onsets").set(result2);
-
-    // Make sure you set the size of the component after
-    // you add any child components.
     setSize (1200, 380);
 
     PropertiesFile::Options options;
@@ -108,14 +47,15 @@ MainComponent::~MainComponent()
     // This shuts down the audio device and clears the audio source.
     setMacMainMenu(nullptr);
     shutdownAudio();
-    essentia::shutdown();
+    // change this to essentia desoncstructor
+    shutdown();
 }
 
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    std::cout<<"Sample Rate: "<<sampleRate<<std::endl;
-    std::cout<<"Buffer Size: "<<samplesPerBlockExpected<<std::endl;
+    std::cout<< "Sample Rate: "<< sampleRate << std::endl;
+    std::cout<< "Buffer Size: "<< samplesPerBlockExpected << std::endl;
 }
 
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
@@ -142,7 +82,7 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
         for (auto i = 0; i < bufferToFill.numSamples; ++i)
         {
             // calling the audio desriptors function in this
-            pushNextSampleIntoEssentiaArray(channelData[i]);
+            essentia.pushNextSampleIntoEssentiaArray(channelData[i], state);
         }
    }
 }
@@ -498,92 +438,4 @@ void MainComponent::setupButtonsAndDials()
     stopButton.setColour(TextButton::buttonColourId, Colours::lightpink);
     stopButton.setEnabled(false);
     addAndMakeVisible(&stopButton);
-}
-//======================================================================================================
-//                                              essentia
-void MainComponent::pushNextSampleIntoEssentiaArray(float sample) noexcept
-{
-    if (state == playing){
-    // if we have enough data set a flag to indicate that next line should now be rendered?
-    if (preApplyEssentia.index == lengthOfEssentiaBuffer)
-    {
-        if (! preApplyEssentia.nextBlockReady)
-        {
-            // zeromem
-            // memcpy
-            estimateMelody();
-            temporaryBuffer.clear();
-            preApplyEssentia.nextBlockReady = true;
-        }
-        preApplyEssentia.index = 0;
-        preApplyEssentia.nextBlockReady = false;
-    }
-    // update index if not enough data and make that index equal to the sample
-    preApplyEssentia.index += 1;
-    temporaryBuffer.emplace_back(sample);
-}
-}
-
-void MainComponent::estimateMelody()
-{
-    dcremoval->compute();
-    windowing->compute();
-    fft->compute();
-    cartesian2polar->compute();
-    
-    spectrum->compute();
-    mfcc->compute();
-    
-    
-   // for (int i = 0; i <= mfccCoeffs.size(); ++i)
-   // {
-   //     cout << mfccCoeffs[i] << endl;
-   // }
-    
-    
-    onsetDetection->compute();
-    hfc.push_back(onsetDetectionResult);
-    blablabla.push_back(onsetDetectionResult);
-
-//    cout << "weights" << weights.size() << endl;
-//    cout << "detection function" << hfc.size() << endl;
-    
-    if (hfc.size() == 2)
-    {
-        matrix = TNT::Array2D<essentia::Real>(2, hfc.size());
-
-        for (int i=0; i<int(hfc.size()); ++i)
-        {
-            matrix[0][i] = hfc[i];
-            matrix[1][i] = blablabla[i];
-        }
-        
-        hfc.clear();
-        weights[0] = 1.0;
-        weights[1] = 1.0;
-        
-        onsets->compute();
-        
-        for (int i = 0; i <= onsetRateVector.size(); ++i)
-        {
-            cout << onsetRateVector[i] << endl;
-        }
-        
-//        onsetRatee = onsetRateVector.size() / (temporaryBuffer.size()/44100.0);
-//        cout << onsetRatee << endl;
-//        hfc.clear();
-    }
-    
-
-
-/*
-    cout << "onsetRate: " << result << endl;
- 
-    for (int i = 0; i <= result2.size(); ++i)
-    {
-        cout << "onsetTimes: " << result2[i] << endl;
-    }
-*/
-    
-//    cout << onsetDetectionResult << endl;
 }
