@@ -1,4 +1,5 @@
 #include "Grain.h"
+
 #define LEFT_CHANNEL 0
 #define RIGHT_CHANNEL 1
 
@@ -76,6 +77,8 @@ void GrainStream::setFilePosition(int startingSample)
     
 }
 
+
+
 void GrainStream::setDuration(int duration)
 {
     float dur = static_cast<float>(this->durationOfStream);
@@ -115,10 +118,15 @@ void GrainStream::setStreamSize(int size)
         removeGrainsFromStream(this->grainStreamSize - size);
 }
 
-double GrainStream::getCurrentGrainPosition(int channel)
+vector<double> GrainStream::getCurrentGrainPosition(int channel)
 {
-    for (oneGrain& grain : grains)
-        return grain.grainDataCurrentSample[channel];
+    vector<double> positions;
+    
+        for (int i = 0; i <= grains.size(); i++)
+        {
+            positions.emplace_back(grains[i].grainDataCurrentSample[channel]);
+        }
+        return positions;
 }
 
 void GrainStream::randomizeGrain(oneGrain& grain)
@@ -130,7 +138,6 @@ void GrainStream::randomizeGrain(oneGrain& grain)
         grain.grainDataStartPosition = this->filePosition;
     else
     {
-        
         // Randomize the Starting Sample
         grain.grainDataStartPosition = rand.nextInt(Range<int>(this->filePosition - filePositionOffset, this->filePosition + filePositionOffset));
         

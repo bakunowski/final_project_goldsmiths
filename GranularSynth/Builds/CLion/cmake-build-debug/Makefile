@@ -339,6 +339,33 @@ Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth
 	$(MAKE) -f CMakeFiles/APP.dir/build.make CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_data_structures.mm.s
 .PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_data_structures.mm.s
 
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.o: Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.o
+
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.o
+
+# target to build an object file
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.o:
+	$(MAKE) -f CMakeFiles/APP.dir/build.make CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.o
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.o
+
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.i: Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.i
+
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.i
+
+# target to preprocess a source file
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.i:
+	$(MAKE) -f CMakeFiles/APP.dir/build.make CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.i
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.i
+
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.s: Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.s
+
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.s
+
+# target to generate assembly for a file
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.s:
+	$(MAKE) -f CMakeFiles/APP.dir/build.make CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.s
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.s
+
 Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_events.o: Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_events.mm.o
 
 .PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_events.o
@@ -474,6 +501,33 @@ Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth
 	$(MAKE) -f CMakeFiles/APP.dir/build.make CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_opengl.mm.s
 .PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_opengl.mm.s
 
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.o: Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.o
+
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.o
+
+# target to build an object file
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.o:
+	$(MAKE) -f CMakeFiles/APP.dir/build.make CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.o
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.o
+
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.i: Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.i
+
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.i
+
+# target to preprocess a source file
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.i:
+	$(MAKE) -f CMakeFiles/APP.dir/build.make CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.i
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.i
+
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.s: Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.s
+
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.s
+
+# target to generate assembly for a file
+Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.s:
+	$(MAKE) -f CMakeFiles/APP.dir/build.make CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.s
+.PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.s
+
 Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Grain.o: Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Grain.cpp.o
 
 .PHONY : Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Grain.o
@@ -588,6 +642,9 @@ help:
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_data_structures.o"
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_data_structures.i"
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_data_structures.s"
+	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.o"
+	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.i"
+	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.s"
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_events.o"
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_events.i"
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_events.s"
@@ -603,6 +660,9 @@ help:
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_opengl.o"
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_opengl.i"
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_opengl.s"
+	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.o"
+	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.i"
+	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.s"
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Grain.o"
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Grain.i"
 	@echo "... Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Grain.s"

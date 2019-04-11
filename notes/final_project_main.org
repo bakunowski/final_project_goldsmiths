@@ -1,0 +1,6 @@
+* TODO make a graph for a longer period of time to see how the threshold function behaves 
+* TODO see if the onset detection works correctly by reading the articles again 
+* TODO make an audio player for feature extraction of a song/audio
+* TODO add a grain envelope
+* TODO start thinking about the parameter sweep for the dataset (analysis for each parameter setting)
+* TODO add some sort of pitch extraction

@@ -1,0 +1,13 @@
+* Audio descriptors
+* To look at:
+** onset times (onsetDetection -> onsetTimes)
+*** this will be hopefully achieved with the spectral flux 
+*** Flux 
+*** Spectral flux: 
+**** https://www.badlogicgames.com/wordpress/?p=161
+**** https://www.badlogicgames.com/wordpress/?p=187  
+** Inharmonicity
+** Dissonance
+** Pitch
+** ExtractorTempoTap
+** PeakDetection -> nope, thresholding makes it unusable for my purpose basically

@@ -43,7 +43,7 @@ public:
     
     double globalGain = 1.0;
     
-    double getCurrentGrainPosition(int channel);
+    vector<double> getCurrentGrainPosition(int channel);
     
 
     

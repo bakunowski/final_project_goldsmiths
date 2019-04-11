@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Audio_Analysis.cpp.o"
   "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Grain.cpp.o"
   "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/MainComponent.cpp.o"
   "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/Main.cpp.o"
@@ -10,6 +11,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_core.mm.o"
   "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_cryptography.mm.o"
   "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_data_structures.mm.o"
+  "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_dsp.mm.o"
   "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_events.mm.o"
   "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_graphics.mm.o"
   "CMakeFiles/APP.dir/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/JuceLibraryCode/include_juce_gui_basics.mm.o"

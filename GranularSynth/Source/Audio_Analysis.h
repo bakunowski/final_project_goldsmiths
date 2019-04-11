@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include <essentia/essentia.h>
-#include <essentia/algorithmfactory.h>
-#include <essentia/essentiamath.h>
-#include <essentia/streaming/algorithms/poolstorage.h>
+#include </usr/local/Cellar/essentia/HEAD-561764f/include/essentia/essentia.h>
+#include </usr/local/Cellar/essentia/HEAD-561764f/include/essentia/algorithmfactory.h>
+#include </usr/local/Cellar/essentia/HEAD-561764f/include/essentia/essentiamath.h>
+#include </usr/local/Cellar/essentia/HEAD-561764f/include/essentia/pool.h>
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
@@ -22,41 +22,69 @@ public:
     esss();
     
     vector<Real> temporaryBuffer;
-    vector<Real> dcRemovalBuffer;
-    vector<Real> windowingBuffer;
-    vector<complex<Real>> fftBuffer;
-    vector<Real> cartesian2polarMagnitudes;
-    vector<Real> cartesian2polarPhases;
-    Real onsetDetectionResult;
-    Real result;
-    vector<Real> result2;
-    // rename the name "matrix" soon !!!!!!!
-    //    vector<vector<essentia::Real>> matrix;
-    TNT::Array2D<Real> matrix;
-    vector<Real> hfc;
-    vector<Real> weights;
-    double onsetRatee;
-    vector<Real> blablabla;
-    vector<Real> onsetRateVector;
+    vector<Real> temporaryBuffer2;
     
+    standard::Algorithm* windowing;
+    vector<Real> windowedFrame;
+    standard::Algorithm* spectrum;
     vector<Real> spectrumResults;
+    standard::Algorithm* mfcc;
     vector<Real> mfccBands;
     vector<Real> mfccCoeffs;
+    standard::Algorithm* flux;
+    Real fluxOutput = 0.1;
+    vector<Real> spectralFlux;
+    vector<Real> threshold;
+    vector<Real> prunnedSpectralFlux;
+    vector<Real> peaks;
     
-    standard::Algorithm* dcremoval;
-    standard::Algorithm* windowing;
+    //TNT::Array2D<Real> matrix;
+    //vector<Real> weights;
+    //vector<Real> onsetRateVector;
+    //double onsetRatee;
+    //vector<Real> blablabla;
+    //vector<Real> hfc;
+
+    //standard::Algorithm* dcremoval;
+    //vector<Real> dcRemovalBuffer;
     standard::Algorithm* fft;
+    vector<complex<Real>> fftBuffer;
     standard::Algorithm* cartesian2polar;
-    standard::Algorithm* spectrum;
-    standard::Algorithm* mfcc;
-    standard::Algorithm* onsetDetection;
-    standard::Algorithm* onsets;
-    standard::Algorithm* onsetRate;
-    
+    vector<Real> cartesian2polarMagnitudes;
+    vector<Real> cartesian2polarPhases;
 
     Pool pool;
+    Pool agrrPool;
     
-    static constexpr int lengthOfEssentiaBuffer = 8192; // 6 times the buffer size
+    Pool fluxPool;
+    Pool agrrFluxPool;
+    
+    Pool onsetPool;
+    Pool agrrOnsetPool;
+    
+    standard::Algorithm* agrr;
+    standard::Algorithm* agrr2;
+    standard::Algorithm* agrr3;
+    standard::Algorithm* output;
+    standard::Algorithm* output2;
+    standard::Algorithm* output3;
+    string outputFilename = "output";
+    
+    
+    enum TransportState
+    {
+        stopped,
+        starting,
+        playing,
+        stopping
+    };
+    
+    TransportState state;
+
+
+    //static constexpr int lengthOfEssentiaBuffer = 1024; // 6 times the buffer size
+    int lengthOfEssentiaBuffer = 1024;
+    int lengthOfPlaybackBuffer = 44100;
     
     // buffer to hold the last 8192 samples for analysis
     struct bufferAndIndex {
@@ -67,11 +95,13 @@ public:
     
     bufferAndIndex preApplyEssentia;
     
+    bufferAndIndex playbackBuffer;
+    
     void essentiaSetup();
     
     void computeEssentiaValues();
     
-    void pushNextSampleIntoEssentiaArray(float sample, bool playing) noexcept;
+    void pushNextSampleIntoEssentiaArray(float sample) noexcept;
 };
 
 #endif

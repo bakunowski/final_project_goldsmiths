@@ -1,4 +1,5 @@
 #include "MainComponent.h"
+#include <algorithm>
 
 //==============================================================================
 MainComponent::MainComponent()  :     grainStream(),
@@ -48,7 +49,7 @@ MainComponent::~MainComponent()
     setMacMainMenu(nullptr);
     shutdownAudio();
     // change this to essentia desoncstructor
-    shutdown();
+essentia:shutdown();
 }
 
 //==============================================================================
@@ -82,7 +83,7 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
         for (auto i = 0; i < bufferToFill.numSamples; ++i)
         {
             // calling the audio desriptors function in this
-            essentia.pushNextSampleIntoEssentiaArray(channelData[i], state);
+            essentia.pushNextSampleIntoEssentiaArray(channelData[i]);
         }
    }
 }
@@ -147,11 +148,29 @@ void MainComponent::changeState(TransportState newState)
                 
             case TransportState::playing:
                 stopButton.setEnabled (true);
+                essentia.state = essentia.playing;
                 break;
                 
             case TransportState::stopping:
                 grainStream.silenceAllGrains();
                 changeState(TransportState::stopped);
+                essentia.state = essentia.stopped;
+
+                essentia.agrr->compute();
+                essentia.output->compute();
+                
+                essentia.agrr2->compute();
+                essentia.output2->compute();
+                
+                essentia.agrr3->compute();
+                essentia.output3->compute();
+
+                essentia.pool.clear();
+                essentia.agrrPool.clear();
+                essentia.fluxPool.clear();
+                essentia.agrrFluxPool.clear();
+                essentia.onsetPool.clear();
+                essentia.agrrOnsetPool.clear();
                 break;
         }
     }
@@ -266,14 +285,22 @@ void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbn
     auto drawPosition ((pos1/audioLength) * thumbnailBounds.getWidth() + thumbnailBounds.getX());
     g.drawLine(drawPosition, thumbnailBounds.getY(), drawPosition, thumbnailBounds.getBottom(), 2.0f);
     
-    for (int i = 0; i <= streamSizeDial.getValue(); ++i)
+    for (int i = 0; i < (static_cast<int>(streamSizeDial.getValue())); ++i)
     {
-        double grainsPos = grainStream.getCurrentGrainPosition(i)/44100.0;
+        double grainsPos = (grainStream.getCurrentGrainPosition(0)[i])/44100.0;
         g.setColour(Colours::white);
         auto drawGrainPosition ((grainsPos/audioLength) * thumbnailBounds.getWidth() + thumbnailBounds.getX());
+        
         g.drawLine(drawGrainPosition, thumbnailBounds.getY()+10, drawGrainPosition, thumbnailBounds.getBottom()-10, 1.0f);
     }
-    //cout << grainsPos << endl;
+
+    //flux drawing to see if changes
+//    if (state == playing){
+//    g.setColour(Colours::white);
+//    double y_finish = essentia.fluxOutput * 1000.0;
+//        cout << "value: " << y_finish << endl;
+//    g.drawLine(getWidth()/2, getHeight()/2, getWidth()/2, y_finish, 5.0f);
+//    }
 }
 
 void MainComponent::timerCallback()
