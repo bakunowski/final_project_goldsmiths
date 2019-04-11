@@ -37,8 +37,7 @@ public:
     vector<Real> threshold;
     vector<Real> prunnedSpectralFlux;
     vector<Real> peaks;
-    standard::Algorithm* superFluxExtractor;
-    vector<Real> superFlux;
+
     standard::Algorithm* onsetRate;
     vector<Real> onsets;
     Real onsetRateValue;
@@ -91,7 +90,7 @@ public:
     int lengthOfEssentiaBuffer = 1024;
     int lengthOfPlaybackBuffer = 44100;
     
-    // buffer to hold the last 8192 samples for analysis
+    // buffer to hold the last 1024 samples for analysis
     struct bufferAndIndex {
         AudioSampleBuffer buffer;
         int index = 0;

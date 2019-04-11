@@ -1,0 +1,86 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+
+
+* DONE make a graph for a longer period of time to see how the threshold function behaves 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2019-04-11 Thu 19:03
+  :ARCHIVE_FILE: ~/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+  :ARCHIVE_OLPATH: AUDIO EXTRACTORS (HIGH PRIORITY)/FLUX
+  :ARCHIVE_CATEGORY: final_project_main
+  :ARCHIVE_TODO: DONE
+  :END:
+
+Archived entries from file /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+
+
+* DONE see if the onset detection works correctly by reading the articles again 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2019-04-11 Thu 19:03
+  :ARCHIVE_FILE: ~/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+  :ARCHIVE_OLPATH: AUDIO EXTRACTORS (HIGH PRIORITY)/FLUX
+  :ARCHIVE_CATEGORY: final_project_main
+  :ARCHIVE_TODO: DONE
+  :END:
+
+Archived entries from file /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+
+
+* DONE plot also the prunned and peaks array! this will be very useful to see if the code is working correctly
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2019-04-11 Thu 19:03
+  :ARCHIVE_FILE: ~/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+  :ARCHIVE_OLPATH: AUDIO EXTRACTORS (HIGH PRIORITY)/FLUX
+  :ARCHIVE_CATEGORY: final_project_main
+  :ARCHIVE_TODO: DONE
+  :END:
+
+Archived entries from file /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+
+
+* DONE check exactly where the flux algorithm is calculated and how it correlates to the longer buffer which is analyzed now in printFluxValues 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2019-04-11 Thu 19:03
+  :ARCHIVE_FILE: ~/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+  :ARCHIVE_OLPATH: AUDIO EXTRACTORS (HIGH PRIORITY)/FLUX
+  :ARCHIVE_CATEGORY: final_project_main
+  :ARCHIVE_TODO: DONE
+  :END:
+
+Archived entries from file /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+
+
+* DONE experiment with the flux threshold function and length of the buffer being analyzed 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2019-04-11 Thu 19:03
+  :ARCHIVE_FILE: ~/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+  :ARCHIVE_OLPATH: AUDIO EXTRACTORS (HIGH PRIORITY)/FLUX
+  :ARCHIVE_CATEGORY: final_project_main
+  :ARCHIVE_TODO: DONE
+  :END:
+
+Archived entries from file /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+
+
+* DONE experiment with the window size ! 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2019-04-11 Thu 19:03
+  :ARCHIVE_FILE: ~/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+  :ARCHIVE_OLPATH: AUDIO EXTRACTORS (HIGH PRIORITY)/FLUX
+  :ARCHIVE_CATEGORY: final_project_main
+  :ARCHIVE_TODO: DONE
+  :END:
+
+Archived entries from file /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+
+
+* DONE try removing peaks that are too close together (~10ms) in the flux algorithm 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2019-04-11 Thu 19:03
+  :ARCHIVE_FILE: ~/Documents/goldsmiths/2018_19/dissertation/project/notes/final_project_main.org
+  :ARCHIVE_OLPATH: AUDIO EXTRACTORS (HIGH PRIORITY)/FLUX
+  :ARCHIVE_CATEGORY: final_project_main
+  :ARCHIVE_TODO: DONE
+  :END:
