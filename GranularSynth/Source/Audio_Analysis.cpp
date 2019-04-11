@@ -1,7 +1,7 @@
 #include "Audio_Analysis.h"
 
 static int THRESHOLD_WINDOW_SIZE = 10;
-static float MULTIPLIER = 1.2f;
+static float MULTIPLIER = 1.4f;
 
 // essentia
 esss::esss()
@@ -41,6 +41,10 @@ esss::esss()
     mfcc = factory.create("MFCC", "inputSize", (lengthOfEssentiaBuffer/2)+1);
 
     flux = factory.create("Flux");
+    
+    superFluxExtractor = factory.create("SuperFluxExtractor");
+    
+    onsetRate = factory.create("OnsetRate");
 
     //dcremoval->input("signal").set(temporaryBuffer);
     //dcremoval->output("signal").set(dcRemovalBuffer);
@@ -64,6 +68,15 @@ esss::esss()
 
     flux->input("spectrum").set(spectrumResults);
     flux->output("flux").set(fluxOutput);
+    
+    superFluxExtractor->input("signal").set(temporaryBuffer2);
+    superFluxExtractor->output("onsets").set(superFlux);
+    
+    onsetRate->input("signal").set(temporaryBuffer2);
+    onsetRate->output("onsets").set(onsets);
+    onsetRate->output("onsetRate").set(onsetRateValue);
+    
+    
 }
 
 void esss::pushNextSampleIntoEssentiaArray(float sample) noexcept
@@ -87,74 +100,97 @@ void esss::pushNextSampleIntoEssentiaArray(float sample) noexcept
         preApplyEssentia.index += 1;
         temporaryBuffer.emplace_back(sample);
 
-        // update the automated extraction length (checks for peaks every second)
-        playbackBuffer.index += 1;
-
-        int spectralSize = static_cast<int>(spectralFlux.size());
-        
-        if (playbackBuffer.index == lengthOfPlaybackBuffer*10)
+        // maybe make this dependent on the grain length
+        if (playbackBuffer.index == lengthOfPlaybackBuffer*3)
         {
-            for (int i = 0; i < spectralFlux.size(); i++)
-            {
-                int start = std::max(0, i - THRESHOLD_WINDOW_SIZE);
-                int end = std::min(spectralSize - 1, i + THRESHOLD_WINDOW_SIZE);
-                float mean = 0;
-                for (int j = start; j <= end; j++)
-                {
-                    mean += spectralFlux[j];
-                }
-                mean /= (end - start);
-                threshold.emplace_back(mean * MULTIPLIER);
-            }
-            
-            for( int i = 0; i < threshold.size(); i++ )
-            {
-                if (threshold[i] <= spectralFlux[i])
-                    prunnedSpectralFlux.emplace_back(spectralFlux[i] - threshold[i]);
-                else
-                    prunnedSpectralFlux.emplace_back((float)0);
-            }
-            
-            for( int i = 0; i < prunnedSpectralFlux.size() - 1; i++ )
-            {
-                if( prunnedSpectralFlux[i] > prunnedSpectralFlux[i+1] )
-                {
-                    peaks.emplace_back(prunnedSpectralFlux[i]);
-                }
-            }
-            
-//            cout << "new round: " << endl;
-//            cout << threshold.size() << endl;
-//            cout << spectralFlux.size() << endl;
-//            cout << prunnedSpectralFlux.size() << endl;
-//            cout << peaks.size() << endl;
-//            for (int i = 0; i <= peaks.size(); ++i)
-//                cout << peaks[i] << flush;
-//            cout << " " << endl;
-            
-            // stuff for plotting of the threshold vs flux values
-            
-           cout << "flux :" << endl;
-           for (int i = 0; i <= spectralFlux.size(); i++)
-           {
-               cout << i << " " << flush;
-               cout << spectralFlux[i] << endl;
-           }
-           
-           cout << "threshold: " << endl;
-           for (int i = 0; i <= spectralFlux.size(); i++)
-           {
-               cout << i << " " << flush;
-               cout << threshold[i] << endl;
-           }
-            
-            playbackBuffer.index = 0;
-            threshold.clear();
-            spectralFlux.clear();
-            prunnedSpectralFlux.clear();
-            peaks.clear();
+            printFluxValues();
+        }
+        playbackBuffer.index += 1;
+        temporaryBuffer2.emplace_back(sample);
+    }
+}
+
+void esss::printFluxValues()
+{
+    int spectralSize = static_cast<int>(spectralFlux.size());
+    
+    for (int i = 0; i < spectralFlux.size(); i++)
+    {
+        int start = std::max(0, i - THRESHOLD_WINDOW_SIZE);
+        int end = std::min(spectralSize - 1, i + THRESHOLD_WINDOW_SIZE);
+        float mean = 0;
+        for (int j = start; j <= end; j++)
+        {
+            mean += spectralFlux[j];
+        }
+        mean /= (end - start);
+        threshold.emplace_back(mean * MULTIPLIER);
+    }
+    
+    // if spectral value is bigger than threshold, put however much bigger into new array
+    // otherwise put 0 in
+    for( int i = 0; i < threshold.size(); i++ )
+    {
+        if (threshold[i] <= spectralFlux[i])
+            prunnedSpectralFlux.emplace_back(spectralFlux[i] - threshold[i]);
+        else
+            prunnedSpectralFlux.emplace_back((float)0);
+    }
+    
+    // if a value is bigger than the value after it, add it to the array of peaks
+    for( int i = 0; i < prunnedSpectralFlux.size() - 1; i++ )
+    {
+        if((prunnedSpectralFlux[i] > prunnedSpectralFlux[i+1]) && (prunnedSpectralFlux[i] > prunnedSpectralFlux[i-1]))
+        {
+            peaks.emplace_back(prunnedSpectralFlux[i]);
         }
     }
+
+    cout << "new round: " << endl;
+    cout << threshold.size() << endl;
+    cout << spectralFlux.size() << endl;
+    cout << prunnedSpectralFlux.size() << endl;
+    cout << "peaks: " << peaks.size() << endl;
+
+    // stuff for plotting of the threshold vs flux values
+    //cout << "flux :" << endl;
+    //for (int i = 0; i <= spectralFlux.size(); i++)
+    //{
+    //    cout << i << "   " << flush;
+    //    cout << spectralFlux[i] << endl;
+    //}
+    //
+    //cout << "threshold: " << endl;
+    //for (int i = 0; i <= threshold.size(); i++)
+    //{
+    //    cout << i << "   " << flush;
+    //    cout << threshold[i] << endl;
+    //}
+    //
+    //cout << "prunned: " << endl;
+    //for (int i = 0; i <= prunnedSpectralFlux.size(); i++)
+    //{
+    //    cout << i << "   " << flush;
+    //    cout << prunnedSpectralFlux[i] << endl;
+    //}
+    //
+    //cout << "peaks: " << endl;
+    //for (int i = 0; i <= peaks.size(); i++)
+    //{
+    //    cout << i << "   " << flush;
+    //    cout << peaks[i] << endl;
+    //}
+    onsetRate->compute();
+    cout << "onset rate: " << onsetRateValue << endl;
+    
+    playbackBuffer.index = 0;
+    temporaryBuffer2.clear();
+    threshold.clear();
+    spectralFlux.clear();
+    prunnedSpectralFlux.clear();
+    peaks.clear();
+    //onsets.clear();
+    onsetRateValue = 0;
 }
 
 void esss::computeEssentiaValues()

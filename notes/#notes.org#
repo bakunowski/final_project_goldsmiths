@@ -6,8 +6,48 @@
 *** Spectral flux: 
 **** https://www.badlogicgames.com/wordpress/?p=161
 **** https://www.badlogicgames.com/wordpress/?p=187  
+*** perhaps look at different ways of doing this if there's time
 ** Inharmonicity
 ** Dissonance
 ** Pitch
 ** ExtractorTempoTap
 ** PeakDetection -> nope, thresholding makes it unusable for my purpose basically
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+prunneedSpectralFlux:
+
+int immunutyPeriod = (int)((float)1024 / 44100n / 10ms)
+
+if the next value in prunned is lower than current -> end of peak
+
+if (prunnedSpectralFlux[i] < prunnedSpectralFlux[i+1])
+{
+   prunnedSpectralFlux[i] = 0;
+   continue;
+}
+
+// remove peaks too close to each other
+
+if (prunnedSpectralFlux[i] > 0.0f)
+{
+    for (int j = i + 1; j < i + immunityPeriod; j++)
+    {
+        if (prunnedSpectralFlux[j] > 0)
+        {
+            prunnedSpectralFlux[j] = 0.0f
+        }
+    }
+}

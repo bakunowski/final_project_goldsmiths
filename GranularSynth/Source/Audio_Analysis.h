@@ -37,6 +37,11 @@ public:
     vector<Real> threshold;
     vector<Real> prunnedSpectralFlux;
     vector<Real> peaks;
+    standard::Algorithm* superFluxExtractor;
+    vector<Real> superFlux;
+    standard::Algorithm* onsetRate;
+    vector<Real> onsets;
+    Real onsetRateValue;
     
     //TNT::Array2D<Real> matrix;
     //vector<Real> weights;
@@ -82,7 +87,7 @@ public:
     TransportState state;
 
 
-    //static constexpr int lengthOfEssentiaBuffer = 1024; // 6 times the buffer size
+    //static constexpr int lengthOfEssentiaBuffer = 1024; // 2 times the buffer size
     int lengthOfEssentiaBuffer = 1024;
     int lengthOfPlaybackBuffer = 44100;
     
@@ -102,6 +107,8 @@ public:
     void computeEssentiaValues();
     
     void pushNextSampleIntoEssentiaArray(float sample) noexcept;
+    
+    void printFluxValues();
 };
 
 #endif

@@ -1,13 +1,12 @@
 * Audio descriptors
-** onsetRate example chain: fft -> onsetDetection -> onsets -> onsetRate
-** maybe actually i could do analysis if state = playing, then stop, chang evalues, play again. clock that into being one second long ? 
-
-* Spectral flux: 
-** https://www.badlogicgames.com/wordpress/?p=161
-** https://www.badlogicgames.com/wordpress/?p=187  
 * To look at:
 ** onset times (onsetDetection -> onsetTimes)
 *** this will be hopefully achieved with the spectral flux 
+*** Flux 
+*** Spectral flux: 
+**** https://www.badlogicgames.com/wordpress/?p=161
+**** https://www.badlogicgames.com/wordpress/?p=187  
+*** perhaps look at different ways of doing this if there's time
 ** Inharmonicity
 ** Dissonance
 ** Pitch

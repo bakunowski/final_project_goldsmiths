@@ -50,7 +50,13 @@ double GrainStream::operator()(int channel)
     
     // scale the sample by gain
     sample *= static_cast<float>(globalGain);
-    
+//    float dur = static_cast<float>(this->durationOfStream);
+//
+//    for (int i = 0; i < 2048; i++) {
+//        double multiplier = 0.5 * (1 - cos(2*PI*i/2047));
+//        dataOut[i] = multiplier * dataIn[i];
+//    }
+
     // when more than one grain is playing, scale gain appropriately
     if (grains.size() > 1)
         sample *= 1.0f/(static_cast<float>(grains.size()));
