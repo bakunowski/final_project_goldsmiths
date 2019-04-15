@@ -62,7 +62,7 @@ private:
     // a-ha, useless!
     //vector<GrainStream> gStream;        // vector of grains (stream)
     GrainStream grainStream;            // reference to current active grain
-    esss essentia;
+    AudioFeatureExtraction audioFeatureExtraction;
     
     // waveform drawing
     AudioThumbnailCache thumbnailCache;
@@ -80,6 +80,8 @@ private:
     void playFile();
     
     void stopFile();
+    
+    void parameterWalkthrough();
 
     //==============================================================================
     //                    functions only used in waveform drawing

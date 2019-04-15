@@ -1,59 +1,58 @@
 #include "Audio_Analysis.h"
 
-static int THRESHOLD_WINDOW_SIZE = 10;
-static float MULTIPLIER = 1.4f;
-
 // essentia
-esss::esss()
+AudioFeatureExtraction::AudioFeatureExtraction()
 {
     preApplyEssentia.buffer.setSize(1, lengthOfEssentiaBuffer);
     essentia::init();
     standard::AlgorithmFactory& factory = standard::AlgorithmFactory::instance();
     
-    agrr = factory.create("PoolAggregator");
+    const char* stats[] = { "mean"};
+
+    agrr = factory.create("PoolAggregator", "defaultStats", arrayToVector<string>(stats));
     agrr2 = factory.create("PoolAggregator");
-    agrr3 = factory.create("PoolAggregator");
-    output = factory.create("YamlOutput");
-    output2 = factory.create("YamlOutput");
-    output3 = factory.create("YamlOutput");
     
+    output = factory.create("YamlOutput", "filename", "parameters");
+    output2 = factory.create("YamlOutput");
+
     agrr->input("input").set(pool);
     agrr->output("output").set(agrrPool);
 
-    agrr2->input("input").set(fluxPool);
-    agrr2->output("output").set(agrrFluxPool);
-    
-    agrr3->input("input").set(onsetPool);
-    agrr3->output("output").set(agrrOnsetPool);
-    
+//    agrr2->input("input").set(paramPool);
+//    agrr2->output("output").set(agrrParamPool);
+
     output->input("pool").set(agrrPool);
-    output2->input("pool").set(agrrFluxPool);
-    output3->input("pool").set(agrrOnsetPool);
+    output2->input("pool").set(paramPool);
 
     //dcremoval = factory.create("DCRemoval");
     
-    windowing = factory.create("Windowing", "size", lengthOfEssentiaBuffer, "type", "hann");
+    frameCutter = factory.create("FrameCutter", "frameSize", frameSize, "hopSize", hopSize);
     
-    fft = factory.create("FFT", "size", lengthOfEssentiaBuffer);
-    cartesian2polar = factory.create("CartesianToPolar");
+    windowing = factory.create("Windowing", "type", "hann");
     
-    spectrum = factory.create("Spectrum", "size", lengthOfEssentiaBuffer);
-    mfcc = factory.create("MFCC", "inputSize", (lengthOfEssentiaBuffer/2)+1);
+//    fft = factory.create("FFT", "size", lengthOfEssentiaBuffer);
+//    cartesian2polar = factory.create("CartesianToPolar");
+    
+    spectrum = factory.create("Spectrum");
+    mfcc = factory.create("MFCC");
 
     flux = factory.create("Flux");
 
     //dcremoval->input("signal").set(temporaryBuffer);
     //dcremoval->output("signal").set(dcRemovalBuffer);
     
-    windowing->input("frame").set(temporaryBuffer);
+    frameCutter->input("signal").set(temporaryBuffer2);
+    frameCutter->output("frame").set(frame);
+    
+    windowing->input("frame").set(frame);
     windowing->output("frame").set(windowedFrame);
     
-    fft->input("frame").set(windowedFrame);
-    fft->output("fft").set(fftBuffer);
-    
-    cartesian2polar->input("complex").set(fftBuffer);
-    cartesian2polar->output("magnitude").set(cartesian2polarMagnitudes);
-    cartesian2polar->output("phase").set(cartesian2polarPhases);
+    //fft->input("frame").set(windowedFrame);
+    //fft->output("fft").set(fftBuffer);
+    //
+    //cartesian2polar->input("complex").set(fftBuffer);
+    //cartesian2polar->output("magnitude").set(cartesian2polarMagnitudes);
+    //cartesian2polar->output("phase").set(cartesian2polarPhases);
     
     spectrum->input("frame").set(windowedFrame);
     spectrum->output("spectrum").set(spectrumResults);
@@ -65,43 +64,48 @@ esss::esss()
     flux->input("spectrum").set(spectrumResults);
     flux->output("flux").set(fluxOutput);
 
-    onsetRate->input("signal").set(temporaryBuffer2);
-    onsetRate->output("onsets").set(onsets);
-    onsetRate->output("onsetRate").set(onsetRateValue);
+    //onsetRate->input("signal").set(temporaryBuffer2);
+    //onsetRate->output("onsets").set(onsets);
+    //onsetRate->output("onsetRate").set(onsetRateValue);
 }
 
-void esss::pushNextSampleIntoEssentiaArray(float sample) noexcept
+void AudioFeatureExtraction::pushNextSampleIntoEssentiaArray(float sample) noexcept
 {
-    // if stopped write to the pool and give me the output in console
-    if (state == playing)
-    {
-        // if we have enough data set a flag to indicate that next line should now be rendered?
-        if (preApplyEssentia.index == lengthOfEssentiaBuffer)
-        {
-            if (! preApplyEssentia.nextBlockReady)
-            {
-                computeEssentiaValues();
-                temporaryBuffer.clear();
-                preApplyEssentia.nextBlockReady = true;
-            }
-            preApplyEssentia.index = 0;
-            preApplyEssentia.nextBlockReady = false;
-        }
-        // update index if not enough data and make that index equal to the sample
-        preApplyEssentia.index += 1;
-        temporaryBuffer.emplace_back(sample);
-
-        // maybe make this dependent on the grain length
-        if (playbackBuffer.index == lengthOfPlaybackBuffer*5)
-        {
-            printFluxValues();
-        }
-        playbackBuffer.index += 1;
-        temporaryBuffer2.emplace_back(sample);
-    }
+        // if stopped write to the pool and give me the output in console
+         playbackBuffer.index += 1;
+         temporaryBuffer2.emplace_back(sample);
 }
 
-void esss::printFluxValues()
+void AudioFeatureExtraction::computeEssentia()
+{
+    frameCutter->compute();
+    windowing->compute();
+    spectrum->compute();
+    mfcc->compute();
+    
+    pool.add("lowlevel.mfcc", mfccCoeffs);
+
+    agrr->compute();
+    output->compute();
+    output2->compute();
+}
+
+void AudioFeatureExtraction::clearBufferAndPool()
+{
+    playbackBuffer.index = 0;
+    temporaryBuffer2.clear();
+    
+    frameCutter->reset();
+    windowing->reset();
+    spectrum->reset();
+    mfcc->reset();
+    
+    pool.clear();
+    paramPool.clear();
+    agrrPool.clear();
+}
+
+void AudioFeatureExtraction::printFluxValues()
 {
     int spectralSize = static_cast<int>(spectralFlux.size());
     
@@ -138,16 +142,16 @@ void esss::printFluxValues()
         }
         
         // remove instances to close to each other
-//        if (prunnedSpectralFlux[i] > 0.0f)
-//        {
-//            for (int j = i + 1; j < i + 2.3f; j++)
-//            {
-//                if (prunnedSpectralFlux[j] > 0)
-//                {
-//                    prunnedSpectralFlux[j] = 0.0f;
-//                }
-//            }
-   //     }
+        if (prunnedSpectralFlux[i] > 0.0f)
+        {
+            for (int j = i + 1; j < i + 2.3f; j++)
+            {
+                if (prunnedSpectralFlux[j] > 0)
+                {
+                    prunnedSpectralFlux[j] = 0.0f;
+                }
+            }
+        }
     }
     for (int i = 0; i < prunnedSpectralFlux.size() - 1; i++)
     {
@@ -185,12 +189,13 @@ void esss::printFluxValues()
         cout << prunnedSpectralFlux[i] << endl;
     }
     
-    onsetRate->compute();
-    cout << "onset rate: " << onsetRateValue << endl;
-    cout << "peaks: " << peaks.size() << endl;
+    //onsetRate->compute();
+    //cout << "onset rate: " << onsetRateValue << endl;
+    //cout << "peaks: " << peaks.size() << endl;
     
-    playbackBuffer.index = 0;
     temporaryBuffer2.clear();
+    playbackBuffer.index = 0;
+
     threshold.clear();
     spectralFlux.clear();
     prunnedSpectralFlux.clear();
@@ -199,49 +204,7 @@ void esss::printFluxValues()
     //onsetRateValue = 0;
 }
 
-void esss::computeEssentiaValues()
+int AudioFeatureExtraction::getLengthOfBuffer()
 {
-    //dcremoval->compute();
-    windowing->compute();
-    fft->compute();
-    cartesian2polar->compute();
-    spectrum->compute();
-    mfcc->compute();
-    
-    pool.add("lowlevel.mfcc", mfccCoeffs);
-
-    flux->compute();
-    spectralFlux.emplace_back(fluxOutput);
-    //fluxPool.add("lowlevel.flux", fluxOutput);
+    return lengthOfPlaybackBuffer;
 }
-
-
-
-//    onsetDetection->compute();
-//    hfc.push_back(onsetDetectionResult);
-//    blablabla.push_back(onsetDetectionResult);
-//
-//    if (hfc.size() == 100)
-//    {
-//        matrix = TNT::Array2D<Real>(2, hfc.size());
-//
-//        for (int i=0; i <= hfc.size(); ++i)
-//        {
-//          matrix[0][i] = hfc[i];
-//          matrix[1][i] = blablabla[i];
-//        }
-//
-//
-//        weights[0] = 1.0;
-//        weights[1] = 1.0;
-//
-//        onsets->compute();
-//        onsetPool.add("lowlevel.onsets", onsetRateVector);
-//
-//        hfc.clear();
-//
-//        //for (int i = 0; i <= onsetRateVector.size(); ++i)
-//        //{
-//        //    cout << onsetRateVector[i] << endl;
-//        //}
-//    }

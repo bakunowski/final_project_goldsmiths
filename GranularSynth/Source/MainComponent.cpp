@@ -2,10 +2,10 @@
 #include <algorithm>
 
 //==============================================================================
-MainComponent::MainComponent()  :     grainStream(),
-                                      essentia(),
-                                      thumbnailCache(5),
-                                      thumbnail(512, formatManager, thumbnailCache)
+MainComponent::MainComponent()  :       grainStream(),
+                                        audioFeatureExtraction(),
+                                        thumbnailCache(5),
+                                        thumbnail(512, formatManager, thumbnailCache)
 
 {
     setMacMainMenu(this);
@@ -49,7 +49,7 @@ MainComponent::~MainComponent()
     setMacMainMenu(nullptr);
     shutdownAudio();
     // change this to essentia desoncstructor
-essentia:shutdown();
+    essentia::shutdown();
 }
 
 //==============================================================================
@@ -73,23 +73,75 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             {
                 buffer[sample] = grainStream(channel);
             }
+
+        }
+    
+   
+        // computing the essentia algorithms
+        if (bufferToFill.buffer->getNumChannels() > 0)
+        {
+            if (audioFeatureExtraction.playbackBuffer.index < audioFeatureExtraction.getLengthOfBuffer())
+            {
+                const auto* channelData = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
+                for (auto i = 0; i < bufferToFill.numSamples; ++i)
+                {
+                    audioFeatureExtraction.pushNextSampleIntoEssentiaArray(channelData[i]);
+                }
+            }
+            else
+            {
+                parameterWalkthrough();
+            }
         }
     }
-   
-    if (bufferToFill.buffer->getNumChannels() > 0)
-    {
-        
-        const auto* channelData = bufferToFill.buffer->getReadPointer(0, bufferToFill.startSample);
-        for (auto i = 0; i < bufferToFill.numSamples; ++i)
-        {
-            // calling the audio desriptors function in this
-            essentia.pushNextSampleIntoEssentiaArray(channelData[i]);
-        }
-   }
 }
 
 void MainComponent::releaseResources()
 {
+}
+
+void MainComponent::parameterWalkthrough()
+{
+    audioFeatureExtraction.computeEssentia();
+    audioFeatureExtraction.clearBufferAndPool();
+    audioFeatureExtraction.count += audioFeatureExtraction.getLengthOfBuffer();
+    
+    if (audioFeatureExtraction.count > grainStream.getFileSize())
+    {
+        audioFeatureExtraction.clearBufferAndPool();
+        audioFeatureExtraction.count = 1;
+        audioFeatureExtraction.duration += 100;
+                                                //901
+        if (audioFeatureExtraction.duration >= 201)
+        {
+            audioFeatureExtraction.duration = 0;
+            grainStream.filePositionOffset += 1000;
+                                                    //50000
+            if (grainStream.filePositionOffset >= 3000)
+            {
+                grainStream.filePositionOffset = 0;
+                audioFeatureExtraction.streamSize += 1;
+                
+                if (audioFeatureExtraction.streamSize == 10)
+                {
+                    audioFeatureExtraction.streamSize = 0;
+                    grainStream.pitchOffsetForOneGrain +=1;
+                }
+            }
+        }
+    }
+    
+    grainStream.setFilePosition(audioFeatureExtraction.count);
+    grainStream.setDuration(audioFeatureExtraction.duration);
+    grainStream.setStreamSize(audioFeatureExtraction.streamSize);
+
+    audioFeatureExtraction.paramPool.add("FilePos", audioFeatureExtraction.count);
+    audioFeatureExtraction.paramPool.add("duration", audioFeatureExtraction.duration);
+    audioFeatureExtraction.paramPool.add("spread", grainStream.filePositionOffset);
+    audioFeatureExtraction.paramPool.add("numberOfGrains", audioFeatureExtraction.streamSize);
+    audioFeatureExtraction.paramPool.add("pitch", grainStream.pitchOffsetForOneGrain);
+    
+    //audioFeatureExtraction.printFluxValues();
 }
 
 void MainComponent::resized()
@@ -148,29 +200,13 @@ void MainComponent::changeState(TransportState newState)
                 
             case TransportState::playing:
                 stopButton.setEnabled (true);
-                essentia.state = essentia.playing;
                 break;
                 
             case TransportState::stopping:
                 grainStream.silenceAllGrains();
                 changeState(TransportState::stopped);
-                essentia.state = essentia.stopped;
-
-                essentia.agrr->compute();
-                essentia.output->compute();
-                
-                essentia.agrr2->compute();
-                essentia.output2->compute();
-                
-                essentia.agrr3->compute();
-                essentia.output3->compute();
-
-                essentia.pool.clear();
-                essentia.agrrPool.clear();
-                essentia.fluxPool.clear();
-                essentia.agrrFluxPool.clear();
-                essentia.onsetPool.clear();
-                essentia.agrrOnsetPool.clear();
+                audioFeatureExtraction.output->compute();
+                audioFeatureExtraction.output2->compute();
                 break;
         }
     }
@@ -297,7 +333,7 @@ void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbn
     //flux drawing to see if changes
 //    if (state == playing){
 //    g.setColour(Colours::white);
-//    double y_finish = essentia.fluxOutput * 1000.0;
+//    double y_finish = audioFeatureExtraction.fluxOutput * 1000.0;
 //        cout << "value: " << y_finish << endl;
 //    g.drawLine(getWidth()/2, getHeight()/2, getWidth()/2, y_finish, 5.0f);
 //    }
@@ -306,6 +342,13 @@ void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbn
 void MainComponent::timerCallback()
 {
     repaint();
+    
+    // update values of dials when doing parameter sweep
+    filePositionDial.setValue(audioFeatureExtraction.count);
+    grainDurationDial.setValue(audioFeatureExtraction.duration);
+    startingOffsetDial.setValue(grainStream.filePositionOffset);
+    streamSizeDial.setValue(audioFeatureExtraction.streamSize);
+    pitchOffsetDial.setValue(grainStream.pitchOffsetForOneGrain);
 }
 
 //====================================================================================================
@@ -418,7 +461,7 @@ void MainComponent::setupButtonsAndDials()
     pitchOffsetDial.setSliderStyle(Slider::RotaryVerticalDrag);
     pitchOffsetDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
     pitchOffsetDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
-    pitchOffsetDial.setRange (0, 24);
+    pitchOffsetDial.setRange (-12, 12);
     pitchOffsetDial.onValueChange = [this] {(grainStream.pitchOffsetForOneGrain = static_cast<int>(pitchOffsetDial.getValue()));};
     pitchOffsetDial.setTextValueSuffix (" semitones offset");
     pitchOffsetDial.setNumDecimalPlacesToDisplay(0);

@@ -15,15 +15,29 @@ using namespace essentia;
 using namespace essentia::streaming;
 using namespace essentia::scheduler;
 
-class esss
+static int THRESHOLD_WINDOW_SIZE = 10;
+static float MULTIPLIER = 1.4f;
+
+class AudioFeatureExtraction
 {
 public:
     
-    esss();
+    AudioFeatureExtraction();
+    
+    int count = 1;
+    int duration = 1;
+    int streamSize = 1;
+    
+
+    
+    int frameSize = 2048;
+    int hopSize = 1024;
     
     vector<Real> temporaryBuffer;
     vector<Real> temporaryBuffer2;
     
+    standard::Algorithm* frameCutter;
+    vector<Real> frame;
     standard::Algorithm* windowing;
     vector<Real> windowedFrame;
     standard::Algorithm* spectrum;
@@ -59,36 +73,21 @@ public:
 
     Pool pool;
     Pool agrrPool;
+    Pool mergePool;
     
-    Pool fluxPool;
-    Pool agrrFluxPool;
-    
-    Pool onsetPool;
-    Pool agrrOnsetPool;
-    
+    Pool paramPool;
+    Pool agrrParamPool;
+
     standard::Algorithm* agrr;
     standard::Algorithm* agrr2;
-    standard::Algorithm* agrr3;
     standard::Algorithm* output;
     standard::Algorithm* output2;
-    standard::Algorithm* output3;
+    
     string outputFilename = "output";
-    
-    
-    enum TransportState
-    {
-        stopped,
-        starting,
-        playing,
-        stopping
-    };
-    
-    TransportState state;
 
-
-    //static constexpr int lengthOfEssentiaBuffer = 1024; // 2 times the buffer size
-    int lengthOfEssentiaBuffer = 1024;
-    int lengthOfPlaybackBuffer = 44100;
+//    //static constexpr int lengthOfEssentiaBuffer = 1024; // 2 times the buffer size
+//    int lengthOfEssentiaBuffer = 1024;
+//    int lengthOfPlaybackBuffer = 44100;
     
     // buffer to hold the last 1024 samples for analysis
     struct bufferAndIndex {
@@ -104,10 +103,20 @@ public:
     void essentiaSetup();
     
     void computeEssentiaValues();
+    void computeEssentia();
+    void clearBufferAndPool();
     
     void pushNextSampleIntoEssentiaArray(float sample) noexcept;
     
     void printFluxValues();
+    
+    int getLengthOfBuffer();
+
+private:
+    
+    //static constexpr int lengthOfEssentiaBuffer = 1024; // 2 times the buffer size
+    int lengthOfEssentiaBuffer = 1024;
+    int lengthOfPlaybackBuffer = 44100;
 };
 
 #endif

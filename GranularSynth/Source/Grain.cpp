@@ -135,6 +135,12 @@ vector<double> GrainStream::getCurrentGrainPosition(int channel)
         return positions;
 }
 
+void GrainStream::changePitch()
+{
+    for (oneGrain& grain : grains)
+        grain.grainDataPitchScalar = std::pow(2.0f, pitchOffsetForOneGrain / 12.0f);
+}
+
 void GrainStream::randomizeGrain(oneGrain& grain)
 {
     Random rand = Random();
@@ -167,7 +173,8 @@ void GrainStream::randomizeGrain(oneGrain& grain)
     int randomPitch = 0;
     if(pitchOffsetForOneGrain > 0)
         randomPitch = rand.nextInt(Range<int>(-pitchOffsetForOneGrain, pitchOffsetForOneGrain));
-    grain.grainDataPitchScalar = std::pow(2.0f, static_cast<double>(randomPitch) / 12.0f);
+//    grain.grainDataPitchScalar = std::pow(2.0f, static_cast<double>(randomPitch) / 12.0f);
+        grain.grainDataPitchScalar = std::pow(2.0f, pitchOffsetForOneGrain / 12.0f);
     
     // Randomize the Grain Gain
     double randomGain = 0.0;

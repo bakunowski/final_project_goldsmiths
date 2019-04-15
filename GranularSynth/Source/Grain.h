@@ -45,6 +45,8 @@ public:
     
     vector<double> getCurrentGrainPosition(int channel);
     
+    void changePitch();
+    
 
     
 private:
