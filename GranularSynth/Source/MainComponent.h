@@ -38,6 +38,7 @@ private:
     TextButton openFileButton;
     TextButton playButton;
     TextButton stopButton;
+    TextButton MachineLearningButton;
     
     Slider  filePositionDial;
     Label   filePositionLabel;
@@ -80,6 +81,8 @@ private:
     void playFile();
     
     void stopFile();
+    
+    void predict();
     
     void parameterWalkthrough();
 

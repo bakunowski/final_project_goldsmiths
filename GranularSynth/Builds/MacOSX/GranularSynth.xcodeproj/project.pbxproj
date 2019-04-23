@@ -631,6 +631,10 @@
 					"../../JuceLibraryCode",
 					"$(HOME)/JUCE/modules",
 					"/usr/local/Cellar/essentia/HEAD-561764f/include",
+					"/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/frugally-deep-master/include",
+					"/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/FunctionalPlus-master/include",
+					"/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731",
+					"/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/json/include",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Info-App.plist;

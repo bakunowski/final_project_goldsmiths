@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
 from tensorflow.keras import layers
+import keras
 
 np.set_printoptions(suppress=True)
 
@@ -46,7 +47,7 @@ print("Test dimensions", X_test.shape)
 print("Test labels dimensions", y_test.shape)
 
 model = tf.keras.Sequential([
-    layers.Flatten(input_shape=(45,13)),
+    layers.Flatten(input_shape=(45, 13)),
     layers.Dense(585, activation='relu'),
     layers.Dense(128, activation='relu'),
     layers.Dense(5)])
@@ -54,7 +55,7 @@ model = tf.keras.Sequential([
 optimizer = tf.train.GradientDescentOptimizer(0.1)
 
 model.compile(loss='mean_squared_error',
-              optimizer=optimizer,
+              optimizer='adam',
               metrics=['mean_squared_error', 'accuracy'])
 
 model.summary()
@@ -64,7 +65,7 @@ model.fit(X_train, y_train, epochs=10, batch_size=64, verbose=1)
 loss, mse, test_acc = model.evaluate(X_test, y_test, verbose=1)
 print('Test accuracy:', test_acc)
 
-model.save('test_1st_model.h5', include_optimizer=False)
+tf.keras.models.save_model(model, '1st_model.h5', include_optimizer=False)
 
 # # serialize model to JSON
 # model_json = model.to_json()

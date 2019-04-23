@@ -1,5 +1,6 @@
 #include "MainComponent.h"
 #include <algorithm>
+#include <fdeep/fdeep.hpp>
 
 //==============================================================================
 MainComponent::MainComponent()  :       grainStream(),
@@ -89,9 +90,8 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             }
             else
             {
-
-	      //parameterWalkthrough()
-	      randomParameterWalkthrough();
+                //parameterWalkthrough()
+                randomParameterWalkthrough();
             }
         }
     }
@@ -207,9 +207,10 @@ void MainComponent::resized()
     globalGainDial.setBounds((xValue += 100), getHeight()/3, dial_width, dial_height);
     grainGainOffsetDial.setBounds((xValue += 100), getHeight()/3, dial_width, dial_height);
     
-    openFileButton.setBounds (10, (yValue += 30), getWidth()/5, 20);
-    playButton.setBounds (10, (yValue += 30), getWidth()/5, 20);
-    stopButton.setBounds (10, (yValue += 30), getWidth()/5, 20);
+    openFileButton.setBounds ((xValue += 10), getHeight()/3+10, getWidth()/5, 18);
+    playButton.setBounds (xValue, getHeight()/3+35, getWidth()/5, 18);
+    stopButton.setBounds (xValue, getHeight()/3+60, getWidth()/5, 18);
+    MachineLearningButton.setBounds ((xValue += getWidth()/5+10), getHeight()/3+10, getWidth()/5, 18);
 }
 
 void MainComponent::paint (Graphics& g)
@@ -310,6 +311,16 @@ void MainComponent::playFile()
 void MainComponent::stopFile()
 {
     changeState(TransportState::stopping);
+}
+
+void MainComponent::predict()
+{
+   // vector<vector<Real>> matrix = audioFeatureExtraction.mergePool.value<vector<vector<Real>>>("lowlevel.mfcc");
+    
+    const auto model = fdeep::load_model("/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/fdeep_model.json");
+//    const auto result = model.predict({fdeep::tensor5(fdeep::shape5(1, 1, 1, 45, 13), {matrix})});
+    const auto result = model.predict({fdeep::tensor5(fdeep::shape5(1, 1, 1, 45, 13), {1})});
+    cout << fdeep::show_tensor5s(result) << endl;
 }
 
 //==============================================================================
@@ -460,18 +471,18 @@ void MainComponent::setupButtonsAndDials()
     filePositionDial.onValueChange = [this] {(grainStream.setFilePosition(static_cast<int>(filePositionDial.getValue()))); };
     filePositionDial.setSliderStyle(Slider::RotaryVerticalDrag);
     filePositionDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
-    filePositionDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+    filePositionDial.setTextBoxStyle(Slider::TextBoxBelow, true, 100, 20);
     filePositionDial.setNumDecimalPlacesToDisplay(0);
     
     addAndMakeVisible(filePositionLabel);
     filePositionLabel.setColour(Label::backgroundColourId, Colours::black);
     filePositionLabel.setText("FilePos", dontSendNotification);
     filePositionLabel.attachToComponent(&filePositionDial, false);
-    
+
     // grain duration dial setup
     grainDurationDial.setSliderStyle(Slider::RotaryVerticalDrag);
     grainDurationDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
-    grainDurationDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+    grainDurationDial.setTextBoxStyle(Slider::TextBoxBelow, true, 100, 20);
     grainDurationDial.setRange (1, 1000);
     grainDurationDial.onValueChange = [this] {(grainStream.setDuration(static_cast<int>(grainDurationDial.getValue()))); };
     grainDurationDial.setTextValueSuffix (" ms");
@@ -482,7 +493,7 @@ void MainComponent::setupButtonsAndDials()
     // strem size dial setup
     streamSizeDial.setSliderStyle(Slider::RotaryVerticalDrag);
     streamSizeDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
-    streamSizeDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+    streamSizeDial.setTextBoxStyle(Slider::TextBoxBelow, true, 100, 20);
     streamSizeDial.setRange (1, 10);
     streamSizeDial.onValueChange = [this] {(grainStream.setStreamSize(static_cast<int>(streamSizeDial.getValue()))); };
     streamSizeDial.setTextValueSuffix (" grains");
@@ -493,7 +504,7 @@ void MainComponent::setupButtonsAndDials()
     // starting offset dial setup
     startingOffsetDial.setSliderStyle(Slider::RotaryVerticalDrag);
     startingOffsetDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
-    startingOffsetDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+    startingOffsetDial.setTextBoxStyle(Slider::TextBoxBelow, true, 100, 20);
     startingOffsetDial.setRange (0, 50000);
     startingOffsetDial.onValueChange = [this] {(grainStream.filePositionOffset = static_cast<int>(startingOffsetDial.getValue()));};
     startingOffsetDial.setTextValueSuffix (" samples offset");
@@ -504,7 +515,7 @@ void MainComponent::setupButtonsAndDials()
     // pitch offset dial
     pitchOffsetDial.setSliderStyle(Slider::RotaryVerticalDrag);
     pitchOffsetDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
-    pitchOffsetDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+    pitchOffsetDial.setTextBoxStyle(Slider::TextBoxBelow, true, 100, 20);
     pitchOffsetDial.setRange (-12, 12);
     pitchOffsetDial.onValueChange = [this] {(grainStream.pitchOffsetForOneGrain = static_cast<int>(pitchOffsetDial.getValue()));};
     pitchOffsetDial.setTextValueSuffix (" semitones offset");
@@ -515,7 +526,7 @@ void MainComponent::setupButtonsAndDials()
     // grain stream gain dial
     globalGainDial.setSliderStyle(Slider::RotaryVerticalDrag);
     globalGainDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
-    globalGainDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+    globalGainDial.setTextBoxStyle(Slider::TextBoxBelow, true, 100, 20);
     globalGainDial.setRange (-60, 0);
     globalGainDial.onValueChange = [this] {grainStream.globalGain = Decibels::decibelsToGain<double>(globalGainDial.getValue());};
     globalGainDial.setTextValueSuffix (" dB");
@@ -526,7 +537,7 @@ void MainComponent::setupButtonsAndDials()
     // grain gain offset dial
     grainGainOffsetDial.setSliderStyle(Slider::RotaryVerticalDrag);
     grainGainOffsetDial.setColour(Slider::rotarySliderFillColourId, Colours::orange);
-    grainGainOffsetDial.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+    grainGainOffsetDial.setTextBoxStyle(Slider::TextBoxBelow, true, 100, 20);
     grainGainOffsetDial.setRange (-60, 0);
     grainGainOffsetDial.onValueChange = [this] {(grainStream.gainOffsetForOneGrain = static_cast<int>(grainGainOffsetDial.getValue()));};
     grainGainOffsetDial.setTextValueSuffix (" dB");
@@ -552,4 +563,10 @@ void MainComponent::setupButtonsAndDials()
     stopButton.setColour(TextButton::buttonColourId, Colours::lightpink);
     stopButton.setEnabled(false);
     addAndMakeVisible(&stopButton);
+    
+    // ml button
+    MachineLearningButton.setButtonText("Predict");
+    MachineLearningButton.onClick = [this] { predict(); };
+    MachineLearningButton.setEnabled(true);
+    addAndMakeVisible(&MachineLearningButton);
 }

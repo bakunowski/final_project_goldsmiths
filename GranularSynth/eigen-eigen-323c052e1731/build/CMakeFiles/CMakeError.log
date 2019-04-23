@@ -1,0 +1,194 @@
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wlogicalop failed with the following output:
+Change Dir: /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_37b60/fast 
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_37b60.dir/build.make CMakeFiles/cmTC_37b60.dir/build
+Building CXX object CMakeFiles/cmTC_37b60.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wshorten-64-to-32 -DCOMPILER_SUPPORT_Wlogicalop -Werror -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -Wlogical-op -o CMakeFiles/cmTC_37b60.dir/src.cxx.o -c /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.cxx
+error: unknown warning option '-Wlogical-op'; did you mean '-Wlong-long'? [-Werror,-Wunknown-warning-option]
+make[1]: *** [CMakeFiles/cmTC_37b60.dir/src.cxx.o] Error 1
+make: *** [cmTC_37b60/fast] Error 2
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wnopsabi failed with the following output:
+Change Dir: /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_afab2/fast 
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_afab2.dir/build.make CMakeFiles/cmTC_afab2.dir/build
+Building CXX object CMakeFiles/cmTC_afab2.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wshorten-64-to-32 -Wenum-conversion -Wc++11-extensions -Wdouble-promotion -Wshadow -DCOMPILER_SUPPORT_Wnopsabi -Werror -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -Wno-psabi -o CMakeFiles/cmTC_afab2.dir/src.cxx.o -c /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.cxx
+error: unknown warning option '-Wno-psabi' [-Werror,-Wunknown-warning-option]
+make[1]: *** [CMakeFiles/cmTC_afab2.dir/src.cxx.o] Error 1
+make: *** [cmTC_afab2/fast] Error 2
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_wd981 failed with the following output:
+Change Dir: /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_2d4fc/fast 
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_2d4fc.dir/build.make CMakeFiles/cmTC_2d4fc.dir/build
+Building CXX object CMakeFiles/cmTC_2d4fc.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wshorten-64-to-32 -Wenum-conversion -Wc++11-extensions -Wdouble-promotion -Wshadow -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_wd981 -Werror -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -wd981 -o CMakeFiles/cmTC_2d4fc.dir/src.cxx.o -c /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.cxx
+clang: error: unknown argument: '-wd981'
+make[1]: *** [CMakeFiles/cmTC_2d4fc.dir/src.cxx.o] Error 1
+make: *** [cmTC_2d4fc/fast] Error 2
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_wd2304 failed with the following output:
+Change Dir: /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_b8b7e/fast 
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_b8b7e.dir/build.make CMakeFiles/cmTC_b8b7e.dir/build
+Building CXX object CMakeFiles/cmTC_b8b7e.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wshorten-64-to-32 -Wenum-conversion -Wc++11-extensions -Wdouble-promotion -Wshadow -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_wd2304 -Werror -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -wd2304 -o CMakeFiles/cmTC_b8b7e.dir/src.cxx.o -c /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.cxx
+clang: error: unknown argument: '-wd2304'
+make[1]: *** [CMakeFiles/cmTC_b8b7e.dir/src.cxx.o] Error 1
+make: *** [cmTC_b8b7e/fast] Error 2
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_STRICTANSI failed with the following output:
+Change Dir: /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_fb4df/fast 
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_fb4df.dir/build.make CMakeFiles/cmTC_fb4df.dir/build
+Building CXX object CMakeFiles/cmTC_fb4df.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wshorten-64-to-32 -Wenum-conversion -Wc++11-extensions -Wdouble-promotion -Wshadow -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_STRICTANSI -Werror -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -strict-ansi -o CMakeFiles/cmTC_fb4df.dir/src.cxx.o -c /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.cxx
+clang: error: unknown argument: '-strict-ansi'
+make[1]: *** [CMakeFiles/cmTC_fb4df.dir/src.cxx.o] Error 1
+make: *** [cmTC_fb4df/fast] Error 2
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_OPENMP failed with the following output:
+Change Dir: /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_d78aa/fast 
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_d78aa.dir/build.make CMakeFiles/cmTC_d78aa.dir/build
+Building CXX object CMakeFiles/cmTC_d78aa.dir/src.cxx.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wshorten-64-to-32 -Wenum-conversion -Wc++11-extensions -Wdouble-promotion -Wshadow -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -Qunused-arguments -ansi -DCOMPILER_SUPPORT_OPENMP -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -fopenmp -o CMakeFiles/cmTC_d78aa.dir/src.cxx.o -c /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.cxx
+clang: error: unsupported option '-fopenmp'
+make[1]: *** [CMakeFiles/cmTC_d78aa.dir/src.cxx.o] Error 1
+make: *** [cmTC_d78aa/fast] Error 2
+
+Source file was:
+int main() { return 0; }
+Performing C SOURCE FILE Test SCOTCH_Num_4 failed with the following compile output:
+Change Dir: /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_31044/fast 
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_31044.dir/build.make CMakeFiles/cmTC_31044.dir/build
+Building C object CMakeFiles/cmTC_31044.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DSCOTCH_Num_4 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -o CMakeFiles/cmTC_31044.dir/src.c.o   -c /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.c
+/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.c:4:10: fatal error: 'scotch.h' file not found
+#include <scotch.h>
+         ^~~~~~~~~~
+1 error generated.
+make[1]: *** [CMakeFiles/cmTC_31044.dir/src.c.o] Error 1
+make: *** [cmTC_31044/fast] Error 2
+
+...and run output:
+
+Return value: 1
+Source file was:
+
+#include <stdio.h>
+#include <stdint.h>
+#include <scotch.h>
+int main(int argc, char **argv) {
+  if (sizeof(SCOTCH_Num) == 4)
+    return 0;
+  else
+    return 1;
+}
+
+Performing C SOURCE FILE Test SCOTCH_Num_8 failed with the following compile output:
+Change Dir: /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_cfe13/fast 
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_cfe13.dir/build.make CMakeFiles/cmTC_cfe13.dir/build
+Building C object CMakeFiles/cmTC_cfe13.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DSCOTCH_Num_8 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -o CMakeFiles/cmTC_cfe13.dir/src.c.o   -c /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.c
+/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.c:4:10: fatal error: 'scotch.h' file not found
+#include <scotch.h>
+         ^~~~~~~~~~
+1 error generated.
+make[1]: *** [CMakeFiles/cmTC_cfe13.dir/src.c.o] Error 1
+make: *** [cmTC_cfe13/fast] Error 2
+
+...and run output:
+
+Return value: 1
+Source file was:
+
+#include <stdio.h>
+#include <stdint.h>
+#include <scotch.h>
+int main(int argc, char **argv) {
+  if (sizeof(SCOTCH_Num) == 8)
+    return 0;
+  else
+    return 1;
+}
+
+Performing C SOURCE FILE Test PTSCOTCH_Num_4 failed with the following compile output:
+Change Dir: /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_c6117/fast 
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_c6117.dir/build.make CMakeFiles/cmTC_c6117.dir/build
+Building C object CMakeFiles/cmTC_c6117.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DPTSCOTCH_Num_4 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -o CMakeFiles/cmTC_c6117.dir/src.c.o   -c /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.c
+/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.c:4:10: fatal error: 'ptscotch.h' file not found
+#include <ptscotch.h>
+         ^~~~~~~~~~~~
+1 error generated.
+make[1]: *** [CMakeFiles/cmTC_c6117.dir/src.c.o] Error 1
+make: *** [cmTC_c6117/fast] Error 2
+
+...and run output:
+
+Return value: 1
+Source file was:
+
+#include <stdio.h>
+#include <stdint.h>
+#include <ptscotch.h>
+int main(int argc, char **argv) {
+  if (sizeof(SCOTCH_Num) == 4)
+    return 0;
+  else
+    return 1;
+}
+
+Performing C SOURCE FILE Test PTSCOTCH_Num_8 failed with the following compile output:
+Change Dir: /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_531c1/fast 
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_531c1.dir/build.make CMakeFiles/cmTC_531c1.dir/build
+Building C object CMakeFiles/cmTC_531c1.dir/src.c.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -DPTSCOTCH_Num_8 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -o CMakeFiles/cmTC_531c1.dir/src.c.o   -c /Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.c
+/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/eigen-eigen-323c052e1731/build/CMakeFiles/CMakeTmp/src.c:4:10: fatal error: 'ptscotch.h' file not found
+#include <ptscotch.h>
+         ^~~~~~~~~~~~
+1 error generated.
+make[1]: *** [CMakeFiles/cmTC_531c1.dir/src.c.o] Error 1
+make: *** [cmTC_531c1/fast] Error 2
+
+...and run output:
+
+Return value: 1
+Source file was:
+
+#include <stdio.h>
+#include <stdint.h>
+#include <ptscotch.h>
+int main(int argc, char **argv) {
+  if (sizeof(SCOTCH_Num) == 8)
+    return 0;
+  else
+    return 1;
+}
+

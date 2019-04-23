@@ -52,6 +52,3 @@ if (prunnedSpectralFlux[i] > 0.0f)
     }
 }
 
-* Final product:
-** upload the model to work with c++ code
-** a button to make a prediction based on some input

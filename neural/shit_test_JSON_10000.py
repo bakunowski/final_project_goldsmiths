@@ -50,7 +50,6 @@ print("Train labels dimensions", y_train.shape)
 
 model = tf.keras.Sequential([
     layers.Flatten(input_shape=(45,13)),
-    layers.Dense()
     layers.Dense(585, activation='relu'),
     layers.Dense(128, activation='relu'),
     layers.Dense(1)])
