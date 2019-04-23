@@ -1,5 +1,5 @@
 * Audio descriptors
-* To look at:
+** To look at:
 ** onset times (onsetDetection -> onsetTimes)
 *** this will be hopefully achieved with the spectral flux 
 *** Flux 
@@ -51,3 +51,7 @@ if (prunnedSpectralFlux[i] > 0.0f)
         }
     }
 }
+
+* Final product:
+** upload the model to work with c++ code
+** a button to make a prediction based on some input

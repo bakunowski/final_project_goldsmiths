@@ -1,9 +1,11 @@
 * MAIN GOALS
-** DONE FINISH THE FLUX
-** DONE TAKE MFCC FOR A SECOND OF SOUND 
-** TODO AUTOMATE PARAMETER WALKTHROUGH -> set of parameters -> one second -> extract MFCCs -> write to a file mfcc results and parameters used
 ** TODO train on all results from the above jazz + test on a set of sounds (described at the bottom of this doc) 
-** TODO add pitch control 
+*** TODO train a MLP on this data 
+*** TODO try and train a recurrent NN on this data 
+*** TODO and try to train an LSTM
+** TODO figure out how to make the model predict in C++ 
+** TODO a button to start getting input from mic for one second, put all in a buffer, do an MFCC and feed into the extracted model to get predictions and set parameters based on them. 
+
 * AUDIO EXTRACTORS (HIGH PRIORITY)
 ** FLUX
 *** TODO make the flux extractor function periodic -> based on grain length -> basically like looping -> see if a connection can be made between the grain length and amount of peaks in the signal
@@ -12,21 +14,16 @@
 *** TODO add some sort of pitch extraction
 ** TODO explore more algorithms and see what sticks (not much time left for this)
 * MORE SOFTWARE (HIGH PRIORITY)
-** TODO start thinking about the parameter sweep for the dataset (analysis for each parameter setting)
 ** TODO make an audio player for feature extraction of a song/audio
 ** TODO see if a separate software for audio extraction can be done -> send buffer from both granulator and audio player and extract in one place 
 * CLEANUP
 ** TODO put buttons and sliders into separate file 
 * NON-PRIORITY
 ** TODO add a grain envelope
-** TODO perhaps after automating the walkthrough -> do some sort of a visualisation fo parameters vs features -> to uncover any patterns -> just like with any other dataset -> see iris 
+** TODO perhaps after automating the walkthrough -> do some sort of a visualisation of parameters vs features -> to uncover any patterns -> just like with any other dataset -> see iris 
 ** TODO change granulator's randomize function to only randomize grain position and rename to "spread"
-** TODO add a randoom button to compare results 
+** TODO add a random button to compare results 
+* MACHINE LEARNING
 * NOTES 
 ** make a set of sounds (maybe 6) from the granulator, on one perticular sample - a sound matching task based on six sets of sounds -> each increasingly complex
 ** maybe program the synth using human voice ? 
-* PARAMETER WALKTHROUGH
-** take mfccs for minimum values of each dial for entire sample  
-** increment one dial by a some amount -> go again until dial maxed out
-** increment 3 dials by some amount (including filePos)
-** repeat until all parameters where written 

@@ -75,7 +75,6 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             }
 
         }
-    
    
         // computing the essentia algorithms
         if (bufferToFill.buffer->getNumChannels() > 0)
@@ -90,7 +89,9 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             }
             else
             {
-                parameterWalkthrough();
+
+	      //parameterWalkthrough()
+	      randomParameterWalkthrough();
             }
         }
     }
@@ -100,32 +101,76 @@ void MainComponent::releaseResources()
 {
 }
 
+void MainComponent::randomParameterWalkthrough()
+{
+  int numOfSamples = 10000;
+  //cout << "pool45 " << audioFeatureExtraction.temporaryBuffer2.size() << endl;
+  Random rand = Random();
+  
+  audioFeatureExtraction.computeEssentia();
+  
+  audioFeatureExtraction.paramPool.add("parameters.position", audioFeatureExtraction.count);
+  audioFeatureExtraction.paramPool.add("parameters.duration", audioFeatureExtraction.duration);
+  audioFeatureExtraction.paramPool.add("parameters.spread", grainStream.filePositionOffset);
+  audioFeatureExtraction.paramPool.add("parameters.numberOfGrains", audioFeatureExtraction.streamSize);
+  audioFeatureExtraction.paramPool.add("parameters.pitch", grainStream.pitchOffsetForOneGrain);
+  audioFeatureExtraction.mergePoolParams.merge(audioFeatureExtraction.paramPool, "append");
+  
+  audioFeatureExtraction.clearBufferAndPool();
+  
+  audioFeatureExtraction.count = rand.nextInt(Range<int>(1, grainStream.getFileSize()));
+  grainStream.setFilePosition(audioFeatureExtraction.count);
+  audioFeatureExtraction.duration = rand.nextInt(Range<int>(10, 1000));
+  grainStream.setDuration(audioFeatureExtraction.duration);
+  grainStream.filePositionOffset = rand.nextInt(Range<int>(0, 50000));
+  audioFeatureExtraction.streamSize = rand.nextInt(Range<int>(1, 10));
+  grainStream.setStreamSize(audioFeatureExtraction.streamSize);
+  grainStream.pitchOffsetForOneGrain = rand.nextInt(Range<int>(-12, 12));
+  
+  audioFeatureExtraction.count2 += 1;
+  cout << audioFeatureExtraction.count2 << endl;
+  
+  if (audioFeatureExtraction.count2 == numOfSamples)
+    {
+      audioFeatureExtraction.mergedMFCCs->compute();
+      audioFeatureExtraction.mergedParameters->compute();
+      changeState(TransportState::stopping);
+    }
+}
+
 void MainComponent::parameterWalkthrough()
 {
     audioFeatureExtraction.computeEssentia();
     audioFeatureExtraction.clearBufferAndPool();
     audioFeatureExtraction.count += audioFeatureExtraction.getLengthOfBuffer();
-    
+
     if (audioFeatureExtraction.count > grainStream.getFileSize())
     {
         audioFeatureExtraction.clearBufferAndPool();
-        audioFeatureExtraction.count = 1;
+        audioFeatureExtraction.count = 1.0;
         audioFeatureExtraction.duration += 100;
-                                                //901
-        if (audioFeatureExtraction.duration >= 201)
+        
+        if (audioFeatureExtraction.duration >= 901) // 901
         {
             audioFeatureExtraction.duration = 0;
-            grainStream.filePositionOffset += 1000;
-                                                    //50000
-            if (grainStream.filePositionOffset >= 3000)
+            grainStream.filePositionOffset += 10000;
+            
+            if (grainStream.filePositionOffset >= 50000) //50000
             {
                 grainStream.filePositionOffset = 0;
-                audioFeatureExtraction.streamSize += 1;
+                audioFeatureExtraction.streamSize += 4;
                 
-                if (audioFeatureExtraction.streamSize == 10)
+                if (audioFeatureExtraction.streamSize >= 9) //10
                 {
                     audioFeatureExtraction.streamSize = 0;
-                    grainStream.pitchOffsetForOneGrain +=1;
+                    grainStream.pitchOffsetForOneGrain +=12;
+                    
+                    if (grainStream.pitchOffsetForOneGrain >= 12)//12
+                    {
+                        audioFeatureExtraction.mergedMFCCs->compute();
+                        audioFeatureExtraction.mergedParameters->compute();
+                        changeState(stopping);
+                    }
                 }
             }
         }
@@ -135,12 +180,12 @@ void MainComponent::parameterWalkthrough()
     grainStream.setDuration(audioFeatureExtraction.duration);
     grainStream.setStreamSize(audioFeatureExtraction.streamSize);
 
-    audioFeatureExtraction.paramPool.add("FilePos", audioFeatureExtraction.count);
-    audioFeatureExtraction.paramPool.add("duration", audioFeatureExtraction.duration);
-    audioFeatureExtraction.paramPool.add("spread", grainStream.filePositionOffset);
-    audioFeatureExtraction.paramPool.add("numberOfGrains", audioFeatureExtraction.streamSize);
-    audioFeatureExtraction.paramPool.add("pitch", grainStream.pitchOffsetForOneGrain);
-    
+    audioFeatureExtraction.paramPool.add("parameters.position", audioFeatureExtraction.count);
+    audioFeatureExtraction.paramPool.add("parameters.duration", audioFeatureExtraction.duration);
+    audioFeatureExtraction.paramPool.add("parameters.spread", grainStream.filePositionOffset);
+    audioFeatureExtraction.paramPool.add("parameters.numberOfGrains", audioFeatureExtraction.streamSize);
+    audioFeatureExtraction.paramPool.add("parameters.pitch", grainStream.pitchOffsetForOneGrain);
+
     //audioFeatureExtraction.printFluxValues();
 }
 
@@ -205,8 +250,6 @@ void MainComponent::changeState(TransportState newState)
             case TransportState::stopping:
                 grainStream.silenceAllGrains();
                 changeState(TransportState::stopped);
-                audioFeatureExtraction.output->compute();
-                audioFeatureExtraction.output2->compute();
                 break;
         }
     }
@@ -245,7 +288,7 @@ void MainComponent::openFile()
             grainDurationDial.setValue(1);
             startingOffsetDial.setValue(0);
             streamSizeDial.setValue(1);
-            pitchOffsetDial.setValue(0);
+            pitchOffsetDial.setValue(-12);
             grainGainOffsetDial.setValue(0);
             
             // turn the audio thread back on
@@ -320,7 +363,8 @@ void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbn
     g.setColour (Colours::yellow);
     auto drawPosition ((pos1/audioLength) * thumbnailBounds.getWidth() + thumbnailBounds.getX());
     g.drawLine(drawPosition, thumbnailBounds.getY(), drawPosition, thumbnailBounds.getBottom(), 2.0f);
-    
+
+    /*
     for (int i = 0; i < (static_cast<int>(streamSizeDial.getValue())); ++i)
     {
         double grainsPos = (grainStream.getCurrentGrainPosition(0)[i])/44100.0;
@@ -328,7 +372,7 @@ void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbn
         auto drawGrainPosition ((grainsPos/audioLength) * thumbnailBounds.getWidth() + thumbnailBounds.getX());
         
         g.drawLine(drawGrainPosition, thumbnailBounds.getY()+10, drawGrainPosition, thumbnailBounds.getBottom()-10, 1.0f);
-    }
+    }*/
 
     //flux drawing to see if changes
 //    if (state == playing){

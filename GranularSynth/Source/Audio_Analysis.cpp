@@ -1,4 +1,5 @@
 #include "Audio_Analysis.h"
+#include <typeinfo>
 
 // essentia
 AudioFeatureExtraction::AudioFeatureExtraction()
@@ -10,20 +11,24 @@ AudioFeatureExtraction::AudioFeatureExtraction()
     const char* stats[] = { "mean"};
 
     agrr = factory.create("PoolAggregator", "defaultStats", arrayToVector<string>(stats));
-    agrr2 = factory.create("PoolAggregator");
-    
-    output = factory.create("YamlOutput", "filename", "parameters");
-    output2 = factory.create("YamlOutput");
 
+    output = factory.create("YamlOutput");
+    output2 = factory.create("YamlOutput");
+    test_output = factory.create("YamlOutput");
+    
+    mergedMFCCs = factory.create("YamlOutput", "filename", "MFCC.json", "format", "json", "writeVersion", false);
+    mergedParameters = factory.create("YamlOutput", "filename", "parameters.json", "format", "json", "writeVersion", false);
+    
     agrr->input("input").set(pool);
     agrr->output("output").set(agrrPool);
 
-//    agrr2->input("input").set(paramPool);
-//    agrr2->output("output").set(agrrParamPool);
-
-    output->input("pool").set(agrrPool);
+    output->input("pool").set(mergePool);
     output2->input("pool").set(paramPool);
-
+    test_output->input("pool").set(pool);
+    
+    mergedMFCCs->input("pool").set(mergePool);
+    mergedParameters->input("pool").set(mergePoolParams);
+    
     //dcremoval = factory.create("DCRemoval");
     
     frameCutter = factory.create("FrameCutter", "frameSize", frameSize, "hopSize", hopSize);
@@ -35,7 +40,7 @@ AudioFeatureExtraction::AudioFeatureExtraction()
     
     spectrum = factory.create("Spectrum");
     mfcc = factory.create("MFCC");
-
+    
     flux = factory.create("Flux");
 
     //dcremoval->input("signal").set(temporaryBuffer);
@@ -49,7 +54,7 @@ AudioFeatureExtraction::AudioFeatureExtraction()
     
     //fft->input("frame").set(windowedFrame);
     //fft->output("fft").set(fftBuffer);
-    //
+    
     //cartesian2polar->input("complex").set(fftBuffer);
     //cartesian2polar->output("magnitude").set(cartesian2polarMagnitudes);
     //cartesian2polar->output("phase").set(cartesian2polarPhases);
@@ -78,16 +83,37 @@ void AudioFeatureExtraction::pushNextSampleIntoEssentiaArray(float sample) noexc
 
 void AudioFeatureExtraction::computeEssentia()
 {
-    frameCutter->compute();
-    windowing->compute();
-    spectrum->compute();
-    mfcc->compute();
-    
-    pool.add("lowlevel.mfcc", mfccCoeffs);
+    while (true)
+    {
+      frameCutter->compute();
 
-    agrr->compute();
-    output->compute();
-    output2->compute();
+      if (!frame.size())
+      {
+          break;
+      }
+      if (isSilent(frame)) continue;
+        
+      windowing->compute();
+      spectrum->compute();
+      mfcc->compute();
+      
+      pool.add("lowlevel.mfcc", mfccCoeffs);
+      //cout << "mfcc13 " << mfccCoeffs.size() << endl;
+    }
+    
+    //agrr->compute();
+    
+    //vector<Real> matrix = pool.value<vector<Real>>("lowlevel.mfcc");
+    //cout << matrix.size() << endl;
+    
+    mergePool.merge(pool, "append");
+    //mergedMFCCs->compute();
+
+    //mergePoolParams.merge(paramPool, "append");
+    //mergedParameters->compute();
+    
+    //output->compute();
+    //output2->compute();
 }
 
 void AudioFeatureExtraction::clearBufferAndPool()

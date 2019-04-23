@@ -25,11 +25,10 @@ public:
     AudioFeatureExtraction();
     
     int count = 1;
+    int count2 = 0;
     int duration = 1;
     int streamSize = 1;
-    
-
-    
+   
     int frameSize = 2048;
     int hopSize = 1024;
     
@@ -38,13 +37,17 @@ public:
     
     standard::Algorithm* frameCutter;
     vector<Real> frame;
+
     standard::Algorithm* windowing;
     vector<Real> windowedFrame;
+
     standard::Algorithm* spectrum;
     vector<Real> spectrumResults;
+
     standard::Algorithm* mfcc;
     vector<Real> mfccBands;
     vector<Real> mfccCoeffs;
+
     standard::Algorithm* flux;
     Real fluxOutput = 0.1;
     vector<Real> spectralFlux;
@@ -65,30 +68,31 @@ public:
 
     //standard::Algorithm* dcremoval;
     //vector<Real> dcRemovalBuffer;
+
     standard::Algorithm* fft;
     vector<complex<Real>> fftBuffer;
+
     standard::Algorithm* cartesian2polar;
     vector<Real> cartesian2polarMagnitudes;
     vector<Real> cartesian2polarPhases;
 
     Pool pool;
     Pool agrrPool;
-    Pool mergePool;
     
     Pool paramPool;
-    Pool agrrParamPool;
+
+    Pool mergePool;
+    Pool mergePoolParams;
 
     standard::Algorithm* agrr;
-    standard::Algorithm* agrr2;
+    standard::Algorithm* mergedMFCCs;
+    standard::Algorithm* mergedParameters;
     standard::Algorithm* output;
     standard::Algorithm* output2;
+    standard::Algorithm* test_output;
     
     string outputFilename = "output";
 
-//    //static constexpr int lengthOfEssentiaBuffer = 1024; // 2 times the buffer size
-//    int lengthOfEssentiaBuffer = 1024;
-//    int lengthOfPlaybackBuffer = 44100;
-    
     // buffer to hold the last 1024 samples for analysis
     struct bufferAndIndex {
         AudioSampleBuffer buffer;

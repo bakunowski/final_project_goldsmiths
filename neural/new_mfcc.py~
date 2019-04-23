@@ -1,0 +1,8 @@
+import json
+
+with open(
+        '/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/neural/MFCC_new.json'
+) as f:
+    d2 = json.load(f)
+
+duration = np.array(d2["parameters"]["duration"]).reshape(6299, 1)

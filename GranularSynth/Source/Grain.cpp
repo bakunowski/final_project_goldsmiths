@@ -171,8 +171,8 @@ void GrainStream::randomizeGrain(oneGrain& grain)
     
     // Randomize the Pitch
     int randomPitch = 0;
-    if(pitchOffsetForOneGrain > 0)
-        randomPitch = rand.nextInt(Range<int>(-pitchOffsetForOneGrain, pitchOffsetForOneGrain));
+    if(pitchOffsetForOneGrain > -13)
+//        randomPitch = rand.nextInt(Range<int>(-pitchOffsetForOneGrain, pitchOffsetForOneGrain));
 //    grain.grainDataPitchScalar = std::pow(2.0f, static_cast<double>(randomPitch) / 12.0f);
         grain.grainDataPitchScalar = std::pow(2.0f, pitchOffsetForOneGrain / 12.0f);
     

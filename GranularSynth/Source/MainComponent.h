@@ -83,6 +83,8 @@ private:
     
     void parameterWalkthrough();
 
+    void randomParameterWalkthrough();
+
     //==============================================================================
     //                    functions only used in waveform drawing
     

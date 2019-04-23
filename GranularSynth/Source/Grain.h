@@ -37,7 +37,7 @@ public:
     
     int filePositionOffset = 0;
     
-    int pitchOffsetForOneGrain = 0;
+    int pitchOffsetForOneGrain = -12;
     
     int gainOffsetForOneGrain = 0;
     

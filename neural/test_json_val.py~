@@ -1,0 +1,13 @@
+import json
+import numpy as np
+
+np.set_printoptions(suppress=True)
+
+with open(
+        '/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Builds/MacOSX/build/Debug/MFCC.json'
+) as f:
+    d2 = json.load(f)
+
+mfcc = np.array(d2["lowlevel"]["mfcc"])
+
+print(mfcc.shape)

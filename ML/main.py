@@ -10,6 +10,7 @@ import numpy as np
 import argparse
 
 data = pd.read_json('dataset.json', orient='split')
+print(data.head)
 
 mfcc = pd.read_json((data['mfcc']).to_json())
 mfcc_transposed = mfcc.T
