@@ -4,9 +4,11 @@
 *** TODO try and train a recurrent NN on this data 
 *** TODO and try to train an LSTM
 ** TODO test on a set of sounds (described at the bottom of this doc)
-** TODO figure out how to make the model predict in C++ 
-** TODO a button to start getting input from mic for one second, put all in a buffer, do an MFCC and feed into the extracted model to get predictions and set parameters based on them. 
-
+** DONE figure out how to make the model predict in C++ 
+** TODO a button to start getting input from mic for one second,  
+*** DONE put all in a buffer, 
+*** DONE do an MFCC and feed into the extracted model to get predictions 
+*** TODO and set parameters based on them.
 * AUDIO EXTRACTORS (HIGH PRIORITY)
 ** FLUX
 *** TODO make the flux extractor function periodic -> based on grain length -> basically like looping -> see if a connection can be made between the grain length and amount of peaks in the signal

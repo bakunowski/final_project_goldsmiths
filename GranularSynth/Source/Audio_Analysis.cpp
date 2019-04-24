@@ -32,14 +32,18 @@ AudioFeatureExtraction::AudioFeatureExtraction()
     //dcremoval = factory.create("DCRemoval");
     
     frameCutter = factory.create("FrameCutter", "frameSize", frameSize, "hopSize", hopSize);
+    frameCutterInput = factory.create("FrameCutter", "frameSize", frameSize, "hopSize", hopSize);
     
     windowing = factory.create("Windowing", "type", "hann");
+    windowingInput = factory.create("Windowing", "type", "hann");
     
 //    fft = factory.create("FFT", "size", lengthOfEssentiaBuffer);
 //    cartesian2polar = factory.create("CartesianToPolar");
     
     spectrum = factory.create("Spectrum");
+    spectrumInput = factory.create("Spectrum");
     mfcc = factory.create("MFCC");
+    mfccInput = factory.create("MFCC");
     
     flux = factory.create("Flux");
 
@@ -49,8 +53,14 @@ AudioFeatureExtraction::AudioFeatureExtraction()
     frameCutter->input("signal").set(temporaryBuffer2);
     frameCutter->output("frame").set(frame);
     
+    frameCutterInput->input("signal").set(microphoneBuffer);
+    frameCutterInput->output("frame").set(frameInput);
+    
     windowing->input("frame").set(frame);
     windowing->output("frame").set(windowedFrame);
+    
+    windowingInput->input("frame").set(frameInput);
+    windowingInput->output("frame").set(windowedFrameInput);
     
     //fft->input("frame").set(windowedFrame);
     //fft->output("fft").set(fftBuffer);
@@ -62,9 +72,16 @@ AudioFeatureExtraction::AudioFeatureExtraction()
     spectrum->input("frame").set(windowedFrame);
     spectrum->output("spectrum").set(spectrumResults);
     
+    spectrumInput->input("frame").set(windowedFrameInput);
+    spectrumInput->output("spectrum").set(spectrumResultsInput);
+    
     mfcc->input("spectrum").set(spectrumResults);
     mfcc->output("bands").set(mfccBands);
     mfcc->output("mfcc").set(mfccCoeffs);
+    
+    mfccInput->input("spectrum").set(spectrumResultsInput);
+    mfccInput->output("bands").set(mfccBandsInput);
+    mfccInput->output("mfcc").set(mfccCoeffsInput);
 
     flux->input("spectrum").set(spectrumResults);
     flux->output("flux").set(fluxOutput);
@@ -116,6 +133,29 @@ void AudioFeatureExtraction::computeEssentia()
     //output2->compute();
 }
 
+void AudioFeatureExtraction::computeEssentiaInput()
+{
+    while (true)
+    {
+        frameCutterInput->compute();
+
+        if (!frameInput.size())
+        {
+            break;
+        }
+        if (isSilent(frameInput)) continue;
+        
+        windowingInput->compute();
+        spectrumInput->compute();
+        mfccInput->compute();
+
+        poolInput.add("lowlevel.mfcc", mfccCoeffsInput);
+        kerasInput.emplace_back(mfccCoeffsInput);
+        //cout << kerasInput.size() << endl;
+        // maybe add to a vector of vectors instead and use that as input to ML
+    }
+    //mergePool.merge(pool, "append");
+}
 void AudioFeatureExtraction::clearBufferAndPool()
 {
     playbackBuffer.index = 0;

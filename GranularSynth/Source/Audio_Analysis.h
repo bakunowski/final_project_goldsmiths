@@ -10,6 +10,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "../eigen-eigen-323c052e1731/Eigen/Dense"
+
 using namespace std;
 using namespace essentia;
 using namespace essentia::streaming;
@@ -34,19 +36,29 @@ public:
     
     vector<Real> temporaryBuffer;
     vector<Real> temporaryBuffer2;
+    vector<Real> microphoneBuffer;
     
     standard::Algorithm* frameCutter;
+    standard::Algorithm* frameCutterInput;
     vector<Real> frame;
+    vector<Real> frameInput;
 
     standard::Algorithm* windowing;
+    standard::Algorithm* windowingInput;
     vector<Real> windowedFrame;
+    vector<Real> windowedFrameInput;
 
     standard::Algorithm* spectrum;
+    standard::Algorithm* spectrumInput;
     vector<Real> spectrumResults;
+    vector<Real> spectrumResultsInput;
 
     standard::Algorithm* mfcc;
+    standard::Algorithm* mfccInput;
     vector<Real> mfccBands;
     vector<Real> mfccCoeffs;
+    vector<Real> mfccBandsInput;
+    vector<Real> mfccCoeffsInput;
 
     standard::Algorithm* flux;
     Real fluxOutput = 0.1;
@@ -77,6 +89,10 @@ public:
     vector<Real> cartesian2polarPhases;
 
     Pool pool;
+    
+    Pool poolInput;
+    vector<vector<float>> kerasInput;
+
     Pool agrrPool;
     
     Pool paramPool;
@@ -103,11 +119,12 @@ public:
     bufferAndIndex preApplyEssentia;
     
     bufferAndIndex playbackBuffer;
-    
+
     void essentiaSetup();
     
     void computeEssentiaValues();
     void computeEssentia();
+    void computeEssentiaInput();
     void clearBufferAndPool();
     
     void pushNextSampleIntoEssentiaArray(float sample) noexcept;

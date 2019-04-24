@@ -1,6 +1,5 @@
 #include "MainComponent.h"
 #include <algorithm>
-#include <fdeep/fdeep.hpp>
 
 //==============================================================================
 MainComponent::MainComponent()  :       grainStream(),
@@ -35,12 +34,12 @@ MainComponent::MainComponent()  :       grainStream(),
         && ! RuntimePermissions::isGranted (RuntimePermissions::recordAudio))
     {
         RuntimePermissions::request (RuntimePermissions::recordAudio,
-                                     [&] (bool granted) { if (granted)  setAudioChannels (0, 2, savedAudioState.get()); });
+                                     [&] (bool granted) { if (granted)  setAudioChannels (2, 2, savedAudioState.get()); });
     }
     else
     {
         // Specify the number of input and output channels that we want to open
-        setAudioChannels (0, 2, savedAudioState.get());
+        setAudioChannels(2, 2, savedAudioState.get());
     }
 }
 
@@ -68,15 +67,15 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
         {
             // get a pointer to the start sample in the buffer for this audio output channel
             auto* buffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
- 
+
             // fill the required number of samples with
             for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
             {
                 buffer[sample] = grainStream(channel);
             }
+            
 
         }
-   
         // computing the essentia algorithms
         if (bufferToFill.buffer->getNumChannels() > 0)
         {
@@ -91,11 +90,44 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             else
             {
                 //parameterWalkthrough()
-                randomParameterWalkthrough();
+                //randomParameterWalkthrough();
             }
         }
     }
+    
+    if (record == true)
+    {
+        if (audioFeatureExtraction.microphoneBuffer.size() < audioFeatureExtraction.getLengthOfBuffer())
+        {
+            const auto* channelData = bufferToFill.buffer->getReadPointer (0, bufferToFill.startSample);
+            for (auto i = 0; i < bufferToFill.numSamples; ++i)
+            {
+                audioFeatureExtraction.microphoneBuffer.emplace_back(channelData[i]);
+                cout << channelData[i] << flush;
+            }
+        }
+        else
+        {
+            record = false;
+            cout <<"mic buffer size "<< audioFeatureExtraction.microphoneBuffer.size() << endl;
+            // here put micbuffer into the ML model?
+            audioFeatureExtraction.computeEssentiaInput();
+            //cout << audioFeatureExtraction.kerasInput.size() << endl;
+            //cout << audioFeatureExtraction.kerasInput[0] << endl;
+
+            audioFeatureExtraction.microphoneBuffer.clear();
+            audioFeatureExtraction.preApplyEssentia.index = 0;
+            //audioFeatureExtraction.kerasInput.clear();
+            audioFeatureExtraction.frameCutterInput->reset();
+            audioFeatureExtraction.windowingInput->reset();
+            audioFeatureExtraction.spectrumInput->reset();
+            audioFeatureExtraction.mfccInput->reset();
+            audioFeatureExtraction.poolInput.clear();
+            MachineLearningButton.setEnabled(true);
+        }
+    }
 }
+
 
 void MainComponent::releaseResources()
 {
@@ -194,7 +226,8 @@ void MainComponent::resized()
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
-    int yValue = getHeight()/3+120;
+    
+    //int yValue = getHeight()/3+120;
     int xValue = 10;
     int dial_width = 80;
     int dial_height = 80;
@@ -211,6 +244,7 @@ void MainComponent::resized()
     playButton.setBounds (xValue, getHeight()/3+35, getWidth()/5, 18);
     stopButton.setBounds (xValue, getHeight()/3+60, getWidth()/5, 18);
     MachineLearningButton.setBounds ((xValue += getWidth()/5+10), getHeight()/3+10, getWidth()/5, 18);
+    MLBUTTON.setBounds (xValue, getHeight()/3+35, getWidth()/5, 18);
 }
 
 void MainComponent::paint (Graphics& g)
@@ -272,6 +306,9 @@ void MainComponent::openFile()
         // load file into the grain
         if (reader != nullptr)
         {
+            
+           
+            
            // enable the playbutton
             playButton.setEnabled(true);
             
@@ -313,14 +350,49 @@ void MainComponent::stopFile()
     changeState(TransportState::stopping);
 }
 
+void MainComponent::recordButton()
+{
+    record = true;
+}
+
 void MainComponent::predict()
 {
-   // vector<vector<Real>> matrix = audioFeatureExtraction.mergePool.value<vector<vector<Real>>>("lowlevel.mfcc");
+    const auto model = fdeep::load_model("/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/100_epochs.json");
     
-    const auto model = fdeep::load_model("/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/Source/fdeep_model.json");
-//    const auto result = model.predict({fdeep::tensor5(fdeep::shape5(1, 1, 1, 45, 13), {matrix})});
-    const auto result = model.predict({fdeep::tensor5(fdeep::shape5(1, 1, 1, 45, 13), {1})});
+    const int tensor5_channels = 1;
+    const int tensor5_rows = 45;
+    const int tensor5_cols = 13;
+    fdeep::shape5 tensor5_shape(1, 1, tensor5_channels, tensor5_rows, tensor5_cols);
+    fdeep::tensor5 t(tensor5_shape, 0.0f);
+    
+    for (int y = 0; y<tensor5_rows; ++y)
+    {
+        for (int x = 0; x<tensor5_cols; ++x)
+        {
+            for (int c = 0; c < tensor5_channels; ++c)
+            {
+                t.set(0, 0, c, y, x, audioFeatureExtraction.kerasInput[y][x]);
+            }
+        }
+    }
+    
+    //cout << t.depth() << endl;
+    //cout << t.height() << endl;
+    //cout << t.width() << endl;
+
+    const auto result = model.predict({t});
     cout << fdeep::show_tensor5s(result) << endl;
+    audioFeatureExtraction.kerasInput.clear();
+
+        //if (i == 44)
+        //{
+        //    cout << "BANG" << endl;
+        //    //fdeep::tensor5 t(fdeep::shape5(1, 1, 45, 13, 1), sv);
+        //    //const auto result = model.predict({inputValues});
+        //}
+   // }
+//    const auto result = model.predict({fdeep::tensor5(fdeep::shape5(1, 1, 1, 45, 13), t)});
+ //   cout << fdeep::show_tensor5s(result) << endl;
 }
 
 //==============================================================================
@@ -399,11 +471,11 @@ void MainComponent::timerCallback()
     repaint();
     
     // update values of dials when doing parameter sweep
-    filePositionDial.setValue(audioFeatureExtraction.count);
-    grainDurationDial.setValue(audioFeatureExtraction.duration);
-    startingOffsetDial.setValue(grainStream.filePositionOffset);
-    streamSizeDial.setValue(audioFeatureExtraction.streamSize);
-    pitchOffsetDial.setValue(grainStream.pitchOffsetForOneGrain);
+    //filePositionDial.setValue(audioFeatureExtraction.count);
+    //grainDurationDial.setValue(audioFeatureExtraction.duration);
+    //startingOffsetDial.setValue(grainStream.filePositionOffset);
+    //streamSizeDial.setValue(audioFeatureExtraction.streamSize);
+    //pitchOffsetDial.setValue(grainStream.pitchOffsetForOneGrain);
 }
 
 //====================================================================================================
@@ -436,7 +508,7 @@ void MainComponent::buttonClicked(Button *button)
 void MainComponent::showAudioSettings()
 {
    AudioDeviceSelectorComponent audioSettingsComp (deviceManager,
-                                                   0, 0,    // audio input
+                                                   1, 1,    // audio input
                                                    1, 1,    // audio output
                                                    false,   // midi in
                                                    false,   // midi out
@@ -565,8 +637,13 @@ void MainComponent::setupButtonsAndDials()
     addAndMakeVisible(&stopButton);
     
     // ml button
-    MachineLearningButton.setButtonText("Predict");
-    MachineLearningButton.onClick = [this] { predict(); };
+    MachineLearningButton.setButtonText("Record");
+    MachineLearningButton.onClick = [this] { recordButton(); };
     MachineLearningButton.setEnabled(true);
     addAndMakeVisible(&MachineLearningButton);
+    
+    MLBUTTON.setButtonText("Predict");
+    MLBUTTON.onClick = [this] { predict(); };
+    MLBUTTON.setEnabled(true);
+    addAndMakeVisible(&MLBUTTON);
 }

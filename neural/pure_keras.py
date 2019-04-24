@@ -3,6 +3,8 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from keras.layers import Flatten, Dense, Input
 from keras.models import Model
+from keras.callbacks import EarlyStopping
+from keras import optimizers
 
 np.set_printoptions(suppress=True)
 
@@ -48,22 +50,35 @@ print("Test labels dimensions", y_test.shape)
 inputs = Input(shape=(45, 13))
 a = Flatten()(inputs)
 x = Dense(585, activation='relu')(a)
-x2 = Dense(128, activation='relu')(x)
-predictions = Dense(5)(x2)
+x2 = Dense(256, activation='relu')(x)
+x3 = Dense(128, activation='relu')(x2)
+x4 = Dense(128, activation='relu')(x3)
+x5 = Dense(32, activation='relu')(x4)
+predictions = Dense(5)(x5)
 model = Model(inputs=inputs, outputs=predictions)
 
+optimizer = optimizers.Adam(lr=0.005)
+
 model.compile(loss='mean_squared_error',
-              optimizer='adam',
+              optimizer=optimizer,
               metrics=['mean_squared_error', 'accuracy'])
 
 model.summary()
 
-model.fit(X_train, y_train, epochs=10, batch_size=64, verbose=1)
+early_stop = EarlyStopping(monitor='loss', patience=20)
+
+model.fit(X_train,
+          y_train,
+          epochs=2000,
+          batch_size=64,
+          verbose=2,
+          validation_split=0.2,
+          callbacks=[early_stop])
 
 loss, mse, test_acc = model.evaluate(X_test, y_test, verbose=1)
-print('Test accuracy:', test_acc)
+print('Test accuracy:', test_acc, mse, loss)
 
-model.save('test_1st_model.h5', include_optimizer=False)
+model.save('100_epochs.h5', include_optimizer=False)
 
 # # serialize model to JSON
 # model_json = model.to_json()

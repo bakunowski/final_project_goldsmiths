@@ -2,6 +2,7 @@
 
 #include "Grain.h"
 #include "Audio_Analysis.h"
+#include <fdeep/fdeep.hpp>
 
 #define XMLKEYAUDIOSETTINGS "audioDeviceState"
 
@@ -39,6 +40,9 @@ private:
     TextButton playButton;
     TextButton stopButton;
     TextButton MachineLearningButton;
+    TextButton MLBUTTON;
+    bool record = false;
+    typedef fplus::shared_ref<std::vector<float>> shared_float_vec;
     
     Slider  filePositionDial;
     Label   filePositionLabel;
@@ -81,6 +85,8 @@ private:
     void playFile();
     
     void stopFile();
+    
+    void recordButton();
     
     void predict();
     
