@@ -17,6 +17,7 @@ with open(
 
 mfcc = np.array(d2["lowlevel"]["mfcc"])
 scaler.fit(mfcc)
+
 mfcc_norm = scaler.transform(mfcc)
 # normalized between 0 and 1 and reshaped to 45 frames x 13 values
 mfcc_norm_reshaped = mfcc_norm.reshape(10000, 45, 13)
@@ -33,6 +34,7 @@ spread = np.array(d1["parameters"]["spread"]).reshape(10000, 1)
 parameters = np.concatenate((duration, numberOfGrains, pitch, position, spread), axis=1)
 
 scaler.fit(parameters)
+print(scaler.data_min_, scaler.data_max_)
 # normalized between 0 and 1
 parameters_norm = scaler.transform(parameters)
 
@@ -65,11 +67,11 @@ model.compile(loss='mean_squared_error',
 
 model.summary()
 
-early_stop = EarlyStopping(monitor='loss', patience=20)
+early_stop = EarlyStopping(monitor='loss', patience=100)
 
 model.fit(X_train,
           y_train,
-          epochs=2000,
+          epochs=10,
           batch_size=64,
           verbose=2,
           validation_split=0.2,
@@ -77,6 +79,13 @@ model.fit(X_train,
 
 loss, mse, test_acc = model.evaluate(X_test, y_test, verbose=1)
 print('Test accuracy:', test_acc, mse, loss)
+
+prediction = model.predict(X_test)
+print(prediction[0], y_test[0])
+
+a = scaler.inverse_transform(prediction)
+b = scaler.inverse_transform(y_test)
+print(a[0], b[0])
 
 model.save('100_epochs.h5', include_optimizer=False)
 

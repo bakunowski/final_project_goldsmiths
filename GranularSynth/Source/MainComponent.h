@@ -43,6 +43,8 @@ private:
     TextButton MLBUTTON;
     bool record = false;
     typedef fplus::shared_ref<std::vector<float>> shared_float_vec;
+    std::vector<float> result_vec;
+    bool ready = false;
     
     Slider  filePositionDial;
     Label   filePositionLabel;

@@ -91,6 +91,9 @@ public:
     Pool pool;
     
     Pool poolInput;
+    float X_scaled;
+    float min;
+    float max;
     vector<vector<float>> kerasInput;
 
     Pool agrrPool;

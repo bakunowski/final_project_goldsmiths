@@ -211,6 +211,7 @@ void GrainStream::silenceAllGrains()
         grain.grainDataIsFinished = true;
     
     grainStreamIsActive = false;
+    
 }
 
 void GrainStream::getCurrentPosition(oneGrain& grain)

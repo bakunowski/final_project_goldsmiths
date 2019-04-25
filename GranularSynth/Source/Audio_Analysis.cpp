@@ -150,11 +150,34 @@ void AudioFeatureExtraction::computeEssentiaInput()
         mfccInput->compute();
 
         poolInput.add("lowlevel.mfcc", mfccCoeffsInput);
+        
+//        float min = *min_element(mfccCoeffsInput.begin(), mfccCoeffsInput.end());
+//        float max = *max_element(std::begin(mfccCoeffsInput), std::end(mfccCoeffsInput));
+//
+//        for (int i = 0; i < mfccCoeffsInput.size(); ++i)
+//        {
+//            float X_std = (mfccCoeffsInput[i] - min) / max - min;
+//            X_scaled = X_std * (max - min) + min;
+//        }
+//
+//        kerasInput.emplace_back(X_scaled);
+//        cout << kerasInput << endl;
         kerasInput.emplace_back(mfccCoeffsInput);
         //cout << kerasInput.size() << endl;
-        // maybe add to a vector of vectors instead and use that as input to ML
     }
-    //mergePool.merge(pool, "append");
+   // cout << kerasInput[0] << endl;
+    for (int i = 0; i < kerasInput.size(); ++i)
+    {
+        min = *min_element(kerasInput[i].begin(), kerasInput[i].end());
+        max = *max_element(kerasInput[i].begin(), kerasInput[i].end());
+
+        for (int j = 0; j < kerasInput[i].size(); ++j)
+        {
+            float norm = kerasInput[i][j] - min;
+            kerasInput[i][j] = norm / (max-min);
+        }
+    }
+    cout << kerasInput << endl;
 }
 void AudioFeatureExtraction::clearBufferAndPool()
 {
