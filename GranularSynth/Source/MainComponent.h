@@ -41,11 +41,13 @@ private:
     TextButton stopButton;
     TextButton MachineLearningButton;
     TextButton MLBUTTON;
+    
     bool record = false;
-    typedef fplus::shared_ref<std::vector<float>> shared_float_vec;
-    std::vector<float> result_vec;
     bool ready = false;
     
+    // ml results vector
+    std::vector<float> result_vec;
+
     Slider  filePositionDial;
     Label   filePositionLabel;
     Slider  grainDurationDial;
@@ -66,10 +68,8 @@ private:
     AudioFormatManager formatManager;        // valid audio formats checker
     TransportState state;               // current audio playback state
     
-    // a-ha, useless!
-    //vector<GrainStream> gStream;        // vector of grains (stream)
     GrainStream grainStream;            // reference to current active grain
-    AudioFeatureExtraction audioFeatureExtraction;
+    AudioFeatureExtraction audioFeatureExtraction; // the essentia setup reference
     
     // waveform drawing
     AudioThumbnailCache thumbnailCache;

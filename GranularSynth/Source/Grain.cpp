@@ -8,16 +8,20 @@ GrainStream::GrainStream(int startingSample, int duration)
     this->samplingRate = 0;
     setDuration(duration);
     setFilePosition(startingSample);
-    // add 1 grain at the beggining
     addGrainsToStream();
 }
 
 double GrainStream::operator()(int channel)
 {
     float sample = 0;
-    
+
     for (oneGrain& grain : grains)
     {
+        grain.adsr.setParameters({});
+        grain.adsrParams.attack = 0.5f;
+        grain.adsrParams.decay = 0.1f;
+        grain.adsrParams.sustain = 1.0f;
+        grain.adsrParams.release = 0.1f;
         // check if getting the current grain is done
         if (this->AudioSourceBuffer->getNumChannels() >= 2)
         {
@@ -46,7 +50,12 @@ double GrainStream::operator()(int channel)
         
         if (grain.grainDataCurrentSample[channel] >= static_cast<double>(this->fileSize))
             grain.grainDataCurrentSample[channel] = (static_cast<double>(this->fileSize) - 1.0f);
+        
+        float sampleToScale = (AudioSourceBuffer->getSample(channel, static_cast<int>(grain.grainDataCurrentSample[channel] )));
+        
+        sample += (sampleToScale * grain.adsr.getNextSample());
     }
+
     
     // scale the sample by gain
     sample *= static_cast<float>(globalGain);

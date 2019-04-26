@@ -1,1 +1,60 @@
-* Tasks
+* TODO Preamble
+** TODO Abstract 
+** TODO Acknowledgements
+* TODO Introduction
+** TODO talk about iZotope's neuron maybe? how i'm following their philosphy a lil bit (bit from rebecca's interview: https://juce.com/discover/stories/adc-spotlight-rebecca-fiebrink) 
+* TODO Literature Review
+** TODO Problem background
+*** TODO add some studies for describing the problem either directly or by bits
+*** TODO possibly talk about how these studies differ from what i've done 
+** TODO Audio descriptors 
+*** TODO describe ffts in more detail
+*** TODO describe mfccs in more detail
+*** TODO add studies to confirm their usefullness and describe why i started off with MFCCs 
+*** TODO think about how to structure it->rythymicall vs timbral?
+*** TODO add citations 
+** TODO Granulation 
+*** TODO lack of research into corpus based synthesis? 
+*** TODO mention CataRT 
+*** TODO is the content here appropriate for the literature review chapter? 
+*** TODO add citations 
+** TODO Machine Learning 
+*** TODO add citations 
+* TODO Methods
+** TODO think about the structure and create appropriate sections 
+*** TODO audio analysis
+**** TODO more precise description of why frames are needed and why hopsize is needed. 
+*** TODO ml
+**** TODO for now the only thing i can explain is the multi layered perceptron i have implemented
+***** TODO go in depth here 
+***** TODO add the theory behind it 
+***** TODO add some equations
+***** TODO make it look professional and like i know what i'm talking about hahaha
+**** TODO try to think about how to talk about different ones, especially mentioned in the ppr -> knn, MLP(done), LSTM (maybe rather in future work discussion)
+**** TODO perhaps mention rebecca in the parameter walktrhough idea 
+*** TODO the synth itself
+**** TODO basic stuff about a granulator (cite some books) 
+***** TODO use microsound as the reference, good diagrams etc. 
+**** TODO how i have implemented it (maths and code examples)
+**** TODO go through each parameter and explain what exactly it does to the grains
+* TODO Results and analysis
+** TODO a note on methodologies 
+*** TODO explain how and what has been done briefly ( what could lead to some misconceptions -> shiffling data etc.)
+** TODO think about and make notes about results 
+*** comparing images of spectra?
+*** euclidean distance between mfccs?
+* TODO Discussion
+** TODO summary of findings 
+*** TODO found shit basically
+*** TODO onset detection useless, not correlated directly with the grain size parameter
+**** TODO show graphs
+*** TODO MLPs useless on the temoral data that i have
+** TODO evaluation 
+*** TODO not sure, the same as above but in more detail?
+** TODO future work 
+*** TODO change ML algorithm to LSTMs
+*** TODO add grain envelope to the granlator
+*** TODO implement a better UI, difficult to know how to operate this
+*** TODO extend to predict any uploaded file, as well as input longer/shorter than one second
+* TODO Conclusion
+** read the bloddy paragraph in the pdf and follow  

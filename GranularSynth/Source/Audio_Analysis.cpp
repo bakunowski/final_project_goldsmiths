@@ -8,14 +8,12 @@ AudioFeatureExtraction::AudioFeatureExtraction()
     essentia::init();
     standard::AlgorithmFactory& factory = standard::AlgorithmFactory::instance();
     
-    const char* stats[] = { "mean"};
-
+    const char* stats[] = {"mean"};
     agrr = factory.create("PoolAggregator", "defaultStats", arrayToVector<string>(stats));
 
     output = factory.create("YamlOutput");
     output2 = factory.create("YamlOutput");
-    test_output = factory.create("YamlOutput");
-    
+
     mergedMFCCs = factory.create("YamlOutput", "filename", "MFCC.json", "format", "json", "writeVersion", false);
     mergedParameters = factory.create("YamlOutput", "filename", "parameters.json", "format", "json", "writeVersion", false);
     
@@ -24,8 +22,7 @@ AudioFeatureExtraction::AudioFeatureExtraction()
 
     output->input("pool").set(mergePool);
     output2->input("pool").set(paramPool);
-    test_output->input("pool").set(pool);
-    
+
     mergedMFCCs->input("pool").set(mergePool);
     mergedParameters->input("pool").set(mergePoolParams);
     
@@ -37,8 +34,8 @@ AudioFeatureExtraction::AudioFeatureExtraction()
     windowing = factory.create("Windowing", "type", "hann");
     windowingInput = factory.create("Windowing", "type", "hann");
     
-//    fft = factory.create("FFT", "size", lengthOfEssentiaBuffer);
-//    cartesian2polar = factory.create("CartesianToPolar");
+    //fft = factory.create("FFT", "size", lengthOfEssentiaBuffer);
+    //cartesian2polar = factory.create("CartesianToPolar");
     
     spectrum = factory.create("Spectrum");
     spectrumInput = factory.create("Spectrum");
@@ -93,11 +90,12 @@ AudioFeatureExtraction::AudioFeatureExtraction()
 
 void AudioFeatureExtraction::pushNextSampleIntoEssentiaArray(float sample) noexcept
 {
-        // if stopped write to the pool and give me the output in console
-         playbackBuffer.index += 1;
-         temporaryBuffer2.emplace_back(sample);
+    // if stopped write to the pool and give me the output in console
+    playbackBuffer.index += 1;
+    temporaryBuffer2.emplace_back(sample);
 }
 
+//// look into this! -> is the mergePool args correct?
 void AudioFeatureExtraction::computeEssentia()
 {
     while (true)
@@ -115,7 +113,6 @@ void AudioFeatureExtraction::computeEssentia()
       mfcc->compute();
       
       pool.add("lowlevel.mfcc", mfccCoeffs);
-      //cout << "mfcc13 " << mfccCoeffs.size() << endl;
     }
     
     //agrr->compute();
@@ -150,22 +147,10 @@ void AudioFeatureExtraction::computeEssentiaInput()
         mfccInput->compute();
 
         poolInput.add("lowlevel.mfcc", mfccCoeffsInput);
-        
-//        float min = *min_element(mfccCoeffsInput.begin(), mfccCoeffsInput.end());
-//        float max = *max_element(std::begin(mfccCoeffsInput), std::end(mfccCoeffsInput));
-//
-//        for (int i = 0; i < mfccCoeffsInput.size(); ++i)
-//        {
-//            float X_std = (mfccCoeffsInput[i] - min) / max - min;
-//            X_scaled = X_std * (max - min) + min;
-//        }
-//
-//        kerasInput.emplace_back(X_scaled);
-//        cout << kerasInput << endl;
         kerasInput.emplace_back(mfccCoeffsInput);
-        //cout << kerasInput.size() << endl;
     }
-   // cout << kerasInput[0] << endl;
+    
+    //normalize mfccs
     for (int i = 0; i < kerasInput.size(); ++i)
     {
         min = *min_element(kerasInput[i].begin(), kerasInput[i].end());
@@ -177,8 +162,8 @@ void AudioFeatureExtraction::computeEssentiaInput()
             kerasInput[i][j] = norm / (max-min);
         }
     }
-    cout << kerasInput << endl;
 }
+
 void AudioFeatureExtraction::clearBufferAndPool()
 {
     playbackBuffer.index = 0;
@@ -192,6 +177,11 @@ void AudioFeatureExtraction::clearBufferAndPool()
     pool.clear();
     paramPool.clear();
     agrrPool.clear();
+}
+
+int AudioFeatureExtraction::getLengthOfBuffer()
+{
+    return lengthOfPlaybackBuffer;
 }
 
 void AudioFeatureExtraction::printFluxValues()
@@ -293,7 +283,4 @@ void AudioFeatureExtraction::printFluxValues()
     //onsetRateValue = 0;
 }
 
-int AudioFeatureExtraction::getLengthOfBuffer()
-{
-    return lengthOfPlaybackBuffer;
-}
+

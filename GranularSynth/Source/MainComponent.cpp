@@ -73,32 +73,26 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             {
                 buffer[sample] = grainStream(channel);
             }
-            
-
         }
+        
         // computing the essentia algorithms
-        if (bufferToFill.buffer->getNumChannels() > 0)
+        if (audioFeatureExtraction.playbackBuffer.index < audioFeatureExtraction.getLengthOfBuffer())
         {
-            if (audioFeatureExtraction.playbackBuffer.index < audioFeatureExtraction.getLengthOfBuffer())
+            const auto* channelData = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
+            for (auto i = 0; i < bufferToFill.numSamples; ++i)
             {
-                const auto* channelData = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
-                for (auto i = 0; i < bufferToFill.numSamples; ++i)
-                {
-                    audioFeatureExtraction.pushNextSampleIntoEssentiaArray(channelData[i]);
-                }
+                audioFeatureExtraction.pushNextSampleIntoEssentiaArray(channelData[i]);
             }
-            else
-            {
-                //parameterWalkthrough()
-                //randomParameterWalkthrough();
-            }
+        }
+        else
+        {
+            //parameterWalkthrough()
+            //randomParameterWalkthrough();
         }
     }
-    
+
     if ((record == true && grainStream.grainStreamIsActive) || (record == true && grainStream.grainStreamIsActive == false))
     {
-        //bufferToFill.clearActiveBufferRegion();
-        
         if (audioFeatureExtraction.microphoneBuffer.size() < audioFeatureExtraction.getLengthOfBuffer())
         {
             const auto* channelData = bufferToFill.buffer->getReadPointer (0, bufferToFill.startSample);
@@ -106,21 +100,15 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             {
                 audioFeatureExtraction.microphoneBuffer.emplace_back(channelData[i]);
             }
-                 cout << audioFeatureExtraction.microphoneBuffer[0] << endl;
-            
         }
         else
         {
             record = false;
             cout <<"mic buffer size "<< audioFeatureExtraction.microphoneBuffer.size() << endl;
-            // here put micbuffer into the ML model?
             audioFeatureExtraction.computeEssentiaInput();
-            //cout << audioFeatureExtraction.kerasInput.size() << endl;
-            //cout << audioFeatureExtraction.kerasInput[0] << endl;
 
             audioFeatureExtraction.microphoneBuffer.clear();
             audioFeatureExtraction.preApplyEssentia.index = 0;
-            //audioFeatureExtraction.kerasInput.clear();
             audioFeatureExtraction.frameCutterInput->reset();
             audioFeatureExtraction.windowingInput->reset();
             audioFeatureExtraction.spectrumInput->reset();
@@ -145,45 +133,44 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
     }
 }
 
-
 void MainComponent::releaseResources()
 {
 }
 
 void MainComponent::randomParameterWalkthrough()
 {
-  int numOfSamples = 10000;
-  //cout << "pool45 " << audioFeatureExtraction.temporaryBuffer2.size() << endl;
-  Random rand = Random();
+    
+    int numOfSamples = 10000;
+    Random rand = Random();
   
-  audioFeatureExtraction.computeEssentia();
+    audioFeatureExtraction.computeEssentia();
   
-  audioFeatureExtraction.paramPool.add("parameters.position", audioFeatureExtraction.count);
-  audioFeatureExtraction.paramPool.add("parameters.duration", audioFeatureExtraction.duration);
-  audioFeatureExtraction.paramPool.add("parameters.spread", grainStream.filePositionOffset);
-  audioFeatureExtraction.paramPool.add("parameters.numberOfGrains", audioFeatureExtraction.streamSize);
-  audioFeatureExtraction.paramPool.add("parameters.pitch", grainStream.pitchOffsetForOneGrain);
-  audioFeatureExtraction.mergePoolParams.merge(audioFeatureExtraction.paramPool, "append");
+    audioFeatureExtraction.paramPool.add("parameters.position", audioFeatureExtraction.count);
+    audioFeatureExtraction.paramPool.add("parameters.duration", audioFeatureExtraction.duration);
+    audioFeatureExtraction.paramPool.add("parameters.spread", grainStream.filePositionOffset);
+    audioFeatureExtraction.paramPool.add("parameters.numberOfGrains", audioFeatureExtraction.streamSize);
+    audioFeatureExtraction.paramPool.add("parameters.pitch", grainStream.pitchOffsetForOneGrain);
+    audioFeatureExtraction.mergePoolParams.merge(audioFeatureExtraction.paramPool, "append");
   
-  audioFeatureExtraction.clearBufferAndPool();
+    audioFeatureExtraction.clearBufferAndPool();
+    
+    audioFeatureExtraction.count = rand.nextInt(Range<int>(1, grainStream.getFileSize()));
+    grainStream.setFilePosition(audioFeatureExtraction.count);
+    audioFeatureExtraction.duration = rand.nextInt(Range<int>(10, 1000));
+    grainStream.setDuration(audioFeatureExtraction.duration);
+    grainStream.filePositionOffset = rand.nextInt(Range<int>(0, 50000));
+    audioFeatureExtraction.streamSize = rand.nextInt(Range<int>(1, 10));
+    grainStream.setStreamSize(audioFeatureExtraction.streamSize);
+    grainStream.pitchOffsetForOneGrain = rand.nextInt(Range<int>(-12, 12));
+    
+    audioFeatureExtraction.count2 += 1;
+    cout << "round:" << "/t" << audioFeatureExtraction.count2 << endl;
   
-  audioFeatureExtraction.count = rand.nextInt(Range<int>(1, grainStream.getFileSize()));
-  grainStream.setFilePosition(audioFeatureExtraction.count);
-  audioFeatureExtraction.duration = rand.nextInt(Range<int>(10, 1000));
-  grainStream.setDuration(audioFeatureExtraction.duration);
-  grainStream.filePositionOffset = rand.nextInt(Range<int>(0, 50000));
-  audioFeatureExtraction.streamSize = rand.nextInt(Range<int>(1, 10));
-  grainStream.setStreamSize(audioFeatureExtraction.streamSize);
-  grainStream.pitchOffsetForOneGrain = rand.nextInt(Range<int>(-12, 12));
-  
-  audioFeatureExtraction.count2 += 1;
-  cout << audioFeatureExtraction.count2 << endl;
-  
-  if (audioFeatureExtraction.count2 == numOfSamples)
+    if (audioFeatureExtraction.count2 == numOfSamples)
     {
-      audioFeatureExtraction.mergedMFCCs->compute();
-      audioFeatureExtraction.mergedParameters->compute();
-      changeState(TransportState::stopping);
+        audioFeatureExtraction.mergedMFCCs->compute();
+        audioFeatureExtraction.mergedParameters->compute();
+        changeState(TransportState::stopping);
     }
 }
 
@@ -218,7 +205,7 @@ void MainComponent::parameterWalkthrough()
                     {
                         audioFeatureExtraction.mergedMFCCs->compute();
                         audioFeatureExtraction.mergedParameters->compute();
-                        changeState(stopping);
+                        stopFile();
                     }
                 }
             }
@@ -324,9 +311,6 @@ void MainComponent::openFile()
         // load file into the grain
         if (reader != nullptr)
         {
-            
-           
-            
            // enable the playbutton
             playButton.setEnabled(true);
             
@@ -394,6 +378,7 @@ void MainComponent::predict()
         }
     }
     
+    // check the dimensions of tensor
     //cout << t.depth() << endl;
     //cout << t.height() << endl;
     //cout << t.width() << endl;
@@ -402,6 +387,8 @@ void MainComponent::predict()
     //cout << fdeep::show_tensor5s(result) << endl;
     result_vec = *result.front().as_vector();
     cout << "vector " << result_vec << endl;
+    
+    // bool to start redrawing the dials, once there are values in the prediction vector
     ready = true;
     
     //grain length
@@ -418,25 +405,10 @@ void MainComponent::predict()
     grainStream.setFilePosition(result_vec[3]);
     // offset
     result_vec[4] = result_vec[4] * (49999.0 - 0.0) + 0.0;
-    //grainStream.filePositionOffset = result_vec[4];
-    
-    //for (int i = 0; i < result_vec.size(); ++i)
-    //{
-    //    result_vec[i] = result_vec[i] * (audioFeatureExtraction.max - audioFeatureExtraction.min) + audioFeatureExtraction.min;
-    //}
-    
+    grainStream.filePositionOffset = result_vec[4];
+
     cout << result_vec << endl;
     audioFeatureExtraction.kerasInput.clear();
-
-        //if (i == 44)
-        //{
-        //    cout << "BANG" << endl;
-        //    //fdeep::tensor5 t(fdeep::shape5(1, 1, 45, 13, 1), sv);
-        //    //const auto result = model.predict({inputValues});
-        //}
-   // }
-//    const auto result = model.predict({fdeep::tensor5(fdeep::shape5(1, 1, 1, 45, 13), t)});
- //   cout << fdeep::show_tensor5s(result) << endl;
 }
 
 //==============================================================================
@@ -487,11 +459,12 @@ void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbn
     g.setColour(Colours::olivedrab);
     thumbnail.drawChannel(g, thumbnailBounds, 0.0, audioLength, 1, 1.0f);
     
+    // draw the position around which grains are created
     g.setColour (Colours::yellow);
     auto drawPosition ((pos1/audioLength) * thumbnailBounds.getWidth() + thumbnailBounds.getX());
     g.drawLine(drawPosition, thumbnailBounds.getY(), drawPosition, thumbnailBounds.getBottom(), 2.0f);
 
-    /*
+    // draw a line for each active grain
     for (int i = 0; i < (static_cast<int>(streamSizeDial.getValue())); ++i)
     {
         double grainsPos = (grainStream.getCurrentGrainPosition(0)[i])/44100.0;
@@ -499,9 +472,9 @@ void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbn
         auto drawGrainPosition ((grainsPos/audioLength) * thumbnailBounds.getWidth() + thumbnailBounds.getX());
         
         g.drawLine(drawGrainPosition, thumbnailBounds.getY()+10, drawGrainPosition, thumbnailBounds.getBottom()-10, 1.0f);
-    }*/
+    }
 
-    //flux drawing to see if changes
+    //flux drawing to see if it changes (algorithm not used for now)
 //    if (state == playing){
 //    g.setColour(Colours::white);
 //    double y_finish = audioFeatureExtraction.fluxOutput * 1000.0;
@@ -520,6 +493,9 @@ void MainComponent::timerCallback()
     //startingOffsetDial.setValue(grainStream.filePositionOffset);
     //streamSizeDial.setValue(audioFeatureExtraction.streamSize);
     //pitchOffsetDial.setValue(grainStream.pitchOffsetForOneGrain);
+    
+    // once there are values in the prediction vector start redrawing the dials
+    // according to these values
     if (ready == true)
     {
     // update values of dials when predicting

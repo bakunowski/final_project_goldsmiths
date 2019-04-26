@@ -10,8 +10,6 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "../eigen-eigen-323c052e1731/Eigen/Dense"
-
 using namespace std;
 using namespace essentia;
 using namespace essentia::streaming;
@@ -70,13 +68,6 @@ public:
     standard::Algorithm* onsetRate;
     vector<Real> onsets;
     Real onsetRateValue;
-    
-    //TNT::Array2D<Real> matrix;
-    //vector<Real> weights;
-    //vector<Real> onsetRateVector;
-    //double onsetRatee;
-    //vector<Real> blablabla;
-    //vector<Real> hfc;
 
     //standard::Algorithm* dcremoval;
     //vector<Real> dcRemovalBuffer;
@@ -91,7 +82,6 @@ public:
     Pool pool;
     
     Pool poolInput;
-    float X_scaled;
     float min;
     float max;
     vector<vector<float>> kerasInput;
@@ -108,8 +98,7 @@ public:
     standard::Algorithm* mergedParameters;
     standard::Algorithm* output;
     standard::Algorithm* output2;
-    standard::Algorithm* test_output;
-    
+
     string outputFilename = "output";
 
     // buffer to hold the last 1024 samples for analysis

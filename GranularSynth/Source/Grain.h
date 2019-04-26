@@ -8,7 +8,6 @@ using namespace std;
 
 class GrainStream                :public ChangeBroadcaster
 {
-    
 public:
     
     GrainStream(int startingSample = 1, int duration = 0);
@@ -66,6 +65,9 @@ private:
         double grainDataGainScalar = 1.0f;      // scalar value for rand gain offset
         
         bool grainDataIsFinished = true;       // boolean whether grain needs to be replayed
+        
+        juce::ADSR adsr;
+        juce::ADSR::Parameters adsrParams;
     };
     
     // vector containing grains in the stream
