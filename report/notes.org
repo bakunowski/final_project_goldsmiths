@@ -101,7 +101,6 @@ summarize everything you have ever read on a subject.
 ** Do not repeat word for word the abstract, introduction or discussion.
 * Frieda document 
 ** Final Project Submission: Creative Project and Accompanying Text of 12,000 -15,000 words (80% of final mark) marked out of 100
-
 ** Implementation 40/100
 *** TODO Correctness
 *** TODO Elegance of design
@@ -132,3 +131,10 @@ summarize everything you have ever read on a subject.
 *** TODO Good layout and formatting, especially of tables, figures, formulae and code examples
 *** TODO Inclusion of appropriate sound recordings and other documentation media
 *** TODO Correct and readable English in an appropriate style for academic work
+ 
+* 07-05-2019 fixes:
+** DONE Introduction
+** TODO Lit review
+** TODO Methods 
+* MICHAEL QUESTIONS 
+** in lit review, how much should i describe the MFCCs etc, and how much should i just talk about where and when were they previously used ?

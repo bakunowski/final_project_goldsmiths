@@ -1,0 +1,17 @@
+[0] Config.pm:302> INFO - This is Biber 2.11
+[0] Config.pm:305> INFO - Logfile is 'dissertation.blg'
+[41] biber-darwin:313> INFO - === Sun May  5, 2019, 00:09:55
+[62] Biber.pm:371> INFO - Reading 'dissertation.bcf'
+[141] Biber.pm:857> INFO - Found 15 citekeys in bib section 0
+[154] Biber.pm:3976> INFO - Processing section 0
+[167] Biber.pm:4136> INFO - Looking for bibtex format file 'refs.bib' for section 0
+[170] bibtex.pm:1500> INFO - LaTeX decoding ...
+[207] bibtex.pm:1316> INFO - Found BibTeX data source 'refs.bib'
+[271] Utils.pm:193> WARN - I didn't find a database entry for 'dahlstedt_creating_nodate' (section 0)
+[290] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[290] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[290] Biber.pm:3804> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[290] Biber.pm:3810> INFO - No sort tailoring available for locale 'en-US'
+[306] bbl.pm:617> INFO - Writing 'dissertation.bbl' with encoding 'UTF-8'
+[311] bbl.pm:720> INFO - Output to dissertation.bbl
+[311] Biber.pm:110> INFO - WARNINGS: 1

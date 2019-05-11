@@ -1,19 +1,34 @@
-\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [0][-]{chapter.1}{Introductiones}{}% 1
 \BOOKMARK [1][-]{section.1.1}{Aims and Objectives}{chapter.1}% 2
 \BOOKMARK [2][-]{subsection.1.1.1}{Deliverables}{section.1.1}% 3
 \BOOKMARK [0][-]{chapter.2}{Literature Review}{}% 4
 \BOOKMARK [1][-]{section.2.1}{Problem background}{chapter.2}% 5
-\BOOKMARK [1][-]{section.2.2}{Audio descriptors}{chapter.2}% 6
-\BOOKMARK [1][-]{section.2.3}{Granulation}{chapter.2}% 7
-\BOOKMARK [1][-]{section.2.4}{Machine Learning}{chapter.2}% 8
-\BOOKMARK [0][-]{chapter.3}{Methods}{}% 9
-\BOOKMARK [1][-]{section.3.1}{Synthesis}{chapter.3}% 10
-\BOOKMARK [1][-]{section.3.2}{Audio descriptors}{chapter.3}% 11
-\BOOKMARK [1][-]{section.3.3}{Machine learning}{chapter.3}% 12
-\BOOKMARK [0][-]{chapter.4}{Results and Analysis}{}% 13
-\BOOKMARK [0][-]{chapter.5}{Discussion}{}% 14
-\BOOKMARK [1][-]{section.5.1}{Summary of Findings}{chapter.5}% 15
-\BOOKMARK [1][-]{section.5.2}{Evaluation}{chapter.5}% 16
-\BOOKMARK [1][-]{section.5.3}{Future Work}{chapter.5}% 17
-\BOOKMARK [0][-]{chapter.6}{Conclusion}{}% 18
-\BOOKMARK [1][-]{section.Alph0.1}{Title of Appendix A}{chapter.6}% 19
+\BOOKMARK [2][-]{subsection.2.1.1}{Synthesizer programming}{section.2.1}% 6
+\BOOKMARK [2][-]{subsection.2.1.2}{Sound matching}{section.2.1}% 7
+\BOOKMARK [1][-]{section.2.2}{Audio descriptors}{chapter.2}% 8
+\BOOKMARK [2][-]{subsection.2.2.1}{Mel-frequency Cepstrum Coefficients}{section.2.2}% 9
+\BOOKMARK [2][-]{subsection.2.2.2}{Spectral Flux}{section.2.2}% 10
+\BOOKMARK [1][-]{section.2.3}{Synthesis}{chapter.2}% 11
+\BOOKMARK [1][-]{section.2.4}{Predictions}{chapter.2}% 12
+\BOOKMARK [0][-]{chapter.3}{Methods}{}% 13
+\BOOKMARK [1][-]{section.3.1}{Audio descriptors}{chapter.3}% 14
+\BOOKMARK [2][-]{subsection.3.1.1}{Definitions and Formulation}{section.3.1}% 15
+\BOOKMARK [2][-]{subsection.3.1.2}{Implementation}{section.3.1}% 16
+\BOOKMARK [1][-]{section.3.2}{Predictions}{chapter.3}% 17
+\BOOKMARK [2][-]{subsection.3.2.1}{Dataset}{section.3.2}% 18
+\BOOKMARK [2][-]{subsection.3.2.2}{Neural networks}{section.3.2}% 19
+\BOOKMARK [1][-]{section.3.3}{Synthesis}{chapter.3}% 20
+\BOOKMARK [2][-]{subsection.3.3.1}{Granular Synthesis \(basic explenation of the granular synth concept\)}{section.3.3}% 21
+\BOOKMARK [2][-]{subsection.3.3.2}{The JUCE implementation \(author's implementation\)}{section.3.3}% 22
+\BOOKMARK [0][-]{chapter.4}{Results and Analysis}{}% 23
+\BOOKMARK [1][-]{section.4.1}{Methodologies}{chapter.4}% 24
+\BOOKMARK [1][-]{section.4.2}{Sound similiarity}{chapter.4}% 25
+\BOOKMARK [2][-]{subsection.4.2.1}{Quantative evaluation}{section.4.2}% 26
+\BOOKMARK [2][-]{subsection.4.2.2}{Qualitative evaluation}{section.4.2}% 27
+\BOOKMARK [1][-]{section.4.3}{User experience}{chapter.4}% 28
+\BOOKMARK [0][-]{chapter.5}{Discussion}{}% 29
+\BOOKMARK [1][-]{section.5.1}{Summary of Findings}{chapter.5}% 30
+\BOOKMARK [1][-]{section.5.2}{Evaluation}{chapter.5}% 31
+\BOOKMARK [1][-]{section.5.3}{Future Work}{chapter.5}% 32
+\BOOKMARK [0][-]{chapter.6}{Conclusion}{}% 33
+\BOOKMARK [1][-]{section.Alph0.1}{Title of Appendix A}{chapter.6}% 34

@@ -1,0 +1,538 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{noauthor_audacity_nodate}{misc}{}
+      \list{language}{1}{%
+        {en-US}%
+      }
+      \field{sortinit}{A}
+      \field{sortinithash}{d77c7cdd82ff690d4c3ef13216f92f0b}
+      \field{labeltitlesource}{title}
+      \field{title}{Audacity ® {|} {Free}, open source, cross-platform audio software for multi-track recording and editing.}
+      \field{urlday}{3}
+      \field{urlmonth}{5}
+      \field{urlyear}{2019}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Snapshot:/Users/bakunowski/Zotero/storage/VMN4VIQC/www.audacityteam.org.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.audacityteam.org/
+      \endverb
+      \verb{url}
+      \verb https://www.audacityteam.org/
+      \endverb
+    \endentry
+    \entry{eronen_comparison_2001}{inproceedings}{}
+      \name{author}{1}{}{%
+        {{hash=0a06bfb8a1bd1d34ff45116e4650e691}{%
+           family={Eronen},
+           familyi={E\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \list{location}{1}{%
+        {New Platz, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{0a06bfb8a1bd1d34ff45116e4650e691}
+      \strng{fullhash}{0a06bfb8a1bd1d34ff45116e4650e691}
+      \strng{bibnamehash}{0a06bfb8a1bd1d34ff45116e4650e691}
+      \strng{authorbibnamehash}{0a06bfb8a1bd1d34ff45116e4650e691}
+      \strng{authornamehash}{0a06bfb8a1bd1d34ff45116e4650e691}
+      \strng{authorfullhash}{0a06bfb8a1bd1d34ff45116e4650e691}
+      \field{sortinit}{E}
+      \field{sortinithash}{f615fb9c6fba11c6f962fb3fd599810e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Several features were compared with regard to recognition performance in a musical instrument recognition system. Both melfrequency and linear prediction cepstral and delta cepstral coefﬁcients were calculated. Linear prediction analysis was carried out both on a uniform and a warped frequency scale, and reﬂection coefﬁcients were also used as features. The performance of earlier described features relating to the temporal development, modulation properties, brightness, and spectral synchronity of sounds was also analysed. The data base consisted of 5286 acoustic and synthetic solo tones from 29 different Western orchestral instruments, out of which 16 instruments were included in the test set. The best performance for solo tone recognition, 35\% for individual instruments and 77\% for families, was obtained with a feature set consisting of two sets of mel-frequency cepstral coefﬁcients and a subset of the other analysed features. The confusions made by the system were analysed and compared to results reported in a human perception experiment.}
+      \field{booktitle}{Proceedings of the 2001 {IEEE} {Workshop} on the {Applications} of {Signal} {Processing} to {Audio} and {Acoustics} ({Cat}. {No}.01TH8575)}
+      \field{isbn}{978-0-7803-7126-2}
+      \field{title}{Comparison of features for musical instrument recognition}
+      \field{urlday}{3}
+      \field{urlmonth}{5}
+      \field{urlyear}{2019}
+      \field{year}{2001}
+      \field{urldateera}{ce}
+      \field{pages}{19\bibrangedash 22}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1109/ASPAA.2001.969532
+      \endverb
+      \verb{file}
+      \verb Eronen - 2001 - Comparison of features for musical instrument reco.pdf:/Users/bakunowski/Zotero/storage/SMVRUY3D/Eronen - 2001 - Comparison of features for musical instrument reco.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://ieeexplore.ieee.org/document/969532/
+      \endverb
+      \verb{url}
+      \verb http://ieeexplore.ieee.org/document/969532/
+      \endverb
+    \endentry
+    \entry{heise_automated_2009}{article}{}
+      \name{author}{3}{}{%
+        {{hash=0aa1ef1791f0ab966c2c45bbdbf7f344}{%
+           family={Heise},
+           familyi={H\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod}}}%
+        {{hash=70ed9df0ee2baab9dcfef108d3b68866}{%
+           family={Hlatky},
+           familyi={H\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9abf4669e0d1a28e3cb02526c9100c56}{%
+           family={Loviscach},
+           familyi={L\bibinitperiod},
+           given={Jörn},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{1cdffa74f741d9761755f4743a0e8de6}
+      \strng{fullhash}{1cdffa74f741d9761755f4743a0e8de6}
+      \strng{bibnamehash}{1cdffa74f741d9761755f4743a0e8de6}
+      \strng{authorbibnamehash}{1cdffa74f741d9761755f4743a0e8de6}
+      \strng{authornamehash}{1cdffa74f741d9761755f4743a0e8de6}
+      \strng{authorfullhash}{1cdffa74f741d9761755f4743a0e8de6}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Any audio recording can be turned into a digital musical instrument by feeding it into an audio sampler. However, it is difficult to edit such a sound in musical terms or even to control it in real time with musical expression. This does not change much if a more sophisticated resynthesis method is applied. Many electronic musicians appreciate the direct and clear access to sound parameters a traditional analog synthesizer offers. Can one automatically generate a synthesizer setting that approximates a given audio recording and thus clone a given sound to be controlled with the standard functions of the particular synthesizer employed? Even though this problem seems highly complex, we demonstrate that its solution becomes feasible with today’s computer systems. We compare sounds on the basis of acoustic features known from Music Information Retrieval and apply a specialized optimization strategy to adjust the settings of VST instruments, which is sped up using multi-core processors and networked computers.}
+      \field{journaltitle}{New York}
+      \field{title}{Automated {Cloning} of {Recorded} {Sounds} by {Software} {Synthesizers}}
+      \field{year}{2009}
+      \field{pages}{8}
+      \range{pages}{1}
+      \verb{file}
+      \verb Heise et al. - 2009 - Automated Cloning of Recorded Sounds by Software S.pdf:/Users/bakunowski/Zotero/storage/62LS8IQU/Heise et al. - 2009 - Automated Cloning of Recorded Sounds by Software S.pdf:application/pdf
+      \endverb
+    \endentry
+    \entry{herbert_manifesto_2011}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=4b709927ee335235c09c93250be57b67}{%
+           family={Herbert},
+           familyi={H\bibinitperiod},
+           given={Matthew},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en-US}%
+      }
+      \strng{namehash}{4b709927ee335235c09c93250be57b67}
+      \strng{fullhash}{4b709927ee335235c09c93250be57b67}
+      \strng{bibnamehash}{4b709927ee335235c09c93250be57b67}
+      \strng{authorbibnamehash}{4b709927ee335235c09c93250be57b67}
+      \strng{authornamehash}{4b709927ee335235c09c93250be57b67}
+      \strng{authorfullhash}{4b709927ee335235c09c93250be57b67}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{manifesto {|} {Matthew} {Herbert}}
+      \field{urlday}{18}
+      \field{urlmonth}{11}
+      \field{urlyear}{2018}
+      \field{year}{2011}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Snapshot:/Users/bakunowski/Zotero/storage/WFUG5ZYL/manifesto.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://matthewherbert.com/about-contact/manifesto/
+      \endverb
+      \verb{url}
+      \verb https://matthewherbert.com/about-contact/manifesto/
+      \endverb
+    \endentry
+    \entry{noauthor_homepage_nodate}{misc}{}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{labeltitlesource}{title}
+      \field{title}{Homepage — {Essentia} 2.1-beta5-dev documentation}
+      \field{urlday}{3}
+      \field{urlmonth}{5}
+      \field{urlyear}{2019}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Homepage — Essentia 2.1-beta5-dev documentation:/Users/bakunowski/Zotero/storage/CSWUQK7Y/documentation.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://essentia.upf.edu/documentation/
+      \endverb
+      \verb{url}
+      \verb https://essentia.upf.edu/documentation/
+      \endverb
+    \endentry
+    \entry{horner_machine_1993}{article}{}
+      \name{author}{3}{}{%
+        {{hash=fbc37a83879d2ef1beb3663deb511c34}{%
+           family={Horner},
+           familyi={H\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod}}}%
+        {{hash=ca887317af2ca2b4704aebfbe4b02f05}{%
+           family={Beauchamp},
+           familyi={B\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod}}}%
+        {{hash=30a5716fe777451ab8bdea082a22b388}{%
+           family={Haken},
+           familyi={H\bibinitperiod},
+           given={Lippold},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{d1a8780038444fc41edd6bef6d0cdc34}
+      \strng{fullhash}{d1a8780038444fc41edd6bef6d0cdc34}
+      \strng{bibnamehash}{d1a8780038444fc41edd6bef6d0cdc34}
+      \strng{authorbibnamehash}{d1a8780038444fc41edd6bef6d0cdc34}
+      \strng{authornamehash}{d1a8780038444fc41edd6bef6d0cdc34}
+      \strng{authorfullhash}{d1a8780038444fc41edd6bef6d0cdc34}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{01489267}
+      \field{journaltitle}{Computer Music Journal}
+      \field{number}{4}
+      \field{shorttitle}{Machine {Tongues} {XVI}}
+      \field{title}{Machine {Tongues} {XVI}: {Genetic} {Algorithms} and {Their} {Application} to {FM} {Matching} {Synthesis}}
+      \field{urlday}{3}
+      \field{urlmonth}{5}
+      \field{urlyear}{2019}
+      \field{volume}{17}
+      \field{year}{1993}
+      \field{urldateera}{ce}
+      \field{pages}{17}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.2307/3680541
+      \endverb
+      \verb{file}
+      \verb Horner et al. - 1993 - Machine Tongues XVI Genetic Algorithms and Their .pdf:/Users/bakunowski/Zotero/storage/A86S5AGI/Horner et al. - 1993 - Machine Tongues XVI Genetic Algorithms and Their .pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.jstor.org/stable/3680541?origin=crossref
+      \endverb
+      \verb{url}
+      \verb https://www.jstor.org/stable/3680541?origin=crossref
+      \endverb
+    \endentry
+    \entry{noauthor_librosa_nodate}{misc}{}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{labeltitlesource}{title}
+      \field{title}{Librosa}
+      \field{urlday}{3}
+      \field{urlmonth}{5}
+      \field{urlyear}{2019}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Librosa:/Users/bakunowski/Zotero/storage/YQRYFXWD/librosa.github.io.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://librosa.github.io/
+      \endverb
+      \verb{url}
+      \verb https://librosa.github.io/
+      \endverb
+    \endentry
+    \entry{mcdonald_neural_2017}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=796dcfbc757367f7f1fe6bd8af850857}{%
+           family={McDonald},
+           familyi={M\bibinitperiod},
+           given={Kyle},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{796dcfbc757367f7f1fe6bd8af850857}
+      \strng{fullhash}{796dcfbc757367f7f1fe6bd8af850857}
+      \strng{bibnamehash}{796dcfbc757367f7f1fe6bd8af850857}
+      \strng{authorbibnamehash}{796dcfbc757367f7f1fe6bd8af850857}
+      \strng{authornamehash}{796dcfbc757367f7f1fe6bd8af850857}
+      \strng{authorfullhash}{796dcfbc757367f7f1fe6bd8af850857}
+      \field{sortinit}{M}
+      \field{sortinithash}{cfd219b90152c06204fab207bc6c7cab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Algorithmic music composition has developed a lot in the last few years, but the idea has a long history. In some sense, the first…}
+      \field{journaltitle}{Artists and Machine Intelligence}
+      \field{month}{8}
+      \field{title}{Neural {Nets} for {Generating} {Music}}
+      \field{urlday}{18}
+      \field{urlmonth}{11}
+      \field{urlyear}{2018}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Snapshot:/Users/bakunowski/Zotero/storage/GPC275VZ/neural-nets-for-generating-music-f46dffac21c0.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://medium.com/artists-and-machine-intelligence/neural-nets-for-generating-music-f46dffac21c0
+      \endverb
+      \verb{url}
+      \verb https://medium.com/artists-and-machine-intelligence/neural-nets-for-generating-music-f46dffac21c0
+      \endverb
+    \endentry
+    \entry{noauthor_oneohtrix_2016}{misc}{}
+      \list{language}{1}{%
+        {EN\_GB}%
+      }
+      \field{sortinit}{O}
+      \field{sortinithash}{dad3efd0836470093a7b4a7bb756eb8c}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{MusicRadar}
+      \field{month}{2}
+      \field{title}{Oneohtrix {Point} {Never} on the process behind his latest leap into the unknown, {Garden} of {Delete}}
+      \field{urlday}{18}
+      \field{urlmonth}{11}
+      \field{urlyear}{2018}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Snapshot:/Users/bakunowski/Zotero/storage/HFVA6NH8/oneohtrix-point-never-on-the-process-behind-his-latest-leap-into-the-unknown-garden-of-delete-6.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.musicradar.com/news/tech/oneohtrix-point-never-on-the-process-behind-his-latest-leap-into-the-unknown-garden-of-delete-633280
+      \endverb
+      \verb{url}
+      \verb https://www.musicradar.com/news/tech/oneohtrix-point-never-on-the-process-behind-his-latest-leap-into-the-unknown-garden-of-delete-633280
+      \endverb
+    \endentry
+    \entry{tatar_automatic_2016}{article}{}
+      \name{author}{3}{}{%
+        {{hash=3a166eee64f36030371fd3c16d83a479}{%
+           family={Tatar},
+           familyi={T\bibinitperiod},
+           given={Kıvanç},
+           giveni={K\bibinitperiod}}}%
+        {{hash=59434dfcb95e6943ff72f268f869a447}{%
+           family={Macret},
+           familyi={M\bibinitperiod},
+           given={Matthieu},
+           giveni={M\bibinitperiod}}}%
+        {{hash=98a4249d5bf6edf5cb5809788bd84b51}{%
+           family={Pasquier},
+           familyi={P\bibinitperiod},
+           given={Philippe},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{1da5e4f011807b7db22d3ddcb25691f4}
+      \strng{fullhash}{1da5e4f011807b7db22d3ddcb25691f4}
+      \strng{bibnamehash}{1da5e4f011807b7db22d3ddcb25691f4}
+      \strng{authorbibnamehash}{1da5e4f011807b7db22d3ddcb25691f4}
+      \strng{authornamehash}{1da5e4f011807b7db22d3ddcb25691f4}
+      \strng{authorfullhash}{1da5e4f011807b7db22d3ddcb25691f4}
+      \field{sortinit}{T}
+      \field{sortinithash}{6f7aff9db9dcfeb7f95fd5bbd2f78df9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We refer the task of ﬁnding preset(s) (i.e. set(s) of synthesizer parameters) that approximates a target sound best, as the preset generation problem. PresetGen addresses this problem regarding the real world synthesizer, OP-1. The OP-1 consists of several synthesis blocks, and it is not fully deterministic. We propose and evaluate a solution to preset generation using a multi-objective Non-dominated Sorting-Genetic-AlgorithmII. PresetGen handles the full problem complexity and returns a small set of presets that approximate the target sound best by covering the Pareto front of this multi-objective optimization problem. Moreover, we present an empirical evaluation experiment that compares the performance of three human sound designers to that of PresetGen. The results show that PresetGen is human-competitive.}
+      \field{issn}{0929-8215, 1744-5027}
+      \field{journaltitle}{Journal of New Music Research}
+      \field{month}{4}
+      \field{number}{2}
+      \field{title}{Automatic {Synthesizer} {Preset} {Generation} with \textit{{PresetGen}}}
+      \field{urlday}{19}
+      \field{urlmonth}{11}
+      \field{urlyear}{2018}
+      \field{volume}{45}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \field{pages}{124\bibrangedash 144}
+      \range{pages}{21}
+      \verb{doi}
+      \verb 10.1080/09298215.2016.1175481
+      \endverb
+      \verb{file}
+      \verb Tatar et al. - 2016 - Automatic Synthesizer Preset Generation with iPr.pdf:/Users/bakunowski/Zotero/storage/FMM8VVVT/Tatar et al. - 2016 - Automatic Synthesizer Preset Generation with iPr.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://www.tandfonline.com/doi/full/10.1080/09298215.2016.1175481
+      \endverb
+      \verb{url}
+      \verb http://www.tandfonline.com/doi/full/10.1080/09298215.2016.1175481
+      \endverb
+    \endentry
+    \entry{terasawa_center_2005}{article}{}
+      \name{author}{3}{}{%
+        {{hash=05b3b46e6b4a0e22b3640ee896d13725}{%
+           family={Terasawa},
+           familyi={T\bibinitperiod},
+           given={Hiroko},
+           giveni={H\bibinitperiod}}}%
+        {{hash=af3eb849c7bb824718da580e0514e62b}{%
+           family={Slaney},
+           familyi={S\bibinitperiod},
+           given={Malcolm},
+           giveni={M\bibinitperiod}}}%
+        {{hash=2e3da9ae1c620565d45aa215f6f8af4b}{%
+           family={Berger},
+           familyi={B\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{4cac10048cdb81c9726378fef9b8f19e}
+      \strng{fullhash}{4cac10048cdb81c9726378fef9b8f19e}
+      \strng{bibnamehash}{4cac10048cdb81c9726378fef9b8f19e}
+      \strng{authorbibnamehash}{4cac10048cdb81c9726378fef9b8f19e}
+      \strng{authornamehash}{4cac10048cdb81c9726378fef9b8f19e}
+      \strng{authorfullhash}{4cac10048cdb81c9726378fef9b8f19e}
+      \field{sortinit}{T}
+      \field{sortinithash}{6f7aff9db9dcfeb7f95fd5bbd2f78df9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This paper describes a perceptual space for timbre, deﬁnes an objective metric that takes into account perceptual orthogonality, and measures the quality of timbre interpolation applicable to perceptually valid timbral soniﬁcation. We discuss two timbre representations and measure perceptual judgment. We determined that a timbre space based on Mel-frequency cepstral coefﬁcients (MFCC) is a good model for perceptual timbre space.}
+      \field{title}{Center for {Computer} {Research} in {Music} and {Acoustics} ({CCRMA}) {Department} of {Music}, {Stanford} {University} {Stanford}, {California}}
+      \field{year}{2005}
+      \field{pages}{8}
+      \range{pages}{1}
+      \verb{file}
+      \verb Terasawa et al. - 2005 - Center for Computer Research in Music and Acoustic.pdf:/Users/bakunowski/Zotero/storage/7EYGMMBI/Terasawa et al. - 2005 - Center for Computer Research in Music and Acoustic.pdf:application/pdf
+      \endverb
+    \endentry
+    \entry{yee-king_automatic_2018}{article}{}
+      \name{author}{3}{}{%
+        {{hash=ca353b1720b1ca8bfc1c68785a486d0a}{%
+           family={Yee-King},
+           familyi={Y\bibinithyphendelim K\bibinitperiod},
+           given={M.\bibnamedelimi J.},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=11cd55bdbdc5da802df418086a91bc1d}{%
+           family={Fedden},
+           familyi={F\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod}}}%
+        {{hash=d5d4296add9af30f29ee706d46f3401b}{%
+           family={d'Inverno},
+           familyi={d\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{c3ddfbb5fc37f5ba8b41369552495398}
+      \strng{fullhash}{c3ddfbb5fc37f5ba8b41369552495398}
+      \strng{bibnamehash}{c3ddfbb5fc37f5ba8b41369552495398}
+      \strng{authorbibnamehash}{c3ddfbb5fc37f5ba8b41369552495398}
+      \strng{authornamehash}{c3ddfbb5fc37f5ba8b41369552495398}
+      \strng{authorfullhash}{c3ddfbb5fc37f5ba8b41369552495398}
+      \field{sortinit}{Y}
+      \field{sortinithash}{b8d711a035f7be9840c721c82920477e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Programming sound synthesizers is a complex and time-consuming task. Automatic synthesizer programming involves finding parameters for sound synthesizers using algorithmic methods. Sound matching is one application of automatic programming, where the aim is to find the parameters for a synthesizer that cause it to emit as close a sound as possible to a target sound. We describe and compare several sound matching techniques that can be used to automatically program the Dexed synthesizer, which is a virtual model of a Yamaha DX7. The techniques are a hill climber, a genetic algorithm, and three deep neural networks that have not been applied to the problem before. We define a sound matching task based on six sets of sounds, which we derived from increasingly complex configurations of the Dexed synthesis algorithm. A bidirectional, long short-term memory network with highway layers performed better than any other technique and was able to match sounds closely in 25\% of the test cases. This network was also able to match sounds in near real time, once trained, which provides a significant speed advantage over previously reported techniques that are based on search heuristics. We also describe our open source framework, which makes it possible to repeat our study, and to adapt it to different synthesizers and algorithmic programming techniques.}
+      \field{issn}{2471-285X}
+      \field{journaltitle}{IEEE Transactions on Emerging Topics in Computational Intelligence}
+      \field{month}{4}
+      \field{number}{2}
+      \field{title}{Automatic {Programming} of {VST} {Sound} {Synthesizers} {Using} {Deep} {Networks} and {Other} {Techniques}}
+      \field{volume}{2}
+      \field{year}{2018}
+      \field{pages}{150\bibrangedash 159}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1109/TETCI.2017.2783885
+      \endverb
+      \keyw{algorithmic methods,algorithmic programming,artificial neural networks,automatic programming,automatic synthesizer programming,Computer generated music,deep networks,deep neural networks,Dexed synthesis algorithm,Dexed synthesizer,electronic music,Feature extraction,Frequency modulation,frequency modulation (FM),genetic algorithms,Genetic algorithms,genetic algorithms (GA),music,neural nets,programming,Programming profession,short-term memory network,signal synthesis,sound matching,sound matching task,Synthesizers,target sound,Task analysis,VST sound synthesizers}
+    \endentry
+    \entry{yee-king_automatic_nodate}{article}{}
+      \name{author}{1}{}{%
+        {{hash=707f8e2e504e353215a77fc31c34c154}{%
+           family={Yee-King},
+           familyi={Y\bibinithyphendelim K\bibinitperiod},
+           given={Matthew\bibnamedelima John},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{707f8e2e504e353215a77fc31c34c154}
+      \strng{fullhash}{707f8e2e504e353215a77fc31c34c154}
+      \strng{bibnamehash}{707f8e2e504e353215a77fc31c34c154}
+      \strng{authorbibnamehash}{707f8e2e504e353215a77fc31c34c154}
+      \strng{authornamehash}{707f8e2e504e353215a77fc31c34c154}
+      \strng{authorfullhash}{707f8e2e504e353215a77fc31c34c154}
+      \field{sortinit}{Y}
+      \field{sortinithash}{b8d711a035f7be9840c721c82920477e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The aim of this thesis is to investigate techniques for, and applications of automatic sound synthesizer programming. An automatic sound synthesizer programmer is a system which removes the requirement to explicitly specify parameter settings for a sound synthesis algorithm from the user. Two forms of these systems are discussed in this thesis: tone matching programmers and synthesis space explorers. A tone matching programmer takes at its input a sound synthesis algorithm and a desired target sound. At its output it produces a conﬁguration for the sound synthesis algorithm which causes it to emit a similar sound to the target. The techniques for achieving this that are investigated are genetic algorithms, neural networks, hill climbers and data driven approaches. A synthesis space explorer provides a user with a representation of the space of possible sounds that a synthesizer can produce and allows them to interactively explore this space. The applications of automatic sound synthesizer programming that are investigated include studio tools, an autonomous musical agent and a self-reprogramming drum machine. The research employs several methodologies: the development of novel software frameworks and tools, the examination of existing software at the source code and performance levels and user trials of the tools and software. The main contributions made are: a method for visualisation of sound synthesis space and low dimensional control of sound synthesizers; a general purpose framework for the deployment and testing of sound synthesis and optimisation algorithms in the SuperCollider language sclang; a comparison of a variety of optimisation techniques for sound synthesizer programming; an analysis of sound synthesizer error surfaces; a general purpose sound synthesizer programmer compatible with industry standard tools; an automatic improviser which passes a loose equivalent of the Turing test for Jazz musicians, i.e. being half of a man-machine duet which was rated as one of the best sessions of 2009 on the BBC’s ’Jazz on 3’ programme.}
+      \field{title}{Automatic {Sound} {Synthesizer} {Programming}: {Techniques} and {Applications}}
+      \field{pages}{180}
+      \range{pages}{1}
+      \verb{file}
+      \verb Yee-King - Automatic Sound Synthesizer Programming Technique.pdf:/Users/bakunowski/Zotero/storage/LLWFLRMT/Yee-King - Automatic Sound Synthesizer Programming Technique.pdf:application/pdf
+      \endverb
+    \endentry
+    \entry{yee-king_synthbot:_nodate}{article}{}
+      \name{author}{2}{}{%
+        {{hash=225a6850d4e6df5dafc18df57ff07ee4}{%
+           family={Yee-King},
+           familyi={Y\bibinithyphendelim K\bibinitperiod},
+           given={Matthew},
+           giveni={M\bibinitperiod}}}%
+        {{hash=bc99a5b61e7e3ceecd769079bf51c490}{%
+           family={Roth},
+           familyi={R\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{ceb2cc5b336b8b4213771ec1706eebc2}
+      \strng{fullhash}{ceb2cc5b336b8b4213771ec1706eebc2}
+      \strng{bibnamehash}{ceb2cc5b336b8b4213771ec1706eebc2}
+      \strng{authorbibnamehash}{ceb2cc5b336b8b4213771ec1706eebc2}
+      \strng{authornamehash}{ceb2cc5b336b8b4213771ec1706eebc2}
+      \strng{authorfullhash}{ceb2cc5b336b8b4213771ec1706eebc2}
+      \field{sortinit}{Y}
+      \field{sortinithash}{b8d711a035f7be9840c721c82920477e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This work presents a software synthesizer programmer, SynthBot, which is able to automatically ﬁnd the settings necessary to produce a sound similar to a given target. As modern synthesizers become more capable and the underlying synthesis architectures more obscure, the task of programming them to produce a desired sound becomes more time consuming and complex. SynthBot is presented as an automated solution to this problem. A stochastic search algorithm, in this case a genetic algorithm, is used to ﬁnd the parameters which produce the most similar sound to the target. Similarity is measured by the sum squared error between the Mel Frequency Cepstrum Coefﬁcients (MFCCs) of the target and candidate sounds.}
+      \field{title}{{SYNTHBOT}: {AN} {UNSUPERVISED} {SOFTWARE} {SYNTHESIZER} {PROGRAMMER}}
+      \field{pages}{4}
+      \range{pages}{1}
+      \verb{file}
+      \verb Yee-King and Roth - SYNTHBOT AN UNSUPERVISED SOFTWARE SYNTHESIZER PRO.pdf:/Users/bakunowski/Zotero/storage/NSPM7NLY/Yee-King and Roth - SYNTHBOT AN UNSUPERVISED SOFTWARE SYNTHESIZER PRO.pdf:application/pdf
+      \endverb
+    \endentry
+  \enddatalist
+  \missing{dahlstedt_creating_nodate}
+\endrefsection
+\endinput
+

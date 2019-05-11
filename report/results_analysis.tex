@@ -1,5 +1,55 @@
 \chapter{Results and Analysis}
-\label{chapterlabel4}
+As previously stated, the success of this project is dependent on two
+things. The parameter predictions must in fact bear some resemblance to
+the target sound, and be more than a mere randomization of
+parameters. Secondly, as it is a user centered program, the users must
+feel like it indeed generates sounds that they find similar to the
+supplied input, and not less importantly, that the program is
+interesting to them, that an interaction it commences has some value,
+and colloquially that it is fun to use.
+
+\section{Methodologies}
+
+With these goals in mind, both qualitative, and quantative analysis
+were conducted. The qualitative part was made up of a questionnaire,
+as well as interviews during, and after using the program. This has
+allowed for immediate feedback, as well as a possibility to reflect
+upon the experience, and the ability to share those reflections
+later. The quantative evaluation was conducted by comparing sepctra of
+target, and predicted sound. Both generated with the instrument
+itself, as well as with users' voices, to provide a more realistic
+scenario. 
+
+\section{Sound similiarity}
+
+\subsection{Quantative evaluation}
+
+In order to determine if the predictions made are viable, and how well
+do they work, a form of white box testing had to be made. 10 different
+sets of parameter values were determined, and for each one a
+spectrogram, together with MFCC values were made. Then, predicions on
+these MFCCs values were done, following by extracting spectrograms of
+the results and comparing them agains the target values. Moreover,
+euclidean distance between the MFCC values was calculated. The
+reasoning behind that was the fact that as a matter of fact the
+parameter values predicted can differ quite largely from the target
+values, as certain sounds are likely possible to achieve using more
+than one parameter setting.
+
+\subsubsection{Spectra}
+
+\subsubsection{MFCCs distance}
+
+\subsection{Qualitative evaluation}
+
+Equally important as the technical results, are the impressions of
+users, and their enjoyment of the experience, as well as their
+assessment of how similar the predictions are to their input.
+
+(actually, maybe only about similiarity above, and enjoyment below, as
+user experiences?)
+
+\section{User experience}
 
 - statistics, tables and graphs
 
@@ -9,6 +59,11 @@
 
 - user testing
 
-- questionnaires for users (friends, or reddit friends)
+- questionnaires for users
 
 - no interpretation of results
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "dissertation"
+%%% End:

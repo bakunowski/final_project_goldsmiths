@@ -1,114 +1,274 @@
 \chapter{Literature Review}
-\label{chapterlabel2}
+\label{chap:lit}
 
 \section{Problem background}
-%VERY CONCISE 
-%- what is the problem
 
-Programming synthesizers is a fun, but challenging task. The range of sounds possible to
-achieve on such a device, and consequently the amount of adjustable parameters can be overwhelming.
-From choosing an audio file to sample, to an amplitude envelope for each grain, the ability to make
-decisions about programming a granulator has to come from either a place of certainty about what
-each parameter is responsible for, or a place of experimental thought, and a somewhat random
-parameter value assignments.
+\subsection{Synthesizer programming}
 
-Users fairly new in the realm of synthesizer programming may encounter issues creating sounds they
-desire. Even successful musicians might be doing things following a not clearly defined “intuition”.
-There are of course people who are experts in this field, but artists often look for inspiration
-when it comes to timbre of their sounds.
-%\cite{noauthor_oneohtrix_2016} \cite{herbert_manifesto_2011}
-It would seem that, the use of presets as a starting point is not unusual.
+Programming synthesizers can be enjoyable, fun and gratifying, yet
+very often presents a big challenge. The amount of adjustable
+parameters on such a device can be overwhelming, and consequently the
+range of sounds that can be achieved is usually very extensive.
 
-%- some study that describes it directly, and is a general thing done on the main
-%problem here - programming synths based on sound matching
-%based on this write sections i think
-Research has been done previously as an investigation into automation of parameters in synthesizers
-based on sound matching. Taking a snippet of sound, the algorithm would try to
-find parameter settings to match a produced sound as closely as possible to the
-source%\cite{yee-king_automatic_2018}.
+Granulation, or any other corpus based synthesis technique for that
+matter, presents what could be called a special case in this
+domain. Not only do the parameters determine the final output, but
+also the input sample has a tremendous influence over the sound.
 
-This research mostly focuses on FM synthesis
-% \cite{horner_machine_1993}
-, although
-experiments on different synthesis techniques has been
-done
-% \cite{dahlstedt_creating_nodate}
-, including any VST
-plug-in
-% \cite{yee-king_synthbot:_nodate}.
+In a granular synthesizer, users are presented with choices ranging
+from determining the audio to be sampled, to the amliptude envelope
+for each grain. A huge array of possibilities.
 
-Also, it seems that most of this research focuses on reproducing the original
-input
-% \cite{tatar_automatic_2016}
-. Perhaps more interesting and novel sounds
-could arise as an effect of bad performance, but is does not seem to be the
-desired outcome in most cases.
+Therefore the ability to make decisions about programming a granulator
+to achieve desired results has to come from either a place of
+certainty about what each parameter is responsible for combined with
+intuition about the instrument, or a place of experimental though, and
+somewhat random parameter value assignments.
 
-However, using this approach on corpus-based synthesis remains an untapped area
-of research, worth investigating
-%\cite{mcdonald_neural_2017}.
+Users fairly new in the realm of synthesizer programming may encounter
+issues creating sounds they desire. This is to be expected, as like in
+any other area, novices have to get through a rather steep learning
+curve, to achieve certain intuition, and skill. This, however, often
+prevents people from creating what they want, or makes them settle for
+less, consequently limiting their creative output.
+
+On the other hand, experienced musicians are constantly looking for
+inspiration and new ways of interaction with the process of creating
+exciting sounds\cite{herbert_manifesto_2011}. Furthermore, programming
+synthesizers by following a not clearly defined intuition, combined
+with the use of presets and a mixture of experimantal methods is a
+popular approach\cite{noauthor_oneohtrix_2016}, especially considering
+the amount of tools available today, and the ease of acquiring
+them. The fact of having too many VST plugins in a DAW, is a common
+problem today.
+
+There are of course all the people in between the complete novice,
+and succesfull artist. They may have some experience, and can follow
+their own intuition, yet are trying to find their own sound, and
+define their style of production. Making that process easier,
+consequently making the music making process more accessible would be
+a great contribution to the community (EDIT, BUT IDEA IS GOOD).
+
+\subsection{Sound matching}
+
+The problem of sound matching seems to be almost unexistent for
+humans. We are able to hum along a song we have heard previously, or
+replicate sounds of different objects, like cars, or animals, like
+dogs. This activity does not present any real challenge for us. It
+could even be said that such a behaviour is taken for
+granted.
+
+It has been around since forever, and it is mostly how children learn
+language. The word ``onomatopoeia'' desribes a process of creating a
+word that phonetically resembles, or suggests the sound it describes
+(SOURCE) and has been around even before language came aobut (CHANGE)
+(ADD SOURCE)!
+
+Conversly, creating a specific desired sound on an instrument of any
+kind takes serious practice, and sacrifices. Musicians who are able to
+translate what they hear in their head, directly to an instrument, be
+it a physical one like piano or guitar, or a software based
+instrument, are considered viruosic. Therefore, the ability to
+replicate any sound in a synthesizer, based solely on an audio input
+seems like a very intuitive way of interaction, and possibly an
+inspiring way of working for musicians.Additionally, it would blur the
+line between a begginer, and a virtuoso in that specific area,
+allowing people with less technical expertise to create music they
+want to hear.Primarily, however, such interaction would be an immensly
+helpful, and time-saving scenario for musicians, allowing them to
+spend more time on creative work, taking over, at least partially the
+task of programming a synthesiser.
+
+In the next three sections I go over each area of the project, and talk
+about previous work that has been done on each aspect.
 
 \section{Audio descriptors}
 
-MFCCs are a very popular descriptor used widely in the domain of speech
-synthesis. Some literature also uses it as the means of comparing two sounds
-together(cite matthew, or some other study). It is probably the most
-sophisticated algorithm for describing timbre available currently.
+Because of the way audio is represented digitally, mimicking
+sounds is not as intuitive for computers as it is for
+humans. Algorithms that are capable of generating meaningful data
+about given audio signal are needed in order to describe sounds in
+different ways, and based on different assumptions. (add more about
+why these are needed, and pure audio singal can't be used?)
 
-There is of course a huge variety of audio descriptors available, and some
-serve different purpose than others. One can get very specific and use
-descriptors for onsets, pitch, etc.
+A great amount of these analysis tools exist, and a lot of them are
+easily accessible either through libraries in different programming
+languages, such as `libriosa'\cite{noauthor_librosa_nodate} for
+Python, or `Essentia'\cite{noauthor_homepage_nodate} for C++, or
+directly through different audio software such as
+`Audacity'\cite{noauthor_audacity_nodate} or most Digital Audio
+Workstations today.
 
-%what other can i mention that are useful, and widely used, but not as popular?
-%mention the ones that i think will be useful in this project - paired with a granulator.
-These really gain power when used in parallel, or together, rather than on their
-own. That is the main reason behind the approach of describing audio in this
-project.
+The decision about which were suitable for the task of automatic
+synthesizer programming was mainly based on previous research done in
+this domain. However, some amount of experimentation with different
+audio extractors was done, to see if certain assumptions made during
+early stages of the project were correct.
 
-Especially when trying to describe audio to a machine - an agent of you will,
-that will be responsible for the programming of the granulator. Thinking about
-it in terms of how humans would approach it, one would need to describe specific
-characteristics of a particular sound to replicate it. Often this happens
-'behind the scenes', as our perception does most of the work for us, and we
-never really explicitly think about all the separate trains of information that
-we have to process in order to achieve an understanding of sound.
+EXPAND:
+The early work done with focus on sound matching was using mainly
+spectral features, such as the Fast Fourier Transform (source). More
+recently, however, the Mel-frequency Cepstrum Coefficients seem to be
+the prefferable descriptor (source) [22][23]
 
-In this specific case, we are approaching the programming of a granular
-synthesizer, therefore we need specific metrics of describing sound that can
-translate well to the parameters of a granular synthesizer.
+\subsection{Mel-frequency Cepstrum Coefficients}
 
-\section{Granulation}
+In order to get information about the frequencies present in an audio
+signal, a conversion to the frequency domain has to be
+done. Extracting frequency information form the time-domain can be
+done (reference), however a well established, and more prefferable
+method today exists, which is the Fourier Transform (source). The
+algorithm can dissect a signal to it's most basic sinusoidal
+components, therefore determining how much of which frequencies are
+present in the signal allowing for creation of a spectrogram.
 
-Automating parameters for granular synthesizer can be a difficult problem,
-considering how heavily the output sound depends on the audio being sampled. In
-other words the source of the grains.
+The Fourier Transform, or more precisely it's less computationally
+expensive version the fast Fourier Transform (FFT) (source) serves as
+the basis to compute an algorithm which is possibly the most powerful
+algorithm for determining the timbre of an audio signal today - the
+Mel-frequency cepstrum coefficients (MFCC).
 
-To accommodate for that difficulty, some universal audio descriptors have to be
-used in order to describe the sound to the previously mentioned agent. These
-include (change when done) descriptions of rhythm, density, pitch etc, so that
-the input sound can be 'molded' into what will resemble the original sound that
-the agent is trying to replicate.
+Details of this algorithm are well beyond the scope of this paper,
+however many studies have been done to prove the usefullness of MFCCs
+in sound matching
+tasks\cite{yee-king_synthbot:_nodate}\cite{heise_automated_2009}, as
+well as in monophonic instrument recognition
+tasks\cite{eronen_comparison_2001}.
 
-Concatenative synthesis - another thing widely used in speech synthesis offers a
-solution to this problem by creating a 'pool' of grains to choose from in order
-to replicate a sound (offer better description). It could be an interesting way
-to approach this problem, however a lot of research has been done in this domain
-(CataRT) and it seemed less experimental to tinker with. (the truth, but
-obviously change later)
+(not sure if this paragraph is needed?)
+Today they are mainly used in speech symthesis and speech recognition,
+however can be apply to any signal, and are a very powerful
+descriptor. More recently MFCCs have been used in the field of music
+information retrieval applications (sources)
 
-\section{Machine Learning}
+Blurring the line between timbre and rhythm detection, a sequence of
+MFCCs can tell a computer quite a substantial amount of information
+about rhythmical qualities of sound, as well as any temporal changes
+in both time, and frequency domains. Listener studies have shown that
+movement in MFCC space is associated with a similar `sized' movement
+in human perceived timbre space\cite{terasawa_center_2005} (change as this sentence is a total ripoff)
 
-A sophisticated neural network could be implemented to essentialy build a
-granular synthesizer parameter space form the ground up using only the input
-sound, however implementing such a system and predicting it's behaviour is a
-difficult task as well as a very experimental approach, that is quite difficult
-to control and predict.
+\subsection{Spectral Flux}
+MORE CONTENT, CITE PAPERS (not specifically used for sound matching
+tasks i think)
 
-Focusing on replicating certain aspects of the input sound seems like a more
-straightforward and most importantly predictable approach to this problem.
+Onset detection, which tries to estimate how many `peaks' there are
+in a signal is a very useful algorithm to estimate how much rhythmical
+content there is present.
 
-Investigating the correlation between certain audio descriptors and their
-influence over specific parameters of the synthesizer, and consequently
-separating the machine learning tasks to predict those aspects of the sound
-separately will result in a much more predictable outcome, as well as one that's
-easier to control.
+It can be achieved with an algorithm called ``Spectral Flux''. It
+compares consequtive spectra, determining how much change has happend,
+producing a float value corresponding to it. By thresholding this
+change, based on the mean value of the flux, floats corresponding to
+the onsets in a signal can be derived (source, source).
+
+\section{Synthesis}
+
+Research has been done previously as an investigation into automation
+of parameters in synthesizers based on sound matching. Taking a
+snippet of sound, the algorithm would try to find parameter settings
+to match a produced sound as closely as possible to the
+source\cite{yee-king_automatic_2018}.
+
+This research mostly focuses on FM
+synthesis\cite{horner_machine_1993}, although experiments on different
+synthesis techniques have been done\cite{dahlstedt_creating_nodate},
+including VST plug-ins\cite{yee-king_synthbot:_nodate}.
+
+However, using this approach on corpus-based synthesis remains an
+untapped area of research, worth
+investigating\cite{mcdonald_neural_2017}.
+
+Many software based granular synthesizers exist, both in standalone
+(source, source) and VST form (sources). The implementations, and
+certain parameters etc. differ in each example. Nonetheless, this type
+of synthesis introduces an interesting problem in the contex of
+parameter prediction, which applies to any corpus based synthesis
+engine. The sounds created are heavily based on the sample fed into
+the synthesizer. Each parameter changes meaning significantly, once
+the input sample is changed. 
+
+Two possible solutions come to mind, when trying to overcome this
+problem. Using one input sample for synthesis, and trying
+to predict samples for one perticular instance of the granulator is one.
+Another, would be trying to fit some universal analysis algorithms,
+that could decribe rhythym, pitch, density of sound etc. independently
+of the original sample. This way any sample could be `molded' into
+what would resemble the original prediction target. 
+
+Concatenative synthesis is an alternative approach to this problem. It
+could be beneficial, as it would try to find `grains' as closely
+resembling parts of the target as possible, and recreate it using
+little parts, almost like puzzles, that the algorithm thinks
+fit. However, that approach also has limitations, as it could only
+recreate the target sound out of the samples stored in it's database,
+therefore making the output biased. (cataRT source)
+
+\section{Predictions}
+
+A impressively sized bulk of work has been done around the automatic
+programming of synthesizers. Possibly the most complete body of work
+on the topic is Yee-King's thesis
+\cite{yee-king_automatic_nodate}. One of the first approaches
+described by Horner et al. was a Genetic Algorithms \cite{horner_machine_1993}
+aimed at predicting settings for an FM synthesizer. Another
+possibility would be to use the simplest algorithms available and
+suitable for this task, the Hill Climber algorithm (source-matthew's
+paper).
+
+These approaches are all quite valid, however the main problem
+occuring with them is the computational time required to come up with
+a result. None of these approaches really offers the ability of
+prediction in real, or near real time, making them an unappealing
+choice for user facing systems.
+
+An approach in line with the most recent reaserach would seem to be an
+adaptation of neural networks for the task of automatic synthesizer
+programming. Fedden et. al (source) has made a vst host for extraction
+of parameters, and creation of a dataset, as well as a framework to
+train neural networks in. (more?) A more in depth exploartion of
+possibilities in this domain was done by Yee-King, Fedden, and
+D'Inverno et al (source), which compared and considered GA, HC, MLP,
+LSTM, and LSTM++ algorithms.
+
+Another possibility is the use of convolutional networks, however this
+approach would be limited to classification.
+
+Alternatively, in order to try and generalise the predictions for
+different input samples for the synthesizer. The predictions could be
+devided between different parameters. Then linking different
+prediction algorithms with different parameters could possibly allow
+for a creation of a more direct relationship between audio descriptors
+and the synthesis results. No widely available research seems to
+approach this task in this modular way, yet it seems like discovering
+certain linear relationships between parameter values and audio
+descriptors is certainly possible.
+
+%stick to this shit over here:
+It seems that most of this research focuses on reproducing the
+original input\cite{tatar_automatic_2016}. Perhaps more interesting
+and novel sounds could arise as an effect of bad performance, but is
+does not seem to be the desired outcome in most cases.
+
+%% advice 
+
+%The next paragraphs in the introduction should cite previous research in this
+%area. It should cite those who had the idea or ideas first, and should also cite
+%those who have done the most recent and relevant work. You should then go on to
+%explain why more work was necessary (your work, of course.)
+
+%Sufficient background information to allow the reader to understand the context
+%and significance of the question you are trying to address.
+
+%Proper acknowledgement of the previous work on which you are building.
+%Sufficient references such that a reader could, by going to the library, achieve
+%a sophisticated understanding of the context and significance of the question.
+
+%The introduction should be focused on the thesis question(s). All cited work
+%should be directly relevant to the goals of the thesis. This is not a place to
+%summarize everything you have ever read on a subject.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "dissertation"
+%%% End:

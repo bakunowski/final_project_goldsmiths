@@ -16,6 +16,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{natbib}
 \usepackage{rotating}
 \usepackage{hyperref}
 \usepackage{subfig} % apparently subfig is the one to use not subfigure
@@ -124,4 +125,5 @@ Goldsmiths, University of London
 %\bibliography{refs}
 
 \printbibliography
+
 \end{document}
