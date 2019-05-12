@@ -1,37 +1,72 @@
 \chapter{Methods}
+\label{chap:meth}
+
 % have to mention about the ability of working on only one sample
 % somewhere here...
 
-The method of tackling this problem will be based on previous research done in this domain. There are three essential components for this project:
+The method of tackling this problem will be based on previous research
+done in this domain. There are three essential components for this
+project:
+
 \begin{figure}[h]
-\caption{Basic flowchart}
+\caption{Program flow}
 \centering
 \includegraphics[width=0.5\textwidth]{images/flowchart}
 \end{figure}
 
-The box ``Granular Synthesiser'' in figure 1. represents a granular synthesizer.
-It was implemented in C++, using the `JUCE' framework (SOURCE). (Add about it being
-quasi-synchronous, and all other possible information.)
+The box ``Granular Synthesiser'' in figure 1. represents the synthesis
+engine. It was implemented in C++, using the `JUCE' framework
+(SOURCE). (Add about it being quasi-synchronous, and all other
+possible information.)
 
-`Machine Learning' stands for the predictions module, or more
-precisely the Multilayer Perceptron model built in `Keras', and later
-ported to C++ with the help of the `Frugally Deep' library.
+``Machine Learning'' stands for the predictions module, or more
+precisely the Multilayer Perceptron model built in ``Keras'', and
+later ported to C++ with the help of the ``Frugally Deep'' library.
 
-Lastly, the `Audio Analysis' square represents the aspect of the
+The ``Audio Analysis'' square represents the aspect of the
 project responsible for extracting audio features from input
-sounds. This was done with the `Essentia' library, that allowed me to
-perform frame cutting, windowing, extracting the spectrum and finally
-MFCCs on any specified buffer.
+sounds. This was done with the ``Essentia'' library, that allowed me
+to perform frame cutting, windowing, extracting the spectrum and
+finally MFCCs on any specified buffer.
+
+Lastly, the ``Audio Input'' represents the microphone input, which is then
+analysed, and predictions are made on those values, in order to set
+parameters of the synthesizer.
 
 \section{Audio descriptors}
 \subsection{Definitions and Formulation}
 
-As mentioned in \autoref{chap:lit} the MFCC algorithm is proven to be
-one of the most reliable desriptors available, and can not only
-describe the temporal qualities, but also be indicative of the changes
-that happen in the input signal. (source again?) Therefore, it is the
-only algorithm used, with further justifications for this decision
-provided later in this chapter.
+%check if statement correct near source:
+%change last sentence
+The decision about which were suitable for the task of automatic
+synthesizer programming was mainly based on previous research done in
+this domain. As mentioned in \autoref{chap:lit} the MFCC algorithm is
+proven to be one of the most reliable desriptors available, and can
+not only describe the temporal qualities, but also be indicative of
+the changes that happen in the input signal\cite{terasawa_center_2005}.
+Therefore, it is the only algorithm used, with further justifications
+for this decision provided later in this chapter. However, some amount
+of experimentation with different audio extractors was done, to see if
+certain assumptions made during early stages of the project were
+correct.
+%
+
+% make sure this is needed: 
+In order to get information about the frequencies present in an audio
+signal, a conversion to the frequency domain has to be
+done. Extracting frequency information form the time-domain can be
+done (reference), however a well established, and more prefferable
+method today exists, which is the Fourier Transform (source). The
+algorithm can dissect a signal to it's most basic sinusoidal
+components, therefore determining how much of which frequencies are
+present in the signal allowing for creation of a spectrogram.
+
+The Fourier Transform, or more precisely it's less computationally
+expensive version the fast Fourier Transform (FFT) (source) serves as
+the basis to compute an algorithm which is possibly the most powerful
+algorithm for determining the timbre of an audio signal today - the
+Mel-frequency cepstrum coefficients (MFCC).
+%
 
 The Mel-frequency cepstrum is a representaion of the short-term power
 spectrum of sound, based on a linear cosine transform of a log power
@@ -99,17 +134,38 @@ description, or is this useless to talk about?)
 However, during testing, which is described in chapter 4, such a
 connection was not found, therefore this project solely depends on MFCCs.
 
+% only include this and section for it in the implementation if not
+% enough words
+\subsection{Spectral Flux}
+MORE CONTENT, CITE PAPERS (not specifically used for sound matching
+tasks i think)
+In an effort to explore different algorithms, and the idea of
+assigning one feature to one parameter, exploration into the
+onset detection was done.
+Onset detection, which tries to estimate how many `peaks' there are
+in a signal is a very useful algorithm to estimate how much rhythmical
+content there is present.
+
+It can be achieved with an algorithm called ``Spectral Flux''. It
+compares consequtive spectra, determining how much change has happend,
+producing a float value corresponding to it. By thresholding this
+change, based on the mean value of the flux, floats corresponding to
+the onsets in a signal can be derived (source, source).
+
 \subsection{Implementation}
 \subsubsection{Essentia}
 
+%work on this, do a better job of explaining
 The process decribed above was achieved with algorithms provided by
 the `Essentia' library\cite{noauthor_homepage_nodate}. It works in a
 modular way, that can roughly be described as spiltting the algorithms
 into lower, and higher level algorithms. They can be then `stacked' to
 create more complex chains of computation, capable of extracting, as
-in this case, the MFCCs.
+in this case, the MFCCs. The algorithms have to be defined beforehand,
+with an input as well as output for each of them.
 
-% maybe fuck around and create a graph here?
+% show code defining algorithms
+
 The process is as follows:
 
 \begin{itemize}
@@ -128,32 +184,82 @@ The process is as follows:
   for the frame
 \end{itemize}
 
-\begin{figure}[!h]
+\begin{figure}[h]
 \caption{logic of the MFCC computation}
 \centering
 \includegraphics[width=1\textwidth]{images/essentia_logic}
 \end{figure}
 
+\vskip 1cm
+
 Code responsible for creation of the buffer:
-\begin{figure}[!h]
-\caption{filling the buffer}
-\centering
-\includegraphics[width=0.8\textwidth]{images/essentia_buffer}
-\end{figure}
+\begin{lstlisting}
+// computing the essentia algorithms
+if (audioFeatureExtraction.playbackBuffer.index < audioFeatureExtraction.getLengthOfBuffer())
+{
+    const auto* channelData = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
+    for (auto i = 0; i < bufferToFill.numSamples; ++i)
+    {
+        audioFeatureExtraction.pushNextSampleIntoEssentiaArray(channelData[i]);
+    }
+}
+else
+{
+    //randomParameterWalkthrough();
+}
+\end{lstlisting}
+
 
 This process is repeated for each frame, which at the sampling rate of
 44.1kHz, and a buffer size of 512 samples, with frame size of 1024,
 and hopsize of 512 samples equals to exactly 45 frames per
 second. Which in C++ code looks as follows:
-\begin{figure}[!h]
-\caption{computing Essentia algorithms}
-\centering
-\includegraphics[width=0.8\textwidth]{images/essentia_algorithms}
-\end{figure}
+\begin{lstlisting}
+void AudioFeatureExtraction::computeEssentia()
+{
+    while (true)
+    {
+      frameCutter->compute();
+
+      if (!frame.size())
+      {
+          break;
+      }
+      if (isSilent(frame)) continue;
+        
+      windowing->compute();
+      spectrum->compute();
+      mfcc->compute();
+      
+      pool.add("lowlevel.mfcc", mfccCoeffs);
+    }
+    mergePool.merge(pool, "append");
+}
+\end{lstlisting}
+
+As seen above, the results of the computation are written into
+``Essentia's'' pool datastructure. Which in turn is written into a
+JSON file after a specified interval.
+
+The process for audio feature exraction for input differs slightly,
+mainly in that the different algorithms with different inputs and
+outputs are defined and go through different functions.
 
 \section{Predictions}
 \subsection{Dataset}
 \subsubsection{Definitions and Formulations}
+% find place for this: 
+Alternatively, in order to try and generalise the predictions for
+different input samples for the synthesizer. The predictions could be
+devided between different parameters. Then linking different
+prediction algorithms with different parameters could possibly allow
+for a creation of a more direct relationship between audio descriptors
+and the synthesis results. No widely available research seems to
+approach this task in this modular way, yet it seems like discovering
+certain linear relationships between parameter values and audio
+descriptors is certainly possible.
+%
+
 % everything done on one sample only -> here?
 A dataset, linking the MFCC values with the synthesis parameters had
 to be created, in order to create a way to use the information, and
@@ -289,8 +395,35 @@ creating a standalone application, silmultaniously allowing for much
 quicker and simpler performance, without the need of any additional
 software running.
 
-\section{Synthesis}
+\subsubsection{LSTM}
 
+\section{Synthesis}
+% find place for this; 
+Many software based granular synthesizers exist, both in standalone
+(source, source) and VST form (sources). The implementations, and
+certain parameters etc. differ in each example. Nonetheless, this type
+of synthesis introduces an interesting problem in the contex of
+parameter prediction, which applies to any corpus based synthesis
+engine. The sounds created are heavily based on the sample fed into
+the synthesizer. Each parameter changes meaning significantly, once
+the input sample is changed. 
+
+Two possible solutions come to mind, when trying to overcome this
+problem. Using one input sample for synthesis, and trying
+to predict samples for one perticular instance of the granulator is one.
+Another, would be trying to fit some universal analysis algorithms,
+that could decribe rhythym, pitch, density of sound etc. independently
+of the original sample. This way any sample could be `molded' into
+what would resemble the original prediction target. 
+
+Concatenative synthesis is an alternative approach to this problem. It
+could be beneficial, as it would try to find `grains' as closely
+resembling parts of the target as possible, and recreate it using
+little parts, almost like puzzles, that the algorithm thinks
+fit. However, that approach also has limitations, as it could only
+recreate the target sound out of the samples stored in it's database,
+therefore making the output biased. (cataRT source)
+%
 \subsection{Granular Synthesis (basic explenation of the granular synth concept)}
 
 Describing granular synthesis in one paragraph is impossible
@@ -569,6 +702,9 @@ with which to fill both channels of the buffer.
 %also, maybe add how the personal preference for the granular sound
 %influenced this area of production.
 
+\section{Integration}
+
+frugally deep
 %What belongs in the "methods" section of a scientific paper?
 %
 %    Information to allow the reader to assess the believability of your results.

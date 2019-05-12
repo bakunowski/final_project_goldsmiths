@@ -1,26 +1,25 @@
-\chapter{Introductiones}
+\chapter{Introduction}
 % %i should consider writing a 'hook' sentence/paragraph here to draw readers
 % %attention and make them interested in the rest of the paper
 \section{Aims and Objectives}
 
 The initial aim of the project was to implement a machine learning
 solution to the task of granular synthesizer programming based on
-sound matching.  Consequently building a tool that would assist
-musicians in creating interesting sounds, provided an audio input to
-the system.
+sound matching. Consequently building a tool that would assist
+musicians in creating desired sounds more easily, provided an audio input to the system.
 
 Throughout the entire development process, the focus remained mainly
 on creating a well functioning, usable program, despite some
 shortcomings in the areas of synthesis, audio analysis and machine
 learning respectively. Integrating these three modules well took
-priority over designing a more sophisticated solutions to each
-individual problem. Consequently allowing for creation of a tool
+priority over designing more sophisticated solutions to each
+individual problem. This allowed for creation of a tool
 functioning in near real-time, with the possibility of extending the
 modules that contribute to the whole.
 
 The methods here differ from other approaches in literature (cite some
 papers that have done this, eg. Matthew, Leon) primarily in that here,
-one standalone tool has been created, that is usable on it's
+one standalone tool has been created, usable on it's
 own. Users have direct ability to program the synthesizer using input
 from the microphone, and the entire process is handled by two
 buttons. No prior experience with programming is required, and the
@@ -54,6 +53,7 @@ of neural networks used for predicting the parameter values, and help
 in assuming whether users will find the program useful.  
 
 EDIT!!!!!!:
+
 In (future chapters) I provide some critique on established techniques of
 assessment of these types of problems and ultimately conclude that some stuff in
 the best way of doing it.
@@ -65,8 +65,8 @@ standalone program, that allows users to set parameters of a granular
 synthesizer based on a one second buffer of audio, generated form the
 microphone input.
 
-The program could be arbitrarily split into three different modules,
-in order to clarify the it's basic structure. Namely, synthesis, audio
+The program could be arbitrarily split into three separate modules,
+in order to clarify it's basic structure. Namely, synthesis, audio
 analysis and machine learning.
 
 The synthesis is implemented in the ``Juce'' framework. Audio analysis
