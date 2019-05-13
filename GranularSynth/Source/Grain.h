@@ -13,7 +13,9 @@ public:
     GrainStream(int startingSample = 1, int duration = 0);
     
     // ???
-    double operator()(int channel);
+    //double operator()(int channel);
+    
+    double createGrain(int channel);
     
     void setFilePosition(int startingSample);
     
@@ -68,6 +70,8 @@ private:
         
         juce::ADSR adsr;
         juce::ADSR::Parameters adsrParams;
+        
+        bool inRelease = true;
     };
     
     // vector containing grains in the stream

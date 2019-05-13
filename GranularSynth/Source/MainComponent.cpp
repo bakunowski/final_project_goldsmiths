@@ -71,7 +71,7 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
             // fill the required number of samples with
             for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
             {
-                buffer[sample] = grainStream(channel);
+                buffer[sample] = grainStream.createGrain(channel);
             }
         }
         
@@ -96,6 +96,7 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
         if (audioFeatureExtraction.microphoneBuffer.size() < audioFeatureExtraction.getLengthOfBuffer())
         {
             const auto* channelData = bufferToFill.buffer->getReadPointer (0, bufferToFill.startSample);
+
             for (auto i = 0; i < bufferToFill.numSamples; ++i)
             {
                 audioFeatureExtraction.microphoneBuffer.emplace_back(channelData[i]);
@@ -140,7 +141,7 @@ void MainComponent::releaseResources()
 void MainComponent::randomParameterWalkthrough()
 {
     
-    int numOfSamples = 10000;
+    int numOfSamples = 30000;
     Random rand = Random();
   
     audioFeatureExtraction.computeEssentia();
@@ -156,7 +157,7 @@ void MainComponent::randomParameterWalkthrough()
     
     audioFeatureExtraction.count = rand.nextInt(Range<int>(1, grainStream.getFileSize()));
     grainStream.setFilePosition(audioFeatureExtraction.count);
-    audioFeatureExtraction.duration = rand.nextInt(Range<int>(10, 1000));
+    audioFeatureExtraction.duration = rand.nextInt(Range<int>(5, 1000));
     grainStream.setDuration(audioFeatureExtraction.duration);
     grainStream.filePositionOffset = rand.nextInt(Range<int>(0, 50000));
     audioFeatureExtraction.streamSize = rand.nextInt(Range<int>(1, 10));
@@ -393,19 +394,24 @@ void MainComponent::predict()
     
     //grain length
     result_vec[0] = result_vec[0] * (999.0 - 1.0) + 1.0;
-    grainStream.setDuration(static_cast<int>(result_vec[0]));
+    grainDurationDial.setValue(static_cast<int>(result_vec[0]));
+    //grainStream.setDuration(static_cast<int>(result_vec[-1]));
     // grain stream size
     result_vec[1] = result_vec[1] * (9.0 - 1.0) + 1.0;
-    grainStream.setStreamSize(static_cast<int>(result_vec[1]));
+    streamSizeDial.setValue(static_cast<int>(result_vec[1]));
+    // grainStream.setStreamSize(static_cast<int>(result_vec[1]));
     // pitch
     result_vec[2] = result_vec[2] * (11.0 - (-12.0)) + (-12.0);
-    grainStream.pitchOffsetForOneGrain = (static_cast<int>(result_vec[2]));
+    pitchOffsetDial.setValue(static_cast<int>(result_vec[2]));
+    // grainStream.pitchOffsetForOneGrain = (static_cast<int>(result_vec[2]));
     //buffer length
     result_vec[3] = result_vec[3] * (1518322.0 - 1.0) + 1.0;
-    grainStream.setFilePosition(result_vec[3]);
+    filePositionDial.setValue(result_vec[3]);
+    // grainStream.setFilePosition(result_vec[3]);
     // offset
     result_vec[4] = result_vec[4] * (49999.0 - 0.0) + 0.0;
-    grainStream.filePositionOffset = result_vec[4];
+    startingOffsetDial.setValue(grainStream.filePositionOffset);
+    // grainStream.filePositionOffset = result_vec[4];
 
     cout << result_vec << endl;
     audioFeatureExtraction.kerasInput.clear();
@@ -456,7 +462,7 @@ void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbn
     thumbnail.drawChannel(g, thumbnailBounds, 0.0, audioLength, 0, 1.0f);
     
     //draw channel 1 in blue
-    g.setColour(Colours::olivedrab);
+    g.setColour(Colours::darkslategrey);
     thumbnail.drawChannel(g, thumbnailBounds, 0.0, audioLength, 1, 1.0f);
     
     // draw the position around which grains are created
@@ -493,18 +499,6 @@ void MainComponent::timerCallback()
     //startingOffsetDial.setValue(grainStream.filePositionOffset);
     //streamSizeDial.setValue(audioFeatureExtraction.streamSize);
     //pitchOffsetDial.setValue(grainStream.pitchOffsetForOneGrain);
-    
-    // once there are values in the prediction vector start redrawing the dials
-    // according to these values
-    if (ready == true)
-    {
-    // update values of dials when predicting
-    filePositionDial.setValue(result_vec[3]);
-    grainDurationDial.setValue(static_cast<int>(result_vec[0]));
-    //startingOffsetDial.setValue(grainStream.filePositionOffset);
-    streamSizeDial.setValue(static_cast<int>(result_vec[1]));
-    pitchOffsetDial.setValue(static_cast<int>(result_vec[2]));
-    }
 }
 
 //====================================================================================================

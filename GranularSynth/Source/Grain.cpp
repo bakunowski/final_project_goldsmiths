@@ -11,60 +11,59 @@ GrainStream::GrainStream(int startingSample, int duration)
     addGrainsToStream();
 }
 
-double GrainStream::operator()(int channel)
+double GrainStream::createGrain(int channel)
 {
     float sample = 0;
 
     for (oneGrain& grain : grains)
     {
-        grain.adsr.setParameters({});
-        grain.adsrParams.attack = 0.5f;
-        grain.adsrParams.decay = 0.1f;
-        grain.adsrParams.sustain = 1.0f;
-        grain.adsrParams.release = 0.1f;
         // check if getting the current grain is done
-        if (this->AudioSourceBuffer->getNumChannels() >= 2)
+        if (!grain.adsr.isActive())
         {
-            if ((grain.grainDataCurrentSample[LEFT_CHANNEL] >= grain.grainDataEndPosition) &&
-                (grain.grainDataCurrentSample[RIGHT_CHANNEL] >= grain.grainDataEndPosition))
-                grain.grainDataIsFinished = true;
-        }
-        else if((grain.grainDataCurrentSample[LEFT_CHANNEL] >= grain.grainDataEndPosition))
-            grain.grainDataIsFinished = true;
-        
-        // restart the grain if we are using it after finishing
-        if (grain.grainDataIsFinished)
-        {
-            grain.grainDataIsFinished = false;
-            
-            // randomize the grain
-            // file position and grain size do not work when this is off
             randomizeGrain(grain);
+            grain.adsr.noteOn();
+            grain.inRelease = false;
         }
-        
+        else if(!grain.inRelease)
+        {
+            if (this->AudioSourceBuffer->getNumChannels() >= 2)
+            {
+                if((grain.grainDataCurrentSample[LEFT_CHANNEL] >= grain.grainDataEndPosition)
+                    &&
+                    (grain.grainDataCurrentSample[RIGHT_CHANNEL] >= grain.grainDataEndPosition))
+                {
+                    grain.adsr.noteOff();
+                    grain.inRelease = true;
+                }
+            }
+            else if (grain.grainDataCurrentSample[LEFT_CHANNEL] >= grain.grainDataEndPosition)
+            {
+                grain.adsr.noteOff();
+                grain.inRelease = true;
+            }
+        }
+
         //get the current sample form the audio buffer
         float currentSample = (this->AudioSourceBuffer->getSample(channel, static_cast<int>(grain.grainDataCurrentSample[channel])));
-        sample += (currentSample * static_cast<float>(grain.grainDataGainScalar));
         
+         sample += (currentSample * grain.adsr.getNextSample() * static_cast<float>(grain.grainDataGainScalar));
+
         grain.grainDataCurrentSample[channel] += grain.grainDataPitchScalar;
         
         if (grain.grainDataCurrentSample[channel] >= static_cast<double>(this->fileSize))
             grain.grainDataCurrentSample[channel] = (static_cast<double>(this->fileSize) - 1.0f);
-        
-        float sampleToScale = (AudioSourceBuffer->getSample(channel, static_cast<int>(grain.grainDataCurrentSample[channel] )));
-        
-        sample += (sampleToScale * grain.adsr.getNextSample());
     }
 
-    
     // scale the sample by gain
     sample *= static_cast<float>(globalGain);
-//    float dur = static_cast<float>(this->durationOfStream);
-//
-//    for (int i = 0; i < 2048; i++) {
-//        double multiplier = 0.5 * (1 - cos(2*PI*i/2047));
-//        dataOut[i] = multiplier * dataIn[i];
-//    }
+    
+    // unused equation for hanning
+    //float dur = static_cast<float>(this->durationOfStream);
+    //
+    //for (int i = 0; i < 2048; i++) {
+    //    double multiplier = 0.5 * (1 - cos(2*PI*i/2047));
+    //    dataOut[i] = multiplier * dataIn[i];
+    //}
 
     // when more than one grain is playing, scale gain appropriately
     if (grains.size() > 1)
@@ -92,15 +91,11 @@ void GrainStream::setFilePosition(int startingSample)
     
 }
 
-
-
 void GrainStream::setDuration(int duration)
 {
-    float dur = static_cast<float>(this->durationOfStream);
-    
-    // update duration and compute gsSampleDelta
+    // update duration and compute sampleDelta
     this->durationOfStream = duration;
-    this->sampleDelta = static_cast<int>(this->samplingRate * (dur/1000.0f));
+    this->sampleDelta = static_cast<int>(this->samplingRate * (duration/1000.0f));
     
     for (oneGrain& grain : grains)
     {
@@ -150,8 +145,15 @@ void GrainStream::changePitch()
         grain.grainDataPitchScalar = std::pow(2.0f, pitchOffsetForOneGrain / 12.0f);
 }
 
+// all of this is neccessary to play correctly
 void GrainStream::randomizeGrain(oneGrain& grain)
 {
+    grain.adsrParams.attack = 0.8f;
+    grain.adsrParams.decay = 0.0f;
+    grain.adsrParams.sustain = 1.0f;
+    grain.adsrParams.release = 0.8f;
+    grain.adsr.setParameters({});
+
     Random rand = Random();
     
     // Ensure the Starting Sample is non-negative
@@ -161,7 +163,7 @@ void GrainStream::randomizeGrain(oneGrain& grain)
     {
         // Randomize the Starting Sample
         grain.grainDataStartPosition = rand.nextInt(Range<int>(this->filePosition - filePositionOffset, this->filePosition + filePositionOffset));
-        
+    
         // Clamp the Starting Sample to be Within the WaveTable Range
         if (grain.grainDataStartPosition < 0)
             grain.grainDataStartPosition = 0;
@@ -172,7 +174,7 @@ void GrainStream::randomizeGrain(oneGrain& grain)
     // Set the Current Sample to the Starting Sample
     grain.grainDataCurrentSample[LEFT_CHANNEL] = static_cast<double>(grain.grainDataStartPosition);
     grain.grainDataCurrentSample[RIGHT_CHANNEL] = static_cast<double>(grain.grainDataStartPosition);
-//    cout << grain.grainDataCurrentSample[LEFT_CHANNEL] << endl;
+    
     // Clamp the End Sample to be Within the WaveTable Range
     grain.grainDataEndPosition = grain.grainDataStartPosition + this->sampleDelta;
     if (grain.grainDataEndPosition >= this->fileSize)
@@ -217,8 +219,11 @@ void GrainStream::removeGrainsFromStream(int count)
 void GrainStream::silenceAllGrains()
 {
     for (oneGrain& grain : grains)
-        grain.grainDataIsFinished = true;
-    
+    {
+        grain.adsr.noteOff();
+        grain.inRelease = true;
+    }
+   
     grainStreamIsActive = false;
     
 }
