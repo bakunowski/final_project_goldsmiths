@@ -20,7 +20,7 @@ double GrainStream::createGrain(int channel)
         // check if getting the current grain is done
         if (!grain.adsr.isActive())
         {
-            randomizeGrain(grain);
+            setupGrain(grain);
             grain.adsr.noteOn();
             grain.inRelease = false;
         }
@@ -44,26 +44,21 @@ double GrainStream::createGrain(int channel)
         }
 
         //get the current sample form the audio buffer
-        float currentSample = (this->AudioSourceBuffer->getSample(channel, static_cast<int>(grain.grainDataCurrentSample[channel])));
+        float currentSample = (this->AudioSourceBuffer->getSample(channel,
+					 static_cast<int>(grain.grainDataCurrentSample[channel])));
         
-         sample += (currentSample * grain.adsr.getNextSample() * static_cast<float>(grain.grainDataGainScalar));
+         sample += (currentSample * grain.adsr.getNextSample() *
+		    static_cast<float>(grain.grainDataGainScalar));
 
         grain.grainDataCurrentSample[channel] += grain.grainDataPitchScalar;
         
+	// prevent from getting grains out of range
         if (grain.grainDataCurrentSample[channel] >= static_cast<double>(this->fileSize))
             grain.grainDataCurrentSample[channel] = (static_cast<double>(this->fileSize) - 1.0f);
     }
 
     // scale the sample by gain
     sample *= static_cast<float>(globalGain);
-    
-    // unused equation for hanning
-    //float dur = static_cast<float>(this->durationOfStream);
-    //
-    //for (int i = 0; i < 2048; i++) {
-    //    double multiplier = 0.5 * (1 - cos(2*PI*i/2047));
-    //    dataOut[i] = multiplier * dataIn[i];
-    //}
 
     // when more than one grain is playing, scale gain appropriately
     if (grains.size() > 1)
@@ -82,26 +77,19 @@ void GrainStream::setFilePosition(int startingSample)
 {
     // update the starting sample and reset current sample
     this->filePosition = startingSample - 1;
-    
-// this is essentially the spread functionality
-//    for (grainData& grain : grains)
-//    {
-//        randomizeGrain(grain);
-//    }
-    
 }
 
 void GrainStream::setDuration(int duration)
 {
     // update duration and compute sampleDelta
-    this->durationOfStream = duration;
+    this->grainDuration = duration;
     this->sampleDelta = static_cast<int>(this->samplingRate * (duration/1000.0f));
     
     for (oneGrain& grain : grains)
     {
-        // clamp the end sample
         grain.grainDataEndPosition = grain.grainDataStartPosition + this->sampleDelta;
-        
+
+        // clamp the end sample
         if (grain.grainDataEndPosition >= this->fileSize)
             grain.grainDataEndPosition = (this->fileSize - 1);
     }
@@ -139,14 +127,7 @@ vector<double> GrainStream::getCurrentGrainPosition(int channel)
         return positions;
 }
 
-void GrainStream::changePitch()
-{
-    for (oneGrain& grain : grains)
-        grain.grainDataPitchScalar = std::pow(2.0f, pitchOffsetForOneGrain / 12.0f);
-}
-
-// all of this is neccessary to play correctly
-void GrainStream::randomizeGrain(oneGrain& grain)
+void GrainStream::setupGrain(oneGrain& grain)
 {
     grain.adsrParams.attack = 0.8f;
     grain.adsrParams.decay = 0.0f;
@@ -158,13 +139,18 @@ void GrainStream::randomizeGrain(oneGrain& grain)
     
     // Ensure the Starting Sample is non-negative
     if (filePositionOffset == 0 || (this->filePosition - filePositionOffset) <= 0)
+    {
         grain.grainDataStartPosition = this->filePosition;
+    }
     else
     {
         // Randomize the Starting Sample
-        grain.grainDataStartPosition = rand.nextInt(Range<int>(this->filePosition - filePositionOffset, this->filePosition + filePositionOffset));
-    
-        // Clamp the Starting Sample to be Within the WaveTable Range
+        grain.grainDataStartPosition = rand.nextInt(Range<int>(this->filePosition -
+							       filePositionOffset,
+							       this->filePosition +
+							       filePositionOffset));
+
+	// Prevent samples from being outside of file range 
         if (grain.grainDataStartPosition < 0)
             grain.grainDataStartPosition = 0;
         else if (grain.grainDataStartPosition >= this->fileSize)
@@ -175,24 +161,16 @@ void GrainStream::randomizeGrain(oneGrain& grain)
     grain.grainDataCurrentSample[LEFT_CHANNEL] = static_cast<double>(grain.grainDataStartPosition);
     grain.grainDataCurrentSample[RIGHT_CHANNEL] = static_cast<double>(grain.grainDataStartPosition);
     
-    // Clamp the End Sample to be Within the WaveTable Range
+    // Clamp the End Sample to be within filesize 
     grain.grainDataEndPosition = grain.grainDataStartPosition + this->sampleDelta;
     if (grain.grainDataEndPosition >= this->fileSize)
         grain.grainDataEndPosition = (this->fileSize - 1);
     
-    // Randomize the Pitch
-    int randomPitch = 0;
+    // Change the pitch
     if(pitchOffsetForOneGrain > -13)
-//        randomPitch = rand.nextInt(Range<int>(-pitchOffsetForOneGrain, pitchOffsetForOneGrain));
-//    grain.grainDataPitchScalar = std::pow(2.0f, static_cast<double>(randomPitch) / 12.0f);
+    {
         grain.grainDataPitchScalar = std::pow(2.0f, pitchOffsetForOneGrain / 12.0f);
-    
-    // Randomize the Grain Gain
-    double randomGain = 0.0;
-    if(gainOffsetForOneGrain < 0)
-        randomGain = static_cast<double>(rand.nextInt(Range<int>(gainOffsetForOneGrain, 0)));
-    grain.grainDataGainScalar = Decibels::decibelsToGain<double>(randomGain);
-    
+    }
 }
 
 void GrainStream::addGrainsToStream(int count)
@@ -201,8 +179,6 @@ void GrainStream::addGrainsToStream(int count)
     {
         // append a grain the stream of grains
         grains.push_back(oneGrain());
-        // reference the last element(newly added grain) and randomize it
-        // randomizeGrain(grains.back());
     }
     
     this->grainStreamSize += count;
@@ -211,7 +187,9 @@ void GrainStream::addGrainsToStream(int count)
 void GrainStream::removeGrainsFromStream(int count)
 {
     for (int i = 0; i < count; i++)
+    {
         grains.pop_back();
+    }
     
     this->grainStreamSize -= count;
 }
@@ -226,9 +204,4 @@ void GrainStream::silenceAllGrains()
    
     grainStreamIsActive = false;
     
-}
-
-void GrainStream::getCurrentPosition(oneGrain& grain)
-{
-        cout << grain.grainDataCurrentSample[0] << endl;
 }

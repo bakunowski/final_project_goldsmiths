@@ -1,67 +1,276 @@
 \chapter{Results and Analysis}
-As previously stated, the success of this project is dependent on two
-things. The parameter predictions must in fact bear some resemblance to
-the target sound, and be more than a mere randomization of
-parameters. Secondly, as it is a user centered program, the users must
-feel like it indeed generates sounds that they find similar to the
-supplied input, and not less importantly, that the program is
-interesting to them, that an interaction it commences has some value,
-and colloquially that it is fun to use.
+%no interpretation of results!
+
+As stated in \autoref{intro}, the success of this project is dependent
+on three objectives, Firstly, the tool built has to be somewhat
+helpful to artists in creating new sounds. It will ideally challenge
+the interaction between a user, and presets, as a starting point to
+synthesis. Lastly, the results of parameter predictions must in fact
+bear some resemblance to the target sound, and be more than a mere
+randomisation of parameters.
+
+As it is a user centred program, the users must feel like it indeed
+generates sounds that they find similar to the supplied input, and not
+less importantly, that the program is interesting to them, that an
+interaction it commences has some value, and to put it simply, it is
+fun to use. Additionally, the software must be intuitive, and easy to
+use, and ideally the user interface should not bring any confusion.
 
 \section{Methodologies}
 
-With these goals in mind, both qualitative, and quantative analysis
-were conducted. The qualitative part was made up of a questionnaire,
-as well as interviews during, and after using the program. This has
-allowed for immediate feedback, as well as a possibility to reflect
-upon the experience, and the ability to share those reflections
-later. The quantative evaluation was conducted by comparing sepctra of
+Firstly, it has to be ensured that all parts of the system are working
+correctly and as expected. In order to do that, some quantitative
+evaluation has to be done on each module of the system.
+
+Namely, the correctness of extracted MFCC from the signal has to be
+confirmed. The synthesizer has to work as expected. The neural
+networks implemented have to give predictions in expected ranges, and
+finally the sounds achieved through them have to be evaluated to
+determine if they are if fact similar to the targets.
+
+Qualitative evaluation had to be done to determine if users confirm
+the results of quantitative evaluation at least to some extent, as well
+as to determine if it achieves objectives \#1 and \#2. More
+specifically, how easy the user experience is, unrelated to the
+quality of predictions.
+
+The quantitative evaluation was conducted by comparing spectra of
 target, and predicted sound. Both generated with the instrument
-itself, as well as with users' voices, to provide a more realistic
-scenario. 
+itself, as well as with input form the microphone.to provide a more
+realistic scenario. Euclidean distance between MFCCs was measured, as
+a metric of sound similarity.
 
-\section{Sound similiarity}
+The qualitative user testing, was made up of interviews, and a
+questionnaire. The users were briefly introduced to the concept of the
+program, and given most basic usage instructions. During the testing,
+users were allowed to comment freely, and after the session they had
+to fill in a questionnaire. This has allowed for immediate feedback,
+as well as a possibility to reflect upon the experience, and the
+ability to share those reflections later.  Interviews were recorded,
+which allowed for immediate feedback, and the opportunity to
+investigate them later.
 
-\subsection{Quantative evaluation}
+\section{Audio descriptors}
+% audio features - correct ?
+To determine the correctness of MFCC implementation, a simple test of
+the sizes of MFCC vectors is suffice. If the number of coefficients
+for one frame is equal to the expected value, and if the number of
+MFCC vectors in a second of sound is of expected length, then the
+features obtained should be correct.
 
-In order to determine if the predictions made are viable, and how well
-do they work, a form of white box testing had to be made. 10 different
-sets of parameter values were determined, and for each one a
-spectrogram, together with MFCC values were made. Then, predicions on
-these MFCCs values were done, following by extracting spectrograms of
-the results and comparing them agains the target values. Moreover,
-euclidean distance between the MFCC values was calculated. The
-reasoning behind that was the fact that as a matter of fact the
+Looking at the implementation of the MFCC algorithm, within
+``Essentia's'' documentation, it is clear that the length of each
+vector containing MFCCs for one frame should be 13. Meaning that
+exactly 13 coefficient should be extracted for each frame.
+
+Below, we can see that, in fact the length of one MFCC vector is as expected.
+
+% picture of cout of mfcc vector 
+
+In turn, in order to check the validity of the legth of the vector
+containing MFCCs for one second of sound, we have to dive deeper into
+parameters for each consecutive algorithm computed on the signal
+before MFCC.
+
+Assuming that the length of one frame, onto which our one second of
+sound should be cut into is 2048 samples, with a hopsize of 1024
+samples, we should end up with 43.066 frames at the sample rate of
+44.1kHz. This is of course impossible, and the most common way of
+dealing with such a problem is zero-padding. ``FrameCutter'' does this
+automatically and is zero-padding incomplete frames, or frames that
+are going past the end of the buffer. Therefore we end up with exactly
+45 frames, or MFCC vectors per second of sound. The 44th frame is
+zero-padded. Noise is added to the 45th frame for equal extraction, as
+in accordance to the ``siletFrames'' parameter of the ``FrameCutter''
+algorithm.
+
+Here we can see the output of the 2D vector containg all MFCCs for a
+one second buffer.
+
+We can see, that the implementation of the MFCC algorithm is therefore
+sound, as we get exactly 45 vectors each containing 13 MFCCs, as expected. 
+
+\section{Granular Synthesis}
+The evaluation of the synthesis method is perhaps the most
+straightforward. All that has to be made sure of, is that all
+functions are working correctly, and each parameter does what it is
+supposed to.
+
+This is mostly ensured by listening evaluation conducted by myself,
+and testing of each function by using the synthesizer.
+
+%% do all functions work, is the behaviour correct, as I would expect
+%% it?
+
+% perhaps go into more detail here, with some form of confirmation of
+% cout in the program?
+% add shit here only if really desperate for words.
+
+\section{Neural Networks}
+% nns - correct ?
+%% loss function graphs ?
+
+In turn, the implementation of neural networks is possibly the part of
+the project which will have most obvious influence over the final
+results, and consequently this will decide whether predicted sounds
+are in fact similar, and how similar to the targets.
+
+Other aspects of course also have influence over this, however it
+seems like neural networks will definitely determine the biggest
+aspect of this problem. If they fail, the predictions will be
+completely unrelated.
+
+% make sure dataset is corrrect
+% make sure loss is going down
+% put in the graph of the loss function going down
+
+The thing that has to be taken care of first, is the dataset used for
+training. In order to ensure, that the data is coming into the model
+as expected, the numpy arrays are simply printed to the console.
+
+We can see that the loss function is lowering in value, until the
+500th epoch here, and after that stays relatively stable, leading to
+overfitting. 
+
+\section{Sound similarity}
+% microphone vs. synthesis output - mas importante
+
+\subsection{Quantitative evaluation}
+
+In order to determine, if predictions made by the program are viable,
+and to judge how well they work, quantitative testing was performed in
+form of measuring a Euclidean distance between target and predicted
+MFCCs.
+
+First, the testing was done on target sounds created with the
+granulator itself. Meaning, that technically, the sounds should be
+reproducible exactly, because they were made with the same instrument
+we are trying to recreate it on. I now describe the process for one
+iteration of such testing, and put results of one 10 instances in a
+XXX table.
+
+First, random parameter values were set, by using the function for
+random parameter walkthrough. Once the parameters were set, one second
+recording of the synthesizer's output was recorder into a buffer, on
+which MFCCs were extracted. These values were saved, for future
+access. Then, based on those MFCCs, a prediction was made using the
+``Keras'' model, which automatically set values of all parameters
+based on it's results. Then that was recorded into a buffer, and MFCCs
+were extracted. With these two vectors of MFCCs, a Euclidean distance
+was calculated between them, using the ``scikit learn'' library.
+
+% The reason behind comparing the Euclidean distance rather than the
+% parameters themeselves was the fact that as a matter of fact the
+% parameter values predicted can differ quite largely from the target
+% values, as certain sounds are likely possible to achieve using more
+% than one parameter setting. (source) into a buffer, and MFCCs
+% were extracted.
+
+This entire process was later repeated with input from the microphone,
+instead of output from the synthesiser, to determine how the model
+behaves on data it has never seen before.
+
+The reason behind comparing the Euclidean distance rather than the
+parameters themeselves was the fact that as a matter of fact the
 parameter values predicted can differ quite largely from the target
 values, as certain sounds are likely possible to achieve using more
-than one parameter setting.
+than one parameter setting. (source)
 
-\subsubsection{Spectra}
 
+
+plan for this testing:
+
+set some parameter values with a random button
+record a second into a buffer
+save MFCCs
+predict parameter values
+record prediction into the buffer
+save MFCCs
+
+calculate euclidean distance between them in python
+
+do that same thing with microphone input
+
+additionally try to save them so that mfcc's can be taken. either into
+ableton (easiest) or write to a file (maybe time consuming)
+
+%%% mfcc euclidean distance
 \subsubsection{MFCCs distance}
+% how it was measured
+% show results on for example 10 predictions in a table
+% describe the results of this - succesfull?
+
+%%% fft images
+\subsubsection{Spectra}
+% pictures and descriptions
+
+%%% random button vs prediction
+\subsubsection{Random button vs. predictions}
+% implement random button...
 
 \subsection{Qualitative evaluation}
 
-Equally important as the technical results, are the impressions of
-users, and their enjoyment of the experience, as well as their
-assessment of how similar the predictions are to their input.
+With the the technical assessment established, the testing could
+proceed ``into the real'' world, where it's validity among users would
+be tested. I believe, that with this software the assessment of how
+similar the predictions are to the input sounds is equally important
+as the quantitative results.
 
-(actually, maybe only about similiarity above, and enjoyment below, as
-user experiences?)
+Additionally, their enjoyment of the experience, as well as their
+overall impressions are an important factor in the assessment of
+success of this project. During the tests, I was also hoping to gain
+feedback about things that I have overlooked during the production,
+and suggested ways of improving the user experience. 
+
+Therefore, several testing sessions with potential users of this
+software were conducted. All participants had some background in
+programming synthesizers, as well as background in music
+production. In order to ensure that they would somewhat resemble the
+user group this software is aimed at.
+% change this, it's not really aimed at anyone
+
+The session consisted of a brief explanation of what the project is
+meant to do, and a basic user guide, about how to use it. More
+specifically an explanation of how the ``record'' and ``predict''
+buttons work. However, the information given was fairly minimal, and
+is only what was needed to introduce participant to this new concept
+of interaction. This was done in hope to later access the easiness of
+use, once the basic idea of interaction was established.
+
+% some summary of the interviews here ?
+
+After the session, participants were shown a form to fill in,
+summarising their experience, and looking to establish a translation
+of their experience into quantitative data.
+
+\subsubsection{Results}
+% graphs etc.
+
+% here about users
+%------------------------
+% all respondents reporter a fairly good ability to program
+% synthesizers
+% they reported stumbling upon these problems
+% most reported that their ability comes from these things
+
+%here talk about feedback about the program
+%-------------------------------------------
+% the usefulness of the tool was rated quite high
+% alternative to presets - yes
+% how similar were the sounds predicted?
+% ease of use?
+
+% suggested stuff and additional feedback from users
+%------------------------------------------------------
+% 
+
+
 
 \section{User experience}
+% user experience
+%% talk about the interviews somehow
+%% include results from the form about the ease of use and include longer feedback
 
-- statistics, tables and graphs
-
-- qualitative as well as quantitative data
-
-- comparison between random button, and the algorithm
-
-- user testing
-
-- questionnaires for users
-
-- no interpretation of results
 
 %%% Local Variables:
 %%% mode: latex

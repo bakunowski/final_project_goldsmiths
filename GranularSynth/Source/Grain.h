@@ -12,14 +12,10 @@ public:
     
     GrainStream(int startingSample = 1, int duration = 0);
     
-    // ???
-    //double operator()(int channel);
-    
     double createGrain(int channel);
     
     void setFilePosition(int startingSample);
     
-    // duration of a grain
     void setDuration(int duration);
     
     void setAudioSource(AudioFormatReader& audioReader);
@@ -47,9 +43,7 @@ public:
     vector<double> getCurrentGrainPosition(int channel);
     
     void changePitch();
-    
 
-    
 private:
 
     // AudioSampleBuffer of the grain's audio source WAV file
@@ -60,13 +54,13 @@ private:
     {
         double grainDataCurrentSample[2] = {0.0, 0.0};
         
-        int grainDataStartPosition = 0;       // starting sample for a specific grain
-        int grainDataEndPosition = 0;            // ending sample of a specific grain
+        int grainDataStartPosition = 0;
+        int grainDataEndPosition = 0;
         
-        double grainDataPitchScalar = 1.0f;    // scalar value for randomized pitch offset
+        double grainDataPitchScalar = 1.0f;     // scalar value for randomized pitch offset
         double grainDataGainScalar = 1.0f;      // scalar value for rand gain offset
         
-        bool grainDataIsFinished = true;       // boolean whether grain needs to be replayed
+        bool grainDataIsFinished = true;        // boolean whether grain needs to be replayed
         
         juce::ADSR adsr;
         juce::ADSR::Parameters adsrParams;
@@ -80,22 +74,19 @@ private:
     int grainStreamSize = 0;        // size of the stream (number of grains)
     
     int filePosition = 1;           // the centroid sample for a grain cloud
-    int durationOfStream = 0;       // duration of the stream in ms
-    int sampleDelta = 0;            // difference between starting and ending point
+    int grainDuration = 0;          // duration of grain in ms
+    int sampleDelta = 0;            // difference between starting and ending points
     
     int fileSize = 0;               // size of the audio sampled
     int samplingRate;               // sampling rate of the audio sampled
     
     bool grainHasValidWAVFile;      // boolean for whether grain has a valid WAV file
 
-    // randomize grain data
-    void randomizeGrain(oneGrain& grain);
+    void setupGrain(oneGrain& grain);
     
     void addGrainsToStream(int count = 1);
     
     void removeGrainsFromStream(int count = 1);
-    
-    void getCurrentPosition(oneGrain& grain);
 };
 
 #endif

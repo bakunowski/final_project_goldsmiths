@@ -13,6 +13,7 @@ MainComponent::MainComponent()  :       grainStream(),
 
     setSize (1200, 380);
 
+    //menu bar
     PropertiesFile::Options options;
     options.applicationName     = ProjectInfo::projectName;
     options.filenameSuffix      = "settings";
@@ -76,9 +77,11 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
         }
         
         // computing the essentia algorithms
-        if (audioFeatureExtraction.playbackBuffer.index < audioFeatureExtraction.getLengthOfBuffer())
+        if (audioFeatureExtraction.playbackBuffer.index <
+	    audioFeatureExtraction.getLengthOfBuffer())
         {
-            const auto* channelData = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
+            const auto* channelData = bufferToFill.buffer->getWritePointer(0,
+									  bufferToFill.startSample);
             for (auto i = 0; i < bufferToFill.numSamples; ++i)
             {
                 audioFeatureExtraction.pushNextSampleIntoEssentiaArray(channelData[i]);
@@ -86,16 +89,18 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
         }
         else
         {
-            //parameterWalkthrough()
             //randomParameterWalkthrough();
         }
     }
 
-    if ((record == true && grainStream.grainStreamIsActive) || (record == true && grainStream.grainStreamIsActive == false))
+    if ((record == true && grainStream.grainStreamIsActive) ||
+	(record == true && grainStream.grainStreamIsActive == false))
     {
-        if (audioFeatureExtraction.microphoneBuffer.size() < audioFeatureExtraction.getLengthOfBuffer())
+        if (audioFeatureExtraction.microphoneBuffer.size() <
+	    audioFeatureExtraction.getLengthOfBuffer())
         {
-            const auto* channelData = bufferToFill.buffer->getReadPointer (0, bufferToFill.startSample);
+            const auto* channelData = bufferToFill.buffer->getReadPointer (0,
+									  bufferToFill.startSample);
 
             for (auto i = 0; i < bufferToFill.numSamples; ++i)
             {
@@ -119,12 +124,15 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
         }
     }
     
+    // prevent feedback
     if (!grainStream.grainStreamIsActive && record == false)
     {
         for (auto channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel)
         {
-            auto* channelData = bufferToFill.buffer->getReadPointer (channel, bufferToFill.startSample);
-            auto* channelDataOut = bufferToFill.buffer->getWritePointer (channel, bufferToFill.startSample);
+            auto* channelData = bufferToFill.buffer->getReadPointer (channel,
+								     bufferToFill.startSample);
+            auto* channelDataOut = bufferToFill.buffer->getWritePointer (channel,
+									 bufferToFill.startSample);
             
             for (auto i = 0; i < bufferToFill.numSamples; ++i)
             {
@@ -140,7 +148,6 @@ void MainComponent::releaseResources()
 
 void MainComponent::randomParameterWalkthrough()
 {
-    
     int numOfSamples = 30000;
     Random rand = Random();
   
@@ -149,7 +156,8 @@ void MainComponent::randomParameterWalkthrough()
     audioFeatureExtraction.paramPool.add("parameters.position", audioFeatureExtraction.count);
     audioFeatureExtraction.paramPool.add("parameters.duration", audioFeatureExtraction.duration);
     audioFeatureExtraction.paramPool.add("parameters.spread", grainStream.filePositionOffset);
-    audioFeatureExtraction.paramPool.add("parameters.numberOfGrains", audioFeatureExtraction.streamSize);
+    audioFeatureExtraction.paramPool.add("parameters.numberOfGrains",
+					 audioFeatureExtraction.streamSize);
     audioFeatureExtraction.paramPool.add("parameters.pitch", grainStream.pitchOffsetForOneGrain);
     audioFeatureExtraction.mergePoolParams.merge(audioFeatureExtraction.paramPool, "append");
   
@@ -175,64 +183,12 @@ void MainComponent::randomParameterWalkthrough()
     }
 }
 
-void MainComponent::parameterWalkthrough()
-{
-    audioFeatureExtraction.computeEssentia();
-    audioFeatureExtraction.clearBufferAndPool();
-    audioFeatureExtraction.count += audioFeatureExtraction.getLengthOfBuffer();
-
-    if (audioFeatureExtraction.count > grainStream.getFileSize())
-    {
-        audioFeatureExtraction.clearBufferAndPool();
-        audioFeatureExtraction.count = 1.0;
-        audioFeatureExtraction.duration += 100;
-        
-        if (audioFeatureExtraction.duration >= 901) // 901
-        {
-            audioFeatureExtraction.duration = 0;
-            grainStream.filePositionOffset += 10000;
-            
-            if (grainStream.filePositionOffset >= 50000) //50000
-            {
-                grainStream.filePositionOffset = 0;
-                audioFeatureExtraction.streamSize += 4;
-                
-                if (audioFeatureExtraction.streamSize >= 9) //10
-                {
-                    audioFeatureExtraction.streamSize = 0;
-                    grainStream.pitchOffsetForOneGrain +=12;
-                    
-                    if (grainStream.pitchOffsetForOneGrain >= 12)//12
-                    {
-                        audioFeatureExtraction.mergedMFCCs->compute();
-                        audioFeatureExtraction.mergedParameters->compute();
-                        stopFile();
-                    }
-                }
-            }
-        }
-    }
-    
-    grainStream.setFilePosition(audioFeatureExtraction.count);
-    grainStream.setDuration(audioFeatureExtraction.duration);
-    grainStream.setStreamSize(audioFeatureExtraction.streamSize);
-
-    audioFeatureExtraction.paramPool.add("parameters.position", audioFeatureExtraction.count);
-    audioFeatureExtraction.paramPool.add("parameters.duration", audioFeatureExtraction.duration);
-    audioFeatureExtraction.paramPool.add("parameters.spread", grainStream.filePositionOffset);
-    audioFeatureExtraction.paramPool.add("parameters.numberOfGrains", audioFeatureExtraction.streamSize);
-    audioFeatureExtraction.paramPool.add("parameters.pitch", grainStream.pitchOffsetForOneGrain);
-
-    //audioFeatureExtraction.printFluxValues();
-}
-
 void MainComponent::resized()
 {
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
     
-    //int yValue = getHeight()/3+120;
     int xValue = 10;
     int dial_width = 80;
     int dial_height = 80;
@@ -248,8 +204,9 @@ void MainComponent::resized()
     openFileButton.setBounds ((xValue += 10), getHeight()/3+10, getWidth()/5, 18);
     playButton.setBounds (xValue, getHeight()/3+35, getWidth()/5, 18);
     stopButton.setBounds (xValue, getHeight()/3+60, getWidth()/5, 18);
-    MachineLearningButton.setBounds ((xValue += getWidth()/5+10), getHeight()/3+10, getWidth()/5, 18);
     MLBUTTON.setBounds (xValue, getHeight()/3+35, getWidth()/5, 18);
+    MachineLearningButton.setBounds ((xValue += getWidth()/5+10),
+				     getHeight()/3+10, getWidth()/5, 18);
 }
 
 void MainComponent::paint (Graphics& g)
@@ -360,7 +317,7 @@ void MainComponent::recordButton()
 
 void MainComponent::predict()
 {
-    const auto model = fdeep::load_model("/Users/bakunowski/Documents/goldsmiths/2018_19/dissertation/project/GranularSynth/100_epochs.json");
+    const auto model = fdeep::load_model("../100_epochs.json");
     
     const int tensor5_channels = 1;
     const int tensor5_rows = 45;
@@ -385,7 +342,6 @@ void MainComponent::predict()
     //cout << t.width() << endl;
 
     const auto result = model.predict({t});
-    //cout << fdeep::show_tensor5s(result) << endl;
     result_vec = *result.front().as_vector();
     cout << "vector " << result_vec << endl;
     
@@ -395,23 +351,22 @@ void MainComponent::predict()
     //grain length
     result_vec[0] = result_vec[0] * (999.0 - 1.0) + 1.0;
     grainDurationDial.setValue(static_cast<int>(result_vec[0]));
-    //grainStream.setDuration(static_cast<int>(result_vec[-1]));
+
     // grain stream size
     result_vec[1] = result_vec[1] * (9.0 - 1.0) + 1.0;
     streamSizeDial.setValue(static_cast<int>(result_vec[1]));
-    // grainStream.setStreamSize(static_cast<int>(result_vec[1]));
+
     // pitch
     result_vec[2] = result_vec[2] * (11.0 - (-12.0)) + (-12.0);
     pitchOffsetDial.setValue(static_cast<int>(result_vec[2]));
-    // grainStream.pitchOffsetForOneGrain = (static_cast<int>(result_vec[2]));
+
     //buffer length
     result_vec[3] = result_vec[3] * (1518322.0 - 1.0) + 1.0;
     filePositionDial.setValue(result_vec[3]);
-    // grainStream.setFilePosition(result_vec[3]);
+
     // offset
     result_vec[4] = result_vec[4] * (49999.0 - 0.0) + 0.0;
     startingOffsetDial.setValue(grainStream.filePositionOffset);
-    // grainStream.filePositionOffset = result_vec[4];
 
     cout << result_vec << endl;
     audioFeatureExtraction.kerasInput.clear();
@@ -480,15 +435,6 @@ void MainComponent::paintIfFileLoaded (Graphics& g, const Rectangle<int>& thumbn
         g.drawLine(drawGrainPosition, thumbnailBounds.getY()+10, drawGrainPosition, thumbnailBounds.getBottom()-10, 1.0f);
     }
 
-    //flux drawing to see if it changes (algorithm not used for now)
-//    if (state == playing){
-//    g.setColour(Colours::white);
-//    double y_finish = audioFeatureExtraction.fluxOutput * 1000.0;
-//        cout << "value: " << y_finish << endl;
-//    g.drawLine(getWidth()/2, getHeight()/2, getWidth()/2, y_finish, 5.0f);
-//    }
-}
-
 void MainComponent::timerCallback()
 {
     repaint();
@@ -501,7 +447,7 @@ void MainComponent::timerCallback()
     //pitchOffsetDial.setValue(grainStream.pitchOffsetForOneGrain);
 }
 
-//====================================================================================================
+//==============================================================================================
 //                                          menubar stuff
 StringArray MainComponent::getMenuBarNames()
 {
@@ -558,6 +504,7 @@ void MainComponent::showAudioSettings()
 
 //===========================================================================================
 //                     setup buttons and dials down here for cleaner code
+
 void MainComponent::setupButtonsAndDials()
 {
     // filePositionDial setup
@@ -582,7 +529,6 @@ void MainComponent::setupButtonsAndDials()
     grainDurationDial.onValueChange = [this] {(grainStream.setDuration(static_cast<int>(grainDurationDial.getValue()))); };
     grainDurationDial.setTextValueSuffix (" ms");
     grainDurationDial.setNumDecimalPlacesToDisplay(0);
-    //grainDurationDial.addListener(this);
     addAndMakeVisible (grainDurationDial);
                                                
     // strem size dial setup
@@ -593,7 +539,6 @@ void MainComponent::setupButtonsAndDials()
     streamSizeDial.onValueChange = [this] {(grainStream.setStreamSize(static_cast<int>(streamSizeDial.getValue()))); };
     streamSizeDial.setTextValueSuffix (" grains");
     streamSizeDial.setNumDecimalPlacesToDisplay(0);
-    //streamSizeDial.addListener(this);
     addAndMakeVisible (streamSizeDial);
     
     // starting offset dial setup
@@ -604,7 +549,6 @@ void MainComponent::setupButtonsAndDials()
     startingOffsetDial.onValueChange = [this] {(grainStream.filePositionOffset = static_cast<int>(startingOffsetDial.getValue()));};
     startingOffsetDial.setTextValueSuffix (" samples offset");
     startingOffsetDial.setNumDecimalPlacesToDisplay(0);
-    //startingOffsetDial.addListener(this);
     addAndMakeVisible (startingOffsetDial);
     
     // pitch offset dial
@@ -615,7 +559,6 @@ void MainComponent::setupButtonsAndDials()
     pitchOffsetDial.onValueChange = [this] {(grainStream.pitchOffsetForOneGrain = static_cast<int>(pitchOffsetDial.getValue()));};
     pitchOffsetDial.setTextValueSuffix (" semitones offset");
     pitchOffsetDial.setNumDecimalPlacesToDisplay(0);
-    //pitchOffsetDial.addListener(this);
     addAndMakeVisible (pitchOffsetDial);
     
     // grain stream gain dial
@@ -626,7 +569,6 @@ void MainComponent::setupButtonsAndDials()
     globalGainDial.onValueChange = [this] {grainStream.globalGain = Decibels::decibelsToGain<double>(globalGainDial.getValue());};
     globalGainDial.setTextValueSuffix (" dB");
     globalGainDial.setNumDecimalPlacesToDisplay(0);
-    //globalGainDial.addListener(this);
     addAndMakeVisible (globalGainDial);
     
     // grain gain offset dial

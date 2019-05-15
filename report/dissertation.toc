@@ -1,105 +1,119 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {1}Introduction}{5}{chapter.1}% 
+\contentsline {chapter}{\numberline {1}Introduction}{6}{chapter.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.1}Aims and Objectives}{5}{section.1.1}% 
+\contentsline {section}{\numberline {1.1}Aims and Objectives}{6}{section.1.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.1.1}Deliverables}{6}{subsection.1.1.1}% 
+\contentsline {subsection}{\numberline {1.1.1}Deliverables}{7}{subsection.1.1.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {2}Literature Review}{7}{chapter.2}% 
+\contentsline {chapter}{\numberline {2}Literature Review}{8}{chapter.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.1}Problem background}{7}{section.2.1}% 
+\contentsline {section}{\numberline {2.1}Problem background}{8}{section.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1.1}Synthesizer programming}{7}{subsection.2.1.1}% 
+\contentsline {subsection}{\numberline {2.1.1}Synthesizer programming}{8}{subsection.2.1.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1.2}Sound matching}{8}{subsection.2.1.2}% 
+\contentsline {subsection}{\numberline {2.1.2}Sound matching}{9}{subsection.2.1.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}Audio descriptors}{9}{section.2.2}% 
+\contentsline {section}{\numberline {2.2}Audio descriptors}{10}{section.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.1}Mel-frequency Cepstrum Coefficients}{9}{subsection.2.2.1}% 
+\contentsline {subsection}{\numberline {2.2.1}Mel-frequency Cepstrum Coefficients}{10}{subsection.2.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.3}Synthesis}{10}{section.2.3}% 
+\contentsline {section}{\numberline {2.3}Synthesis}{11}{section.2.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.4}Predictions}{10}{section.2.4}% 
+\contentsline {section}{\numberline {2.4}Predictions}{11}{section.2.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.5}Alternatives to sound matching}{11}{section.2.5}% 
+\contentsline {section}{\numberline {2.5}Alternatives to sound matching}{12}{section.2.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Methods}{12}{chapter.3}% 
+\contentsline {chapter}{\numberline {3}Methods}{13}{chapter.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}Audio descriptors}{13}{section.3.1}% 
+\contentsline {section}{\numberline {3.1}Audio descriptors}{14}{section.3.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.1}Definitions and Formulation}{13}{subsection.3.1.1}% 
+\contentsline {subsection}{\numberline {3.1.1}Mel-frequency Cepstrum Coefficients}{14}{subsection.3.1.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.2}Spectral Flux}{15}{subsection.3.1.2}% 
+\contentsline {subsection}{\numberline {3.1.2}Spectral Flux}{17}{subsection.3.1.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.3}Implementation}{15}{subsection.3.1.3}% 
+\contentsline {section}{\numberline {3.2}Predictions}{18}{section.3.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Essentia}{15}{section*.5}% 
+\contentsline {subsubsection}{\numberline {3.2.0.1}Definitions and Formulations}{18}{subsubsection.3.2.0.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.2}Predictions}{17}{section.3.2}% 
+\contentsline {subsection}{\numberline {3.2.1}Dataset}{19}{subsection.3.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.1}Dataset}{17}{subsection.3.2.1}% 
+\contentsline {subsection}{\numberline {3.2.2}Neural networks}{21}{subsection.3.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Definitions and Formulations}{17}{section*.7}% 
+\contentsline {subsubsection}{\numberline {3.2.2.1}Multilayered Perceptron}{22}{subsubsection.3.2.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Implementation}{18}{section*.9}% 
+\contentsline {subsubsection}{\numberline {3.2.2.2}LSTM}{24}{subsubsection.3.2.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.2}Neural networks}{19}{subsection.3.2.2}% 
+\contentsline {section}{\numberline {3.3}Synthesis}{24}{section.3.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Multilayered Perceptron}{19}{section*.10}% 
+\contentsline {subsection}{\numberline {3.3.1}Granular Synthesis}{25}{subsection.3.3.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{LSTM}{20}{section*.11}% 
+\contentsline {subsection}{\numberline {3.3.2}Implemnting Granular Synthesis in JUCE}{26}{subsection.3.3.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.3}Synthesis}{20}{section.3.3}% 
+\contentsline {subsubsection}{\numberline {3.3.2.1}Loading audio files}{27}{subsubsection.3.3.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3.1}Granular Synthesis (basic explenation of the granular synth concept)}{21}{subsection.3.3.1}% 
+\contentsline {subsubsection}{\numberline {3.3.2.2}Grain creation}{27}{subsubsection.3.3.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3.2}The JUCE implementation (author's implementation)}{21}{subsection.3.3.2}% 
+\contentsline {subsubsection}{\numberline {3.3.2.3}Position}{29}{subsubsection.3.3.2.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Loading of samples}{22}{section*.12}% 
+\contentsline {subsubsection}{\numberline {3.3.2.4}Grain Size}{29}{subsubsection.3.3.2.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Grain creation}{22}{section*.13}% 
+\contentsline {subsubsection}{\numberline {3.3.2.5}Spread}{30}{subsubsection.3.3.2.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Position}{22}{section*.14}% 
+\contentsline {subsubsection}{\numberline {3.3.2.6}Number of active grains}{31}{subsubsection.3.3.2.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Grain Size}{23}{section*.15}% 
+\contentsline {subsubsection}{\numberline {3.3.2.7}Pitch}{32}{subsubsection.3.3.2.7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Spread}{24}{section*.16}% 
+\contentsline {subsubsection}{\numberline {3.3.2.8}Global gain}{32}{subsubsection.3.3.2.8}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Number of active grains}{24}{section*.17}% 
+\contentsline {subsubsection}{\numberline {3.3.2.9}Sound output}{33}{subsubsection.3.3.2.9}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Pitch}{25}{section*.18}% 
+\contentsline {section}{\numberline {3.4}Integration}{33}{section.3.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Global gain}{25}{section*.19}% 
+\contentsline {chapter}{\numberline {4}Results and Analysis}{35}{chapter.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Sound output}{26}{section*.20}% 
+\contentsline {section}{\numberline {4.1}Methodologies}{35}{section.4.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.4}Integration}{26}{section.3.4}% 
+\contentsline {section}{\numberline {4.2}Audio descriptors}{36}{section.4.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}Results and Analysis}{27}{chapter.4}% 
+\contentsline {section}{\numberline {4.3}Granular Synthesis}{37}{section.4.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.1}Methodologies}{27}{section.4.1}% 
+\contentsline {section}{\numberline {4.4}Neural Networks}{37}{section.4.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.2}Sound similiarity}{28}{section.4.2}% 
+\contentsline {section}{\numberline {4.5}Sound similarity}{37}{section.4.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2.1}Quantative evaluation}{28}{subsection.4.2.1}% 
+\contentsline {subsection}{\numberline {4.5.1}Quantitative evaluation}{37}{subsection.4.5.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Spectra}{28}{section*.21}% 
+\contentsline {subsubsection}{\numberline {4.5.1.1}MFCCs distance}{39}{subsubsection.4.5.1.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{MFCCs distance}{28}{section*.22}% 
+\contentsline {subsubsection}{\numberline {4.5.1.2}Spectra}{39}{subsubsection.4.5.1.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2.2}Qualitative evaluation}{28}{subsection.4.2.2}% 
+\contentsline {subsubsection}{\numberline {4.5.1.3}Random button vs. predictions}{39}{subsubsection.4.5.1.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.3}User experience}{28}{section.4.3}% 
+\contentsline {subsection}{\numberline {4.5.2}Qualitative evaluation}{39}{subsection.4.5.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Discussion}{29}{chapter.5}% 
+\contentsline {subsubsection}{\numberline {4.5.2.1}Results}{39}{subsubsection.4.5.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.1}Summary of Findings}{29}{section.5.1}% 
+\contentsline {section}{\numberline {4.6}User experience}{39}{section.4.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.2}Evaluation}{29}{section.5.2}% 
+\contentsline {chapter}{\numberline {5}Discussion}{40}{chapter.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.3}Future Work}{29}{section.5.3}% 
+\contentsline {section}{\numberline {5.1}Summary of Findings}{40}{section.5.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Conclusion}{30}{chapter.6}% 
+\contentsline {section}{\numberline {5.2}Evaluation}{41}{section.5.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {.1}Title of Appendix A}{31}{section.Alph0.1}% 
+\contentsline {subsection}{\numberline {5.2.1}Project objective 1: a helpful tool}{41}{subsection.5.2.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.2.2}Project objective 2: alternative to presets}{41}{subsection.5.2.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.2.3}Project objective 3: more than randomisation}{41}{subsection.5.2.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.3}Future Work}{42}{section.5.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.3.1}Implementing more sophisticated neural networks}{42}{subsection.5.3.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.3.2}Creating a database of samples that can be used}{42}{subsection.5.3.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {6}Conclusion}{43}{chapter.6}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {.1}Title of Appendix A}{44}{section.Alph0.1}% 

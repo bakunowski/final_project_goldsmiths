@@ -1,8 +1,80 @@
 \chapter{Discussion}
 \label{chapterlabel5}
+
 \section{Summary of Findings}
+To summarise what I concluded (via either qualitative or quantitative
+analysis) in the last chapter:
+\begin{itemize}
+\item The implementation of the MFCCs, neural network and the synthesizer are sound
+\item The MFCCs in sounds predicted on output of the synthesizer
+    itself are very close to the target MFCCs.
+\item The Euclidean distance of MFCCs predicted on from the microphone
+  input is much bigger than in predictions made from synthesizer output 
+\item In both cases however, the distance in much smaller than
+  compared to MFCCs achieved through pure randomisation of parameters
+\item Most of the testers agree that this tool has potential to be
+  useful in the process of creation of new sounds  
+\item 100\% of the testers think that this process would be a viable
+  alternative to presets
+\item On a scale from 0 to 5, the mean answer for similarity of sounds
+  predicted is 3.8
+\item Most tester agree that the program was intuitive to use
+\end{itemize}
+
 \section{Evaluation}
+\subsection{Project objective 1: a helpful tool}
+
+The overall opinion of all the people that have tested the program
+seem to be that it would indeed be helpful for them in the process of
+creating sound. There has been some suggestions about using it with in
+a live environment, with a vocalist. Which leads to an interesting
+extension of the project as well as a possibility for more research.
+
+It would be possible to pre-train a model on certain samples, before a
+live show, and then improvise with the use of that array of sounds,
+live.
+
+Most respondents agreed that they would be interested in implementing
+such a program into their music production workflow. It would
+certainly need more polishing, and work, yet already at it's current
+state it can serve as an extension to music production arsenal.
+
+\subsection{Project objective 2: alternative to presets}
+
+In the questionnaire, 100\% of participants agreed that this workflow
+is a viable alternative to present. One participant suggested, that
+this interaction brings the user into the position of control, and
+creates space for more control over the sound, than mindless scrolling
+through presets. To quote:
+
+``This project puts a little bit more responsibility with the user by
+making them take a more active part in the creation of sounds rather
+than scrolling through presets. Whilst presets can be a good way of
+producing sounds I think that this makes users think more critically
+about what sounds they are wanting to make and then use the tools
+provided to replicate them.``
+
+\subsection{Project objective 3: more than randomisation}
+
+By measuring the distance between the MFCC vectors, as well as
+repeated listening evaluation on my own, and with different users, it
+is clear that sounds predicted by this system carry clear coorelation
+with the target sounds. Less so with samples from the microphone
+input, than the sounds created by the granulator, however still
+satisfying to the end user. The result of this could be clearly
+improved by spending more time tweaking the neural networks used, as
+well as experimenting with separation of parameters and audio
+features.
+
+To summarize, the quantitative evaluation as well as user testing
+shows that result obtained with this software are more than just a
+randomisation of parameters.
+
 \section{Future Work}
+
+\subsection{Implementing more sophisticated neural networks}
+
+\subsection{Creating a database of samples that can be used}
 
 %%% Local Variables:
 %%% mode: latex

@@ -69,9 +69,6 @@ public:
     vector<Real> onsets;
     Real onsetRateValue;
 
-    //standard::Algorithm* dcremoval;
-    //vector<Real> dcRemovalBuffer;
-
     standard::Algorithm* fft;
     vector<complex<Real>> fftBuffer;
 
@@ -118,11 +115,9 @@ public:
     void computeEssentia();
     void computeEssentiaInput();
     void clearBufferAndPool();
-    
+
     void pushNextSampleIntoEssentiaArray(float sample) noexcept;
-    
-    void printFluxValues();
-    
+
     int getLengthOfBuffer();
 
 private:
