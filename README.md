@@ -1,4 +1,9 @@
-# dissertation
-weekly blog: https://metamonproject.wordpress.com/
+# Final Project
 
-latex template: https://www.overleaf.com/latex/templates/queen-mary-university-of-london/fwfyjjkcswpw
+Granular synthesiser that can be automatically programmed by sound
+matching a second of audio.
+
+Taking advantage of libraries like the JUCE, and Keras.
+
+Extensive description and video can be found here:
+https://metamonproject.wordpress.com/
